@@ -10,6 +10,7 @@ const ERROR_STATUS_MAP: Record<string, number> = {
   CRISIS_DETECTED: 200,
   UNAUTHORIZED: 401,
   WELLNESS_SCORE_OUT_OF_RANGE: 400,
+  JOURNAL_NOT_FOUND: 404,
 };
 
 export function errorHandlerMiddleware(

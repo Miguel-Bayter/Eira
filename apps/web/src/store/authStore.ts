@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface User {
   id: string;
@@ -16,10 +17,22 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  setUser: (user, token) => set({ user, token, isAuthenticated: true }),
-  logout: () => set({ user: null, token: null, isAuthenticated: false }),
-}));
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      setUser: (user, token) => set({ user, token, isAuthenticated: true }),
+      logout: () => set({ user: null, token: null, isAuthenticated: false }),
+    }),
+    {
+      name: 'eira-auth', // clave en localStorage
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    },
+  ),
+);

@@ -7,10 +7,11 @@ import { moodContainer } from '../../../container';
 
 const router = Router();
 
-// Rate limit por IP para endpoints de mood (100 req/15 min)
+// Rate limit por userId (no por IP) — 10 req/15 min por usuario autenticado
 const moodLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 10,
+  keyGenerator: (req) => (req as { userId?: string }).userId ?? req.ip ?? 'anon',
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Demasiadas solicitudes' } },

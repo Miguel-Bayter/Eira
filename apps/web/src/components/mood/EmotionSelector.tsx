@@ -1,0 +1,69 @@
+import { cn } from '@/lib/utils';
+import type { EmotionValue } from '@/schemas/mood.schema';
+
+const EMOTION_LIST: { value: EmotionValue; emoji: string; label: string }[] = [
+  { value: 'alegre', emoji: '😊', label: 'Alegre' },
+  { value: 'tranquilo', emoji: '😌', label: 'Tranquilo' },
+  { value: 'agradecido', emoji: '🙏', label: 'Agradecido' },
+  { value: 'esperanzador', emoji: '✨', label: 'Esperanzador' },
+  { value: 'motivado', emoji: '💪', label: 'Motivado' },
+  { value: 'ansioso', emoji: '😰', label: 'Ansioso' },
+  { value: 'triste', emoji: '😔', label: 'Triste' },
+  { value: 'enojado', emoji: '😠', label: 'Enojado' },
+  { value: 'frustrado', emoji: '😤', label: 'Frustrado' },
+  { value: 'cansado', emoji: '😴', label: 'Cansado' },
+  { value: 'confundido', emoji: '😕', label: 'Confundido' },
+  { value: 'solitario', emoji: '😞', label: 'Solitario' },
+  { value: 'abrumado', emoji: '😩', label: 'Abrumado' },
+  { value: 'asustado', emoji: '😨', label: 'Asustado' },
+  { value: 'neutral', emoji: '😐', label: 'Neutral' },
+];
+
+interface EmotionSelectorProps {
+  value: EmotionValue | '';
+  onChange: (emotion: EmotionValue) => void;
+  error?: string;
+}
+
+export function EmotionSelector({ value, onChange, error }: EmotionSelectorProps) {
+  return (
+    <div className="space-y-3">
+      <span className="block text-sm font-medium text-slate-700">
+        ¿Qué emoción predomina?
+      </span>
+
+      <div
+        className="grid grid-cols-5 gap-2"
+        role="group"
+        aria-label="Selecciona una emoción"
+      >
+        {EMOTION_LIST.map(({ value: emotion, emoji, label }) => {
+          const isSelected = value === emotion;
+          return (
+            <button
+              key={emotion}
+              type="button"
+              onClick={() => onChange(emotion)}
+              aria-pressed={isSelected}
+              aria-label={label}
+              className={cn(
+                'flex flex-col items-center gap-1 rounded-xl p-2 text-xs font-medium',
+                'transition-all focus:outline-none focus:ring-2 focus:ring-eira-500 focus:ring-offset-1',
+                isSelected
+                  ? 'bg-eira-100 text-eira-700 ring-2 ring-eira-400'
+                  : 'bg-slate-50 text-slate-600 hover:bg-slate-100',
+              )}
+            >
+              <span className="text-xl leading-none" aria-hidden="true">{emoji}</span>
+              <span className="text-center leading-tight">{label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {error && (
+        <p className="text-xs text-crisis-600" role="alert">{error}</p>
+      )}
+    </div>
+  );
+}

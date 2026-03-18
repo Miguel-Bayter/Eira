@@ -1,7 +1,9 @@
 import type { IMoodRepository } from '@domain/repositories/IMoodRepository';
+import type { IUserRepository } from '@domain/repositories/IUserRepository';
+import { UserNotFoundError } from '@domain/errors';
 
 export interface GetMoodHistoryInput {
-  userId: string;
+  userId: string; // Supabase Auth UUID (de req.userId)
   limit?: number;
 }
 
@@ -20,11 +22,18 @@ export interface GetMoodHistoryOutput {
 }
 
 export class GetMoodHistoryUseCase {
-  constructor(private readonly moodRepo: IMoodRepository) {}
+  constructor(
+    private readonly moodRepo: IMoodRepository,
+    private readonly userRepo: IUserRepository,
+  ) {}
 
   async execute(input: GetMoodHistoryInput): Promise<GetMoodHistoryOutput> {
+    // Resolver ID interno a partir del supabase_id
+    const user = await this.userRepo.findBySupabaseId(input.userId);
+    if (!user) throw new UserNotFoundError(input.userId);
+
     const limit = input.limit ?? 30;
-    const entries = await this.moodRepo.findByUserId(input.userId, limit);
+    const entries = await this.moodRepo.findByUserId(user.id, limit);
 
     return {
       entries: entries.map((e) => ({

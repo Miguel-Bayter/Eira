@@ -26,17 +26,17 @@ export class CreateMoodEntryUseCase {
   ) {}
 
   async execute(input: CreateMoodEntryInput): Promise<CreateMoodEntryOutput> {
-    // 1. Verificar que el usuario existe
-    const user = await this.userRepo.findById(input.userId);
+    // 1. Buscar usuario por supabase_id (req.userId contiene el UUID de Supabase Auth)
+    const user = await this.userRepo.findBySupabaseId(input.userId);
     if (!user) throw new UserNotFoundError(input.userId);
 
-    // 2. Límite diario de 5 entradas
-    const todayCount = await this.moodRepo.countTodayByUser(input.userId);
+    // 2. Límite diario de 5 entradas (usar ID interno de la BD)
+    const todayCount = await this.moodRepo.countTodayByUser(user.id);
     if (todayCount >= 5) throw new DailyLimitExceededError('mood', 5);
 
     // 3. Crear la entidad (valida score y emoción internamente)
     const entry = MoodEntry.create({
-      userId: input.userId,
+      userId: user.id, // ID interno, no el de Supabase
       score: input.score,
       emotion: input.emotion,
       ...(input.note !== undefined && { note: input.note }),

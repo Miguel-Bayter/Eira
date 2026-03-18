@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import pino from 'pino';
 import authRoutes from './infrastructure/http/routes/auth.routes';
 import moodRoutes from './infrastructure/http/routes/mood.routes';
+import { journalRoutes } from './infrastructure/http/routes/journal.routes';
 import { errorHandlerMiddleware } from './infrastructure/http/middlewares/errorHandler.middleware';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -61,6 +62,7 @@ app.get('/api/health', (_req, res) => {
 // ═══ RUTAS ═══
 app.use('/api/auth', authRoutes);
 app.use('/api/mood', moodRoutes);
+app.use('/api/journal', journalRoutes);
 
 // ═══ ERROR HANDLER GLOBAL ═══
 app.use(errorHandlerMiddleware);

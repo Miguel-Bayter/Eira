@@ -49,3 +49,9 @@ export class WellnessScoreOutOfRangeError extends DomainError {
     super('WELLNESS_SCORE_OUT_OF_RANGE', `Wellness score ${score} debe estar entre 0 y 100`);
   }
 }
+
+export class JournalNotFoundError extends DomainError {
+  constructor(id: string) {
+    super('JOURNAL_NOT_FOUND', `Entrada de diario ${id} no encontrada`);
+  }
+}

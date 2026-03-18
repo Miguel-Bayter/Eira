@@ -2,6 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import MoodTracker from './pages/MoodTracker';
+import Journal from './pages/Journal';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -19,14 +22,16 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/mood" element={<PlaceholderPage name="Mood Tracker" />} />
-      <Route path="/journal" element={<PlaceholderPage name="Diario" />} />
-      <Route path="/chat" element={<PlaceholderPage name="Chat IA" />} />
-      <Route path="/community" element={<PlaceholderPage name="Comunidad" />} />
-      <Route path="/games" element={<PlaceholderPage name="Juegos" />} />
+
+      {/* Rutas protegidas — requieren autenticación */}
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/mood" element={<ProtectedRoute><MoodTracker /></ProtectedRoute>} />
+      <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
+      <Route path="/chat" element={<ProtectedRoute><PlaceholderPage name="Chat IA" /></ProtectedRoute>} />
+      <Route path="/community" element={<ProtectedRoute><PlaceholderPage name="Comunidad" /></ProtectedRoute>} />
+      <Route path="/games" element={<ProtectedRoute><PlaceholderPage name="Juegos" /></ProtectedRoute>} />
     </Routes>
   );
 }
