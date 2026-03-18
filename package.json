@@ -1,0 +1,13 @@
+{
+  "name": "eira-monorepo",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev:api": "pnpm --filter @eira/api dev",
+    "dev:web": "pnpm --filter @eira/web dev",
+    "test": "pnpm --filter @eira/api test && pnpm --filter @eira/web test",
+    "typecheck": "pnpm --filter @eira/api typecheck && pnpm --filter @eira/web typecheck",
+    "lint": "pnpm --filter @eira/api lint && pnpm --filter @eira/web lint"
+  },
+  "engines": { "node": ">=20.0.0", "pnpm": ">=9.0.0" }
+}

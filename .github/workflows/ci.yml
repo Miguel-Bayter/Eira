@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: CI — Lint + Typecheck + Test + Seguridad
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      # ═══ VERIFICACIONES DE CÓDIGO LIMPIO ═══
+
+      - name: Verificar ausencia de inline CSS (prop style={{)
+        run: |
+          echo "Verificando ausencia de inline CSS..."
+          if grep -rn 'style={{' apps/web/src --include="*.tsx" --include="*.jsx" | grep -v "// EXCEPCION"; then
+            echo "ERROR: Inline CSS encontrado. Usa clases Tailwind con cn()."
+            exit 1
+          fi
+          echo "Sin inline CSS"
+
+      - name: Verificar ausencia de console.log en producción
+        run: |
+          echo "Verificando ausencia de console.log..."
+          if grep -rn "console\.\(log\|error\|warn\)" apps/api/src apps/web/src --include="*.ts" --include="*.tsx" | grep -v "// PERMITIDO"; then
+            echo "ERROR: console.log encontrado. Usa el logger de pino."
+            exit 1
+          fi
+          echo "Sin console.log"
+
+      - name: Verificar ausencia de 'any' explícito
+        run: |
+          if grep -rn ": any" apps/api/src apps/web/src --include="*.ts" --include="*.tsx" | grep -v "@ts-expect-error\|// PERMITIDO"; then
+            echo "WARNING: Tipos 'any' encontrados"
+          fi
+          echo "Verificación de tipos completada"
+
+      # ═══ TYPECHECK ═══
+
+      - name: TypeScript — Verificar tipos (Backend)
+        run: pnpm --filter @eira/api typecheck
+
+      - name: TypeScript — Verificar tipos (Frontend)
+        run: pnpm --filter @eira/web typecheck
+
+      # ═══ TESTS ═══
+
+      - name: Tests unitarios e integración (Backend)
+        run: pnpm --filter @eira/api test
+        env:
+          NODE_ENV: test
+          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+
+      - name: Tests de componentes y accesibilidad (Frontend)
+        run: pnpm --filter @eira/web test
+
+      # ═══ COVERAGE ═══
+
+      - name: Generar reporte de coverage
+        run: |
+          pnpm --filter @eira/api test -- --coverage
+          pnpm --filter @eira/web test -- --coverage

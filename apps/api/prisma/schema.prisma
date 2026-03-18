@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id              String    @id @default(cuid())
+  supabase_id     String    @unique
+  email           String    @unique
+  name            String
+  wellness_score  Int       @default(50)
+  streak_days     Int       @default(0)
+  last_mood_date  DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  mood_entries       mood_entries[]
+  journal_entries    journal_entries[]
+  chat_conversations chat_conversations[]
+  community_posts    community_posts[]
+  game_sessions      game_sessions[]
+}
+
+model mood_entries {
+  id         String   @id @default(cuid())
+  user_id    String
+  score      Int
+  emotion    String
+  note       String?
+  is_crisis  Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  users users @relation(fields: [user_id], references: [id])
+
+  @@map("mood_entries")
+}
+
+model journal_entries {
+  id          String   @id @default(cuid())
+  user_id     String
+  content     String
+  ai_analysis String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  users users @relation(fields: [user_id], references: [id])
+
+  @@map("journal_entries")
+}
+
+model chat_conversations {
+  id         String   @id @default(cuid())
+  user_id    String
+  messages   Json
+  has_crisis Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  users users @relation(fields: [user_id], references: [id])
+
+  @@map("chat_conversations")
+}
+
+model community_posts {
+  id               String   @id @default(cuid())
+  user_id          String
+  anonymous_alias  String
+  content          String
+  is_approved      Boolean  @default(false)
+  rejection_reason String?
+  created_at       DateTime @default(now())
+
+  users users @relation(fields: [user_id], references: [id])
+
+  @@map("community_posts")
+}
+
+model game_sessions {
+  id                     String   @id @default(cuid())
+  user_id                String
+  game_type              String
+  duration_seconds       Int
+  wellness_points_earned Int
+  completed_at           DateTime @default(now())
+
+  users users @relation(fields: [user_id], references: [id])
+
+  @@map("game_sessions")
+}
