@@ -18,7 +18,7 @@ export class MoodController {
         ...(body.note !== undefined && { note: body.note }),
       });
 
-      // Si es crisis, retornar 200 con flag especial
+      // If crisis, return 200 with special flag
       const status = result.isCrisis ? 200 : 201;
       res.status(status).json(result);
     } catch (err) {

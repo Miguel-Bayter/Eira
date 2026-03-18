@@ -23,7 +23,7 @@ export async function authMiddleware(
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith('Bearer ')) {
-    res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Token requerido' } });
+    res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Token required' } });
     return;
   }
 
@@ -35,7 +35,7 @@ export async function authMiddleware(
   } = await supabase.auth.getUser(token);
 
   if (error !== null || user === null) {
-    res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Token inválido' } });
+    res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Invalid token' } });
     return;
   }
 

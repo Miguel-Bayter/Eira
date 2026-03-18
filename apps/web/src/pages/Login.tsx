@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Heart, Leaf, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useLogin } from '../hooks/useAuth';
 import { loginSchema, type LoginFormData } from '../schemas/auth.schema';
 import { Input } from '../components/ui/Input';
@@ -9,6 +10,7 @@ import { Button } from '../components/ui/Button';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { mutateAsync: login, isPending, error } = useLogin();
 
   const {
@@ -24,11 +26,18 @@ export default function Login() {
     void navigate('/dashboard');
   };
 
+  // Motivation stats shown on the left panel
+  const motivationStats = [
+    { icon: Heart, label: t('auth.login.stat1Label'), desc: t('auth.login.stat1Desc') },
+    { icon: Star, label: t('auth.login.stat2Label'), desc: t('auth.login.stat2Desc') },
+    { icon: ArrowRight, label: t('auth.login.stat3Label'), desc: t('auth.login.stat3Desc') },
+  ];
+
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
-      {/* ── Panel izquierdo: marca (solo escritorio) ── */}
+      {/* Left panel: branding (desktop only) */}
       <div className="relative hidden overflow-hidden bg-gradient-to-br from-eira-600 via-eira-700 to-eira-900 lg:flex lg:flex-col lg:justify-between lg:p-12">
-        {/* Orbs decorativos */}
+        {/* Decorative orbs */}
         <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-eira-400/20 blur-3xl" />
         <div className="absolute bottom-0 -left-16 h-80 w-80 rounded-full bg-eira-900/40 blur-3xl" />
         <div className="absolute top-1/2 right-8 h-48 w-48 rounded-full bg-eira-500/20 blur-2xl" />
@@ -41,24 +50,18 @@ export default function Login() {
           <span className="text-xl font-bold text-white">Eira</span>
         </div>
 
-        {/* Contenido central */}
+        {/* Central content */}
         <div className="relative">
-          <h2 className="text-4xl font-bold leading-tight text-white">
-            Bienvenido/a
-            <br />
-            de vuelta
+          <h2 className="text-4xl font-bold leading-tight text-white whitespace-pre-line">
+            {t('auth.login.panelHeading')}
           </h2>
           <p className="mt-4 text-lg text-eira-200/80">
-            Tu progreso te está esperando. Cada día que vuelves es un paso más hacia tu bienestar.
+            {t('auth.login.panelSubtitle')}
           </p>
 
-          {/* Tarjetas de motivación */}
+          {/* Motivation cards */}
           <div className="mt-10 space-y-4">
-            {[
-              { icon: Heart, label: '3.2k personas', desc: 'cuidan su salud mental con Eira' },
-              { icon: Star, label: '98% satisfacción', desc: 'en los últimos 30 días' },
-              { icon: ArrowRight, label: 'Siempre gratis', desc: 'sin suscripción ni tarjeta' },
-            ].map(({ icon: Icon, label, desc }) => (
+            {motivationStats.map(({ icon: Icon, label, desc }) => (
               <div key={label} className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10">
                   <Icon className="h-4 w-4 text-eira-200" />
@@ -73,13 +76,13 @@ export default function Login() {
         </div>
 
         <p className="relative text-xs text-eira-400/70">
-          © 2026 Eira · Hecho con cuidado para ti
+          {t('auth.login.footer')}
         </p>
       </div>
 
-      {/* ── Panel derecho: formulario ── */}
+      {/* Right panel: form */}
       <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 py-12 lg:min-h-0">
-        {/* Logo móvil */}
+        {/* Mobile logo */}
         <div className="mb-8 flex items-center gap-2 lg:hidden">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-eira-100">
             <Leaf className="h-4 w-4 text-eira-600" />
@@ -89,9 +92,9 @@ export default function Login() {
 
         <div className="w-full max-w-sm">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-slate-900">Iniciar sesión</h2>
+            <h2 className="text-2xl font-bold text-slate-900">{t('auth.login.formTitle')}</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Continúa donde lo dejaste.
+              {t('auth.login.formSubtitle')}
             </p>
           </div>
 
@@ -106,7 +109,7 @@ export default function Login() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
             <Input
-              label="Email"
+              label={t('auth.login.emailLabel')}
               type="email"
               placeholder="ana@example.com"
               autoComplete="email"
@@ -115,9 +118,9 @@ export default function Login() {
             />
 
             <Input
-              label="Contraseña"
+              label={t('auth.login.passwordLabel')}
               type="password"
-              placeholder="Tu contraseña"
+              placeholder={t('auth.login.passwordPlaceholder')}
               autoComplete="current-password"
               error={errors.password?.message}
               {...register('password')}
@@ -130,17 +133,17 @@ export default function Login() {
               isLoading={isPending}
               className="w-full rounded-xl"
             >
-              Iniciar sesión
+              {t('auth.login.submitButton')}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-slate-500">
-            ¿No tienes cuenta?{' '}
+            {t('auth.login.noAccount')}{' '}
             <Link
               to="/register"
               className="font-semibold text-eira-600 hover:text-eira-700"
             >
-              Regístrate gratis
+              {t('auth.login.registerLink')}
             </Link>
           </p>
         </div>

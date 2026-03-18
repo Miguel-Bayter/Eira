@@ -26,33 +26,33 @@ export class CreateMoodEntryUseCase {
   ) {}
 
   async execute(input: CreateMoodEntryInput): Promise<CreateMoodEntryOutput> {
-    // 1. Buscar usuario por supabase_id (req.userId contiene el UUID de Supabase Auth)
+    // 1. Look up user by supabase_id (req.userId contains the Supabase Auth UUID)
     const user = await this.userRepo.findBySupabaseId(input.userId);
     if (!user) throw new UserNotFoundError(input.userId);
 
-    // 2. Límite diario de 5 entradas (usar ID interno de la BD)
+    // 2. Daily limit: max 5 entries (use the internal DB ID)
     const todayCount = await this.moodRepo.countTodayByUser(user.id);
     if (todayCount >= 5) throw new DailyLimitExceededError('mood', 5);
 
-    // 3. Crear la entidad (valida score y emoción internamente)
+    // 3. Create the entity (validates score and emotion internally)
     const entry = MoodEntry.create({
-      userId: user.id, // ID interno, no el de Supabase
+      userId: user.id, // internal ID, not the Supabase one
       score: input.score,
       emotion: input.emotion,
       ...(input.note !== undefined && { note: input.note }),
     });
 
-    // 4. Aplicar efectos en el wellness score
+    // 4. Apply wellness score effects
     if (entry.score.isHighMood()) {
       user.applyHighMoodBonus();
     } else if (entry.score.isCrisis()) {
       user.applyLowMoodPenalty();
     }
 
-    // 5. Incrementar racha
+    // 5. Increment streak
     user.incrementStreakForToday();
 
-    // 6. Persistir ambos
+    // 6. Persist both
     await this.moodRepo.save(entry);
     await this.userRepo.save(user);
 

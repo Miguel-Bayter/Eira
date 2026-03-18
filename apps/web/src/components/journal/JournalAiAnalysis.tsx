@@ -1,4 +1,5 @@
 import { Heart, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface JournalAiAnalysisProps {
   analysis: string | null;
@@ -8,6 +9,8 @@ interface JournalAiAnalysisProps {
 }
 
 export function JournalAiAnalysis({ analysis, isLoading, error, hasEntry }: JournalAiAnalysisProps) {
+  const { t } = useTranslation();
+
   if (!hasEntry && !isLoading) return null;
 
   return (
@@ -22,8 +25,8 @@ export function JournalAiAnalysis({ analysis, isLoading, error, hasEntry }: Jour
             <Heart className="h-4 w-4 text-eira-500" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-eira-700">Eira te escribe</p>
-            <p className="text-xs text-gray-400">Consejos para ti, con cariño</p>
+            <p className="text-sm font-semibold text-eira-700">{t('journal.analysis.header')}</p>
+            <p className="text-xs text-gray-400">{t('journal.analysis.subheader')}</p>
           </div>
         </div>
 
@@ -32,7 +35,7 @@ export function JournalAiAnalysis({ analysis, isLoading, error, hasEntry }: Jour
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-sm text-eira-500">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Eira está leyendo lo que escribiste...</span>
+              <span>{t('journal.analysis.loading')}</span>
             </div>
             <div className="space-y-2 animate-pulse">
               <div className="h-3 bg-eira-100 rounded-full w-5/6" />

@@ -42,55 +42,57 @@ function renderWithProviders(ui: React.ReactElement) {
   );
 }
 
-describe('Journal — Página', () => {
-  describe('Renderizado', () => {
-    it('muestra el saludo del encabezado', () => {
+describe('Journal — Page', () => {
+  describe('Rendering', () => {
+    it('shows the header greeting', () => {
       renderWithProviders(<Journal />);
-      // getDayGreeting returns "Buenos días/tardes/noches ✨" inside an h1
+      // getDayGreeting returns a translation key (mock returns key), inside an h1
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
     });
 
-    it('muestra el texto del espacio seguro', () => {
+    it('shows the safe space subtitle text', () => {
       renderWithProviders(<Journal />);
-      expect(screen.getByText(/este es tu espacio/i)).toBeInTheDocument();
+      // mock t() returns the key
+      expect(screen.getByText('journal.subtitle')).toBeInTheDocument();
     });
 
-    it('muestra el textarea del editor', () => {
+    it('shows the editor textarea', () => {
       renderWithProviders(<Journal />);
       const textarea = screen.getByRole('textbox');
       expect(textarea).toBeInTheDocument();
     });
 
-    it('muestra el label del editor', () => {
+    it('shows the editor label', () => {
       renderWithProviders(<Journal />);
-      expect(screen.getByLabelText(/¿qué llevas en el corazón hoy\?/i)).toBeInTheDocument();
+      // The label renders the i18n key via mock
+      expect(screen.getByLabelText('journal.editor.label')).toBeInTheDocument();
     });
 
-    it('muestra el texto de ayuda del editor', () => {
+    it('shows the editor hint text', () => {
       renderWithProviders(<Journal />);
-      expect(screen.getByText(/escribe al menos 10 caracteres para guardar/i)).toBeInTheDocument();
+      expect(screen.getByText('journal.editor.hint')).toBeInTheDocument();
     });
 
-    it('NO muestra el panel de Eira cuando no hay entrada guardada', () => {
+    it('does NOT show the Eira panel when no entry is saved', () => {
       renderWithProviders(<Journal />);
-      expect(screen.queryByText(/eira te escribe/i)).not.toBeInTheDocument();
-    });
-  });
-
-  describe('Botones', () => {
-    it('muestra el botón "Solo guardar"', () => {
-      renderWithProviders(<Journal />);
-      expect(screen.getByRole('button', { name: /solo guardar/i })).toBeInTheDocument();
-    });
-
-    it('muestra el botón "Guardar y recibir consejos"', () => {
-      renderWithProviders(<Journal />);
-      expect(screen.getByRole('button', { name: /guardar y recibir consejos/i })).toBeInTheDocument();
+      expect(screen.queryByText('journal.analysis.header')).not.toBeInTheDocument();
     });
   });
 
-  describe('SIN inline CSS', () => {
-    it('ningún elemento tiene prop style con colores o dimensiones de layout', () => {
+  describe('Buttons', () => {
+    it('shows the save-only button', () => {
+      renderWithProviders(<Journal />);
+      expect(screen.getByRole('button', { name: 'journal.editor.saveButton' })).toBeInTheDocument();
+    });
+
+    it('shows the save-and-analyze button', () => {
+      renderWithProviders(<Journal />);
+      expect(screen.getByRole('button', { name: 'journal.editor.saveAndAnalyzeButton' })).toBeInTheDocument();
+    });
+  });
+
+  describe('No inline CSS', () => {
+    it('no element has a style prop with colors or layout dimensions', () => {
       const { container } = renderWithProviders(<Journal />);
       const elementsWithStyle = container.querySelectorAll('[style]');
       elementsWithStyle.forEach((el) => {

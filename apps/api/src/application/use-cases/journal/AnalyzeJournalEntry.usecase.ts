@@ -47,7 +47,7 @@ export class AnalyzeJournalEntryUseCase {
 
     // Rate limit: max 10 AI analyses per day
     const todayCount = await this.journalRepo.countTodayAnalysesByUser(user.id);
-    if (todayCount >= 10) throw new DailyLimitExceededError('análisis IA', 10);
+    if (todayCount >= 10) throw new DailyLimitExceededError('AI analyses', 10);
 
     const analysis = await this.aiService.analyze(entry.content, JOURNAL_ANALYSIS_PROMPT);
     entry.setAiAnalysis(analysis);

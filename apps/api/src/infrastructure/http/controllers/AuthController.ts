@@ -18,17 +18,17 @@ export class AuthController {
     try {
       const { name, email, password } = req.body as { name: string; email: string; password: string };
 
-      // 1. Crear usuario en Supabase Auth
+      // 1. Create user in Supabase Auth
       const { data, error } = await supabase.auth.signUp({ email, password });
 
       if (error !== null || data.user === null) {
         res.status(400).json({
-          error: { code: 'SUPABASE_ERROR', message: error?.message ?? 'Error al registrar' },
+          error: { code: 'SUPABASE_ERROR', message: error?.message ?? 'Registration error' },
         });
         return;
       }
 
-      // 2. Crear usuario en nuestra DB
+      // 2. Create user in our DB
       const user = await this.registerUser.execute({
         name,
         email,
@@ -51,18 +51,18 @@ export class AuthController {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error !== null || data.user === null || data.session === null) {
-        // SEGURIDAD: mismo mensaje para email inexistente y password incorrecta
+        // SECURITY: same message for non-existent email and wrong password
         res.status(401).json({
-          error: { code: 'INVALID_CREDENTIALS', message: 'Credenciales inválidas' },
+          error: { code: 'INVALID_CREDENTIALS', message: 'Invalid credentials' },
         });
         return;
       }
 
-      // Obtener o crear usuario en nuestra DB
+      // Get or create user in our DB
       const user = await this.getOrCreateUser.execute({
         supabaseId: data.user.id,
         email: data.user.email ?? email,
-        name: (data.user.user_metadata as { name?: string } | null)?.name ?? 'Usuario',
+        name: (data.user.user_metadata as { name?: string } | null)?.name ?? 'User',
       });
 
       res.status(200).json({
@@ -76,14 +76,14 @@ export class AuthController {
 
   me = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      // req.userId viene del authMiddleware
+      // req.userId comes from authMiddleware
       const supabaseId = req.userId;
 
       const {
         data: { user: supabaseUser },
       } = await supabase.auth.getUser();
 
-      // Buscar por supabaseId
+      // Look up by supabaseId
       res.status(200).json({ userId: supabaseId, supabaseUser });
     } catch (err) {
       next(err);

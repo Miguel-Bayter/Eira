@@ -1,0 +1,169 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "back": "Volver",
+    "inDevelopment": "En desarrollo..."
+  },
+  "auth": {
+    "login": {
+      "panelHeading": "Bienvenido/a\nde vuelta",
+      "panelSubtitle": "Tu progreso te está esperando. Cada día que vuelves es un paso más hacia tu bienestar.",
+      "stat1Label": "3.2k personas",
+      "stat1Desc": "cuidan su salud mental con Eira",
+      "stat2Label": "98% satisfacción",
+      "stat2Desc": "en los últimos 30 días",
+      "stat3Label": "Siempre gratis",
+      "stat3Desc": "sin suscripción ni tarjeta",
+      "footer": "© 2026 Eira · Hecho con cuidado para ti",
+      "formTitle": "Iniciar sesión",
+      "formSubtitle": "Continúa donde lo dejaste.",
+      "emailLabel": "Email",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Tu contraseña",
+      "submitButton": "Iniciar sesión",
+      "noAccount": "¿No tienes cuenta?",
+      "registerLink": "Regístrate gratis"
+    },
+    "register": {
+      "panelHeading": "Tu espacio seguro\nde bienestar mental",
+      "panelSubtitle": "Un lugar tranquilo para conocerte mejor, registrar cómo te sientes y crecer cada día.",
+      "feature1": "Análisis emocional con inteligencia artificial",
+      "feature2": "Tu privacidad siempre protegida",
+      "feature3": "Totalmente gratuito, sin tarjeta de crédito",
+      "footer": "© 2026 · Hecho con cuidado para ti",
+      "formTitle": "Crear cuenta",
+      "formSubtitle": "Empieza gratis, sin compromisos.",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Ana García",
+      "emailLabel": "Email",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Mínimo 8 caracteres, 1 mayúscula, 1 número",
+      "submitButton": "Crear cuenta",
+      "hasAccount": "¿Ya tienes cuenta?",
+      "loginLink": "Inicia sesión"
+    }
+  },
+  "dashboard": {
+    "logoutAriaLabel": "Cerrar sesión",
+    "defaultUser": "Usuario",
+    "greeting": "Buenos días",
+    "question": "¿Cómo te encuentras hoy?",
+    "streakDays": "{{count}} días de racha",
+    "wellnessAriaLabel": "Puntuación de bienestar: {{score}} de 100",
+    "wellnessLabel": "bienestar",
+    "sectionTitle": "Tu espacio",
+    "dailyTitle": "Registro de hoy",
+    "dailySubtitle": "¿Ya registraste tu estado de ánimo?",
+    "nav": {
+      "moodLabel": "Mood Tracker",
+      "moodDesc": "Registra cómo te sientes",
+      "journalLabel": "Diario",
+      "journalDesc": "Escribe y analiza con IA",
+      "chatLabel": "Chat IA",
+      "chatDesc": "Habla con Eira",
+      "communityLabel": "Comunidad",
+      "communityDesc": "Apoyo anónimo",
+      "gamesLabel": "Juegos",
+      "gamesDesc": "Ejercicios terapéuticos"
+    }
+  },
+  "mood": {
+    "tracker": {
+      "backAriaLabel": "Volver al inicio",
+      "title": "Mood Tracker",
+      "remainingEntries_one": "{{count}} registro restante hoy",
+      "remainingEntries_other": "{{count}} registros restantes hoy",
+      "limitReached": "Límite diario alcanzado",
+      "limitMessage": "Ya registraste {{max}} estados de ánimo hoy. Vuelve mañana.",
+      "noteLabel": "Nota (opcional)",
+      "notePlaceholder": "¿Qué está pasando hoy? ¿Hay algo que quieras recordar?",
+      "submitButton": "Guardar registro",
+      "successTitle": "¡Registrado!",
+      "successMessage": "Tu estado de ánimo fue guardado",
+      "backToHome": "Volver al inicio"
+    },
+    "slider": {
+      "question": "¿Cómo te sientes ahora?",
+      "ariaLabel": "Estado de ánimo",
+      "thumbAriaLabel": "Estado de ánimo: {{value}} - {{label}}",
+      "scaleMin": "Muy mal",
+      "scaleMid": "Neutro",
+      "scaleMax": "Extraordinario",
+      "labels": {
+        "1": "Muy mal",
+        "2": "Muy mal",
+        "3": "Mal",
+        "4": "Algo bajo",
+        "5": "Neutro",
+        "6": "Bien",
+        "7": "Bastante bien",
+        "8": "Muy bien",
+        "9": "Excelente",
+        "10": "Extraordinario"
+      }
+    },
+    "emotions": {
+      "question": "¿Qué emoción predomina?",
+      "groupAriaLabel": "Selecciona una emoción",
+      "alegre": "Alegre",
+      "tranquilo": "Tranquilo",
+      "agradecido": "Agradecido",
+      "esperanzador": "Esperanzador",
+      "motivado": "Motivado",
+      "ansioso": "Ansioso",
+      "triste": "Triste",
+      "enojado": "Enojado",
+      "frustrado": "Frustrado",
+      "cansado": "Cansado",
+      "confundido": "Confundido",
+      "solitario": "Solitario",
+      "abrumado": "Abrumado",
+      "asustado": "Asustado",
+      "neutral": "Neutral"
+    },
+    "crisis": {
+      "closeAriaLabel": "Cerrar",
+      "title": "Estamos aquí para ti",
+      "description": "Notamos que puedes estar pasando un momento difícil. Hablar con alguien puede ayudar mucho.",
+      "lineLabel": "Línea de atención gratuita · Colombia",
+      "lineAvailability": "Disponible 24/7 · Confidencial",
+      "callButton": "Llamar al 106 ahora",
+      "continueButton": "Continuar en Eira"
+    }
+  },
+  "journal": {
+    "greeting": {
+      "morning": "Buenos días",
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches"
+    },
+    "subtitle": "Este es tu espacio. Escribe sin filtros, sin juicios.",
+    "previousEntries": "Entradas anteriores",
+    "withTips": "Con consejos",
+    "viewTips": "Ver consejos de Eira →",
+    "editor": {
+      "label": "¿Qué llevas en el corazón hoy?",
+      "placeholder": "Escribe libremente... aquí no hay respuestas correctas ni incorrectas 🌿",
+      "hint": "Escribe al menos 10 caracteres para guardar.",
+      "remaining": "{{count}} restantes",
+      "saveButton": "Solo guardar",
+      "saveAndAnalyzeButton": "Guardar y recibir consejos",
+      "saving": "Guardando...",
+      "analyzing": "Eira está leyendo..."
+    },
+    "analysis": {
+      "header": "Eira te escribe",
+      "subheader": "Consejos para ti, con cariño",
+      "loading": "Eira está leyendo lo que escribiste..."
+    }
+  },
+  "navigation": {
+    "page": "Página: {{name}}"
+  },
+  "errors": {
+    "internalServer": "Internal server error"
+  }
+}

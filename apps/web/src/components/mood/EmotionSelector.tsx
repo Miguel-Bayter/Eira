@@ -1,22 +1,24 @@
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import type { EmotionValue } from '@/schemas/mood.schema';
 
-const EMOTION_LIST: { value: EmotionValue; emoji: string; label: string }[] = [
-  { value: 'alegre', emoji: '😊', label: 'Alegre' },
-  { value: 'tranquilo', emoji: '😌', label: 'Tranquilo' },
-  { value: 'agradecido', emoji: '🙏', label: 'Agradecido' },
-  { value: 'esperanzador', emoji: '✨', label: 'Esperanzador' },
-  { value: 'motivado', emoji: '💪', label: 'Motivado' },
-  { value: 'ansioso', emoji: '😰', label: 'Ansioso' },
-  { value: 'triste', emoji: '😔', label: 'Triste' },
-  { value: 'enojado', emoji: '😠', label: 'Enojado' },
-  { value: 'frustrado', emoji: '😤', label: 'Frustrado' },
-  { value: 'cansado', emoji: '😴', label: 'Cansado' },
-  { value: 'confundido', emoji: '😕', label: 'Confundido' },
-  { value: 'solitario', emoji: '😞', label: 'Solitario' },
-  { value: 'abrumado', emoji: '😩', label: 'Abrumado' },
-  { value: 'asustado', emoji: '😨', label: 'Asustado' },
-  { value: 'neutral', emoji: '😐', label: 'Neutral' },
+// Emotion list with value and emoji — labels come from i18n
+const EMOTION_LIST: { value: EmotionValue; emoji: string }[] = [
+  { value: 'alegre',       emoji: '😊' },
+  { value: 'tranquilo',    emoji: '😌' },
+  { value: 'agradecido',   emoji: '🙏' },
+  { value: 'esperanzador', emoji: '✨' },
+  { value: 'motivado',     emoji: '💪' },
+  { value: 'ansioso',      emoji: '😰' },
+  { value: 'triste',       emoji: '😔' },
+  { value: 'enojado',      emoji: '😠' },
+  { value: 'frustrado',    emoji: '😤' },
+  { value: 'cansado',      emoji: '😴' },
+  { value: 'confundido',   emoji: '😕' },
+  { value: 'solitario',    emoji: '😞' },
+  { value: 'abrumado',     emoji: '😩' },
+  { value: 'asustado',     emoji: '😨' },
+  { value: 'neutral',      emoji: '😐' },
 ];
 
 interface EmotionSelectorProps {
@@ -26,18 +28,21 @@ interface EmotionSelectorProps {
 }
 
 export function EmotionSelector({ value, onChange, error }: EmotionSelectorProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-3">
       <span className="block text-sm font-medium text-slate-700">
-        ¿Qué emoción predomina?
+        {t('mood.emotions.question')}
       </span>
 
       <div
         className="grid grid-cols-5 gap-2"
         role="group"
-        aria-label="Selecciona una emoción"
+        aria-label={t('mood.emotions.groupAriaLabel')}
       >
-        {EMOTION_LIST.map(({ value: emotion, emoji, label }) => {
+        {EMOTION_LIST.map(({ value: emotion, emoji }) => {
+          const label = t(`mood.emotions.${emotion}`);
           const isSelected = value === emotion;
           return (
             <button

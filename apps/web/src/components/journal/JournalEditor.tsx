@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Loader2, Sparkles, BookmarkCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface JournalEditorProps {
   onSave: (content: string) => Promise<void>;
@@ -9,6 +10,7 @@ interface JournalEditorProps {
 }
 
 export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing }: JournalEditorProps) {
+  const { t } = useTranslation();
   const [content, setContent] = useState('');
   const isPending = isSaving || isAnalyzing;
   const canSubmit = content.trim().length >= 10 && !isPending;
@@ -35,7 +37,7 @@ export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing 
           htmlFor="journal-content"
           className="block text-base font-semibold text-gray-700"
         >
-          ¿Qué llevas en el corazón hoy?
+          {t('journal.editor.label')}
         </label>
 
         {/* Textarea */}
@@ -44,7 +46,7 @@ export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing 
             id="journal-content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Escribe libremente... aquí no hay respuestas correctas ni incorrectas 🌿"
+            placeholder={t('journal.editor.placeholder')}
             maxLength={5000}
             rows={11}
             disabled={isPending}
@@ -53,12 +55,12 @@ export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing 
           />
           {/* Character count inside textarea area */}
           <span className="absolute bottom-3 right-4 text-xs text-gray-300 select-none">
-            {remaining < 500 ? `${remaining} restantes` : ''}
+            {remaining < 500 ? t('journal.editor.remaining', { count: remaining }) : ''}
           </span>
         </div>
 
         <p id="journal-hint" className="text-xs text-gray-400">
-          Escribe al menos 10 caracteres para guardar.
+          {t('journal.editor.hint')}
         </p>
 
         {/* Buttons */}
@@ -71,12 +73,12 @@ export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing 
             {isSaving ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Guardando...
+                {t('journal.editor.saving')}
               </>
             ) : (
               <>
                 <BookmarkCheck className="h-4 w-4" />
-                Solo guardar
+                {t('journal.editor.saveButton')}
               </>
             )}
           </button>
@@ -89,12 +91,12 @@ export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing 
             {isAnalyzing ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Eira está leyendo...
+                {t('journal.editor.analyzing')}
               </>
             ) : (
               <>
                 <Sparkles className="h-4 w-4" />
-                Guardar y recibir consejos
+                {t('journal.editor.saveAndAnalyzeButton')}
               </>
             )}
           </button>

@@ -1,17 +1,19 @@
 import * as SliderPrimitive from '@radix-ui/react-slider';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
-const MOOD_LABELS: Record<number, string> = {
-  1: 'Muy mal',
-  2: 'Muy mal',
-  3: 'Mal',
-  4: 'Algo bajo',
-  5: 'Neutro',
-  6: 'Bien',
-  7: 'Bastante bien',
-  8: 'Muy bien',
-  9: 'Excelente',
-  10: 'Extraordinario',
+// Mapping from numeric score to translation key suffix
+const MOOD_LABEL_KEYS: Record<number, string> = {
+  1: 'mood.slider.labels.1',
+  2: 'mood.slider.labels.2',
+  3: 'mood.slider.labels.3',
+  4: 'mood.slider.labels.4',
+  5: 'mood.slider.labels.5',
+  6: 'mood.slider.labels.6',
+  7: 'mood.slider.labels.7',
+  8: 'mood.slider.labels.8',
+  9: 'mood.slider.labels.9',
+  10: 'mood.slider.labels.10',
 };
 
 interface MoodSliderProps {
@@ -20,6 +22,8 @@ interface MoodSliderProps {
 }
 
 export function MoodSlider({ value, onChange }: MoodSliderProps) {
+  const { t } = useTranslation();
+
   const isCrisis = value <= 3;
   const isLow = value >= 4 && value <= 5;
   const isHigh = value >= 8;
@@ -44,10 +48,12 @@ export function MoodSlider({ value, onChange }: MoodSliderProps) {
       ? 'bg-amber-500 border-amber-300'
       : 'bg-eira-500 border-eira-300';
 
+  const currentLabel = t(MOOD_LABEL_KEYS[value] ?? 'mood.slider.labels.5');
+
   return (
     <div className="space-y-5">
       <div className="flex items-baseline justify-between">
-        <span className="text-sm font-medium text-slate-700">¿Cómo te sientes ahora?</span>
+        <span className="text-sm font-medium text-slate-700">{t('mood.slider.question')}</span>
         <div className="flex items-baseline gap-1">
           <span className={cn('text-3xl font-bold tabular-nums', scoreColor)}>{value}</span>
           <span className="text-sm text-slate-400">/10</span>
@@ -63,7 +69,7 @@ export function MoodSlider({ value, onChange }: MoodSliderProps) {
         onValueChange={(vals) => {
           if (vals[0] !== undefined) onChange(vals[0]);
         }}
-        aria-label="Estado de ánimo"
+        aria-label={t('mood.slider.ariaLabel')}
       >
         <SliderPrimitive.Track className="relative h-3 w-full grow overflow-hidden rounded-full bg-slate-100">
           <SliderPrimitive.Range className={cn('absolute h-full transition-all duration-200', trackColor)} />
@@ -75,18 +81,18 @@ export function MoodSlider({ value, onChange }: MoodSliderProps) {
             'transition-transform hover:scale-110 active:scale-95',
             thumbColor,
           )}
-          aria-label={`Estado de ánimo: ${value} - ${MOOD_LABELS[value] ?? ''}`}
+          aria-label={t('mood.slider.thumbAriaLabel', { value, label: currentLabel })}
         />
       </SliderPrimitive.Root>
 
       <p className={cn('text-center text-base font-semibold', scoreColor)}>
-        {MOOD_LABELS[value]}
+        {currentLabel}
       </p>
 
       <div className="flex justify-between text-xs text-slate-400">
-        <span>Muy mal</span>
-        <span>Neutro</span>
-        <span>Extraordinario</span>
+        <span>{t('mood.slider.scaleMin')}</span>
+        <span>{t('mood.slider.scaleMid')}</span>
+        <span>{t('mood.slider.scaleMax')}</span>
       </div>
     </div>
   );

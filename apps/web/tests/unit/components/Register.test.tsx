@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import Register from '../../../src/pages/Register';
 
-// Mock del hook useRegister
+// Mock useRegister hook
 vi.mock('../../../src/hooks/useAuth', () => ({
   useRegister: () => ({
     mutateAsync: vi.fn().mockResolvedValue({ user: { id: '1', email: 'a@b.com', name: 'Test', wellnessScore: 50 }, token: 'token' }),
@@ -14,7 +14,7 @@ vi.mock('../../../src/hooks/useAuth', () => ({
   }),
 }));
 
-// Mock de react-router-dom navigate
+// Mock react-router-dom navigate
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return { ...actual, useNavigate: () => vi.fn() };
@@ -29,28 +29,29 @@ function renderWithProviders(ui: React.ReactElement) {
   );
 }
 
-describe('Register — Página', () => {
-  describe('Renderizado', () => {
-    it('muestra el formulario de registro', () => {
+describe('Register — Page', () => {
+  describe('Rendering', () => {
+    it('shows the registration form', () => {
       renderWithProviders(<Register />);
-      expect(screen.getByRole('heading', { name: /crear cuenta/i })).toBeInTheDocument();
-      expect(screen.getByLabelText(/nombre/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
+      // The mock returns the i18n key as text
+      expect(screen.getByRole('heading', { name: 'auth.register.formTitle' })).toBeInTheDocument();
+      expect(screen.getByLabelText('auth.register.nameLabel')).toBeInTheDocument();
+      expect(screen.getByLabelText('auth.register.emailLabel')).toBeInTheDocument();
+      expect(screen.getByLabelText('auth.register.passwordLabel')).toBeInTheDocument();
     });
 
-    it('muestra el logo de Eira', () => {
+    it('shows the Eira logo', () => {
       renderWithProviders(<Register />);
       expect(screen.getByText(/eira/i)).toBeInTheDocument();
     });
   });
 
-  describe('Validación', () => {
-    it('muestra errores si se envía el formulario vacío', async () => {
+  describe('Validation', () => {
+    it('shows errors when submitting an empty form', async () => {
       const user = userEvent.setup();
       renderWithProviders(<Register />);
 
-      const submitBtn = screen.getByRole('button', { name: /crear cuenta/i });
+      const submitBtn = screen.getByRole('button', { name: 'auth.register.submitButton' });
       await user.click(submitBtn);
 
       await waitFor(() => {
@@ -58,12 +59,12 @@ describe('Register — Página', () => {
       });
     });
 
-    it('muestra error para email inválido', async () => {
+    it('shows error for invalid email', async () => {
       const user = userEvent.setup();
       renderWithProviders(<Register />);
 
-      await user.type(screen.getByLabelText(/email/i), 'notanemail');
-      await user.click(screen.getByRole('button', { name: /crear cuenta/i }));
+      await user.type(screen.getByLabelText('auth.register.emailLabel'), 'notanemail');
+      await user.click(screen.getByRole('button', { name: 'auth.register.submitButton' }));
 
       await waitFor(() => {
         expect(screen.getByText(/email inválido/i)).toBeInTheDocument();
@@ -71,8 +72,8 @@ describe('Register — Página', () => {
     });
   });
 
-  describe('SIN inline CSS', () => {
-    it('ningún elemento tiene prop style con colores o padding', () => {
+  describe('No inline CSS', () => {
+    it('no element has a style prop with colors or padding', () => {
       const { container } = renderWithProviders(<Register />);
       const elementsWithStyle = container.querySelectorAll('[style]');
       elementsWithStyle.forEach((el) => {

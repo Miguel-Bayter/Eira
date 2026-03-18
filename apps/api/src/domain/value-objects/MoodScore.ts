@@ -37,9 +37,9 @@ export class MoodScore {
 
   getLabel(): string {
     if (this.value <= 2) return 'crisis';
-    if (this.value <= 4) return 'bajo';
+    if (this.value <= 4) return 'low';
     if (this.value <= 6) return 'neutral';
-    if (this.value <= 8) return 'bien';
-    return 'excelente';
+    if (this.value <= 8) return 'good';
+    return 'excellent';
   }
 }

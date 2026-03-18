@@ -55,8 +55,8 @@ describe('RegisterUserUseCase', () => {
         email: 'test@x.com',
         supabaseId: 'sb-1',
       });
-      // El email se envía de forma asíncrona (fire-and-forget)
-      // Esperamos que se haya llamado
+      // Email is sent asynchronously (fire-and-forget)
+      // Wait for it to be called
       await new Promise((resolve) => setTimeout(resolve, 10));
       expect(mockEmailService.sendWelcome).toHaveBeenCalled();
     });

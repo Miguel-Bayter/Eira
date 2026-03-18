@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { Phone, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/Button';
 
 interface CrisisModalProps {
@@ -8,6 +9,8 @@ interface CrisisModalProps {
 }
 
 export function CrisisModal({ isOpen, onClose }: CrisisModalProps) {
+  const { t } = useTranslation();
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <Dialog.Portal>
@@ -18,7 +21,7 @@ export function CrisisModal({ isOpen, onClose }: CrisisModalProps) {
         >
           <Dialog.Close
             className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100"
-            aria-label="Cerrar"
+            aria-label={t('mood.crisis.closeAriaLabel')}
           >
             <X className="h-4 w-4" />
           </Dialog.Close>
@@ -28,22 +31,22 @@ export function CrisisModal({ isOpen, onClose }: CrisisModalProps) {
           </div>
 
           <Dialog.Title className="mb-3 text-center text-xl font-bold text-slate-900">
-            Estamos aquí para ti
+            {t('mood.crisis.title')}
           </Dialog.Title>
 
           <p
             id="crisis-desc"
             className="mb-6 text-center text-sm leading-relaxed text-slate-500"
           >
-            Notamos que puedes estar pasando un momento difícil. Hablar con alguien puede ayudar mucho.
+            {t('mood.crisis.description')}
           </p>
 
           <div className="mb-6 rounded-2xl bg-crisis-50 py-4 text-center">
             <p className="text-xs font-semibold uppercase tracking-widest text-crisis-500">
-              Línea de atención gratuita · Colombia
+              {t('mood.crisis.lineLabel')}
             </p>
             <p className="mt-1 text-5xl font-bold text-crisis-700">106</p>
-            <p className="mt-1 text-xs text-crisis-400">Disponible 24/7 · Confidencial</p>
+            <p className="mt-1 text-xs text-crisis-400">{t('mood.crisis.lineAvailability')}</p>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -52,10 +55,10 @@ export function CrisisModal({ isOpen, onClose }: CrisisModalProps) {
               className="flex items-center justify-center gap-2 rounded-xl bg-crisis-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-crisis-700 focus:outline-none focus:ring-2 focus:ring-crisis-500 focus:ring-offset-2"
             >
               <Phone className="h-4 w-4" />
-              Llamar al 106 ahora
+              {t('mood.crisis.callButton')}
             </a>
             <Button variant="ghost" size="md" onClick={onClose} className="w-full">
-              Continuar en Eira
+              {t('mood.crisis.continueButton')}
             </Button>
           </div>
         </Dialog.Content>

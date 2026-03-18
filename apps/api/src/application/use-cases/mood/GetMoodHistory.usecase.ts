@@ -3,7 +3,7 @@ import type { IUserRepository } from '@domain/repositories/IUserRepository';
 import { UserNotFoundError } from '@domain/errors';
 
 export interface GetMoodHistoryInput {
-  userId: string; // Supabase Auth UUID (de req.userId)
+  userId: string; // Supabase Auth UUID (from req.userId)
   limit?: number;
 }
 
@@ -28,7 +28,7 @@ export class GetMoodHistoryUseCase {
   ) {}
 
   async execute(input: GetMoodHistoryInput): Promise<GetMoodHistoryOutput> {
-    // Resolver ID interno a partir del supabase_id
+    // Resolve internal ID from supabase_id
     const user = await this.userRepo.findBySupabaseId(input.userId);
     if (!user) throw new UserNotFoundError(input.userId);
 

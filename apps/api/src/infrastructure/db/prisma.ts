@@ -5,7 +5,7 @@ declare global {
   var __prisma: PrismaClient | undefined;
 }
 
-// Singleton para evitar múltiples conexiones en desarrollo (hot reload)
+// Singleton to avoid multiple connections in development (hot reload)
 export const prisma =
   global.__prisma ??
   new PrismaClient({

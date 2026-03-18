@@ -6,13 +6,13 @@ import { z } from 'zod';
 
 const router = Router();
 
-// Rate limiting estricto para auth (previene brute force)
+// Strict rate limiting for auth routes (prevents brute force)
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 10, // máx 10 intentos por IP
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // max 10 attempts per IP
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Demasiados intentos. Intenta en 15 minutos.' } },
+  message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many attempts. Please try again in 15 minutes.' } },
 });
 
 const registerSchema = z.object({
@@ -21,8 +21,8 @@ const registerSchema = z.object({
   password: z
     .string()
     .min(8)
-    .regex(/[A-Z]/, 'Debe contener mayúscula')
-    .regex(/[0-9]/, 'Debe contener número'),
+    .regex(/[A-Z]/, 'Must contain an uppercase letter')
+    .regex(/[0-9]/, 'Must contain a number'),
 });
 
 const loginSchema = z.object({

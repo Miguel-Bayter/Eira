@@ -9,55 +9,24 @@ import {
   MessageCircle,
   Users,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
+import { LanguageSwitcher } from '../components/ui/LanguageSwitcher';
 
-const NAV_CARDS = [
-  {
-    to: '/mood',
-    icon: Activity,
-    label: 'Mood Tracker',
-    desc: 'Registra cómo te sientes',
-    bg: 'bg-eira-100',
-    iconColor: 'text-eira-600',
-  },
-  {
-    to: '/journal',
-    icon: BookOpen,
-    label: 'Diario',
-    desc: 'Escribe y analiza con IA',
-    bg: 'bg-violet-100',
-    iconColor: 'text-violet-600',
-  },
-  {
-    to: '/chat',
-    icon: MessageCircle,
-    label: 'Chat IA',
-    desc: 'Habla con Eira',
-    bg: 'bg-sky-100',
-    iconColor: 'text-sky-600',
-  },
-  {
-    to: '/community',
-    icon: Users,
-    label: 'Comunidad',
-    desc: 'Apoyo anónimo',
-    bg: 'bg-amber-100',
-    iconColor: 'text-amber-600',
-  },
-  {
-    to: '/games',
-    icon: Gamepad2,
-    label: 'Juegos',
-    desc: 'Ejercicios terapéuticos',
-    bg: 'bg-rose-100',
-    iconColor: 'text-rose-600',
-  },
+// Static route/style data (no translatable strings here)
+const NAV_ROUTES = [
+  { to: '/mood',      icon: Activity,     labelKey: 'dashboard.nav.moodLabel',      descKey: 'dashboard.nav.moodDesc',      bg: 'bg-eira-100',   iconColor: 'text-eira-600'   },
+  { to: '/journal',   icon: BookOpen,     labelKey: 'dashboard.nav.journalLabel',   descKey: 'dashboard.nav.journalDesc',   bg: 'bg-violet-100', iconColor: 'text-violet-600' },
+  { to: '/chat',      icon: MessageCircle,labelKey: 'dashboard.nav.chatLabel',      descKey: 'dashboard.nav.chatDesc',      bg: 'bg-sky-100',    iconColor: 'text-sky-600'    },
+  { to: '/community', icon: Users,        labelKey: 'dashboard.nav.communityLabel', descKey: 'dashboard.nav.communityDesc', bg: 'bg-amber-100',  iconColor: 'text-amber-600'  },
+  { to: '/games',     icon: Gamepad2,     labelKey: 'dashboard.nav.gamesLabel',     descKey: 'dashboard.nav.gamesDesc',     bg: 'bg-rose-100',   iconColor: 'text-rose-600'   },
 ] as const;
 
 const RING_RADIUS = 38;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
@@ -66,7 +35,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* ── Top nav ── */}
+      {/* Top nav */}
       <header className="sticky top-0 z-10 border-b border-slate-100 bg-white/80 px-6 py-4 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <div className="flex items-center gap-2">
@@ -77,6 +46,7 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-center gap-3">
+            <LanguageSwitcher />
             {user && (
               <span className="hidden text-sm font-medium text-slate-600 sm:block">
                 {user.name}
@@ -85,7 +55,7 @@ export default function Dashboard() {
             <button
               onClick={logout}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
-              aria-label="Cerrar sesión"
+              aria-label={t('dashboard.logoutAriaLabel')}
             >
               <LogOut className="h-4 w-4" />
             </button>
@@ -94,41 +64,41 @@ export default function Dashboard() {
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-8">
-        {/* ── Hero de bienestar ── */}
+        {/* Wellness hero */}
         <div className="relative mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-eira-500 via-eira-600 to-eira-800 p-8 text-white">
-          {/* Orbs decorativos */}
+          {/* Decorative orbs */}
           <div className="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-white/5 blur-2xl" />
           <div className="absolute -bottom-10 left-8 h-52 w-52 rounded-full bg-eira-900/30 blur-xl" />
 
           <div className="relative flex items-center justify-between gap-6">
-            {/* Texto izquierda */}
+            {/* Left text */}
             <div className="flex-1">
-              <p className="mb-1 text-sm font-medium text-eira-200">Buenos días</p>
+              <p className="mb-1 text-sm font-medium text-eira-200">{t('dashboard.greeting')}</p>
               <h1 className="text-3xl font-bold">
-                {user?.name ?? 'Usuario'}
+                {user?.name ?? t('dashboard.defaultUser')}
               </h1>
-              <p className="mt-2 text-eira-100/80">¿Cómo te encuentras hoy?</p>
+              <p className="mt-2 text-eira-100/80">{t('dashboard.question')}</p>
 
               {user && (
                 <div className="mt-5 flex items-center gap-2">
                   <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5">
                     <Flame className="h-3.5 w-3.5 text-amber-300" />
                     <span className="text-xs font-semibold">
-                      {user.streakDays} días de racha
+                      {t('dashboard.streakDays', { count: user.streakDays })}
                     </span>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Anillo de bienestar */}
+            {/* Wellness ring */}
             {user && (
               <div className="shrink-0">
                 <div className="relative h-28 w-28">
                   <svg
                     className="h-28 w-28 -rotate-90"
                     viewBox="0 0 100 100"
-                    aria-label={`Puntuación de bienestar: ${score} de 100`}
+                    aria-label={t('dashboard.wellnessAriaLabel', { score })}
                     role="img"
                   >
                     {/* Track */}
@@ -150,12 +120,12 @@ export default function Dashboard() {
                       fill="none"
                       strokeLinecap="round"
                       strokeDasharray={RING_CIRCUMFERENCE}
-                      style={{ strokeDashoffset: ringOffset }} // EXCEPCION: valor continuo dinámico
+                      style={{ strokeDashoffset: ringOffset }} // Exception: continuous dynamic value
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-2xl font-bold leading-none">{score}</span>
-                    <span className="mt-0.5 text-xs text-eira-200">bienestar</span>
+                    <span className="mt-0.5 text-xs text-eira-200">{t('dashboard.wellnessLabel')}</span>
                   </div>
                 </div>
               </div>
@@ -163,13 +133,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ── Sección de funciones ── */}
+        {/* Features section */}
         <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-          Tu espacio
+          {t('dashboard.sectionTitle')}
         </h2>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {NAV_CARDS.map(({ to, icon: Icon, label, desc, bg, iconColor }) => (
+          {NAV_ROUTES.map(({ to, icon: Icon, labelKey, descKey, bg, iconColor }) => (
             <Link key={to} to={to}>
               <div className="group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-all hover:border-eira-200 hover:shadow-md">
                 <div
@@ -177,19 +147,19 @@ export default function Dashboard() {
                 >
                   <Icon className={`h-5 w-5 ${iconColor}`} />
                 </div>
-                <p className="font-semibold text-slate-800">{label}</p>
-                <p className="mt-0.5 text-xs text-slate-500">{desc}</p>
+                <p className="font-semibold text-slate-800">{t(labelKey)}</p>
+                <p className="mt-0.5 text-xs text-slate-500">{t(descKey)}</p>
               </div>
             </Link>
           ))}
         </div>
 
-        {/* ── Llamada a la acción diaria ── */}
+        {/* Daily call-to-action */}
         <Link to="/mood">
           <div className="mt-6 flex items-center justify-between rounded-2xl border border-eira-100 bg-eira-50 px-6 py-4 transition-colors hover:bg-eira-100/50">
             <div>
-              <p className="font-semibold text-eira-800">Registro de hoy</p>
-              <p className="text-sm text-eira-600/70">¿Ya registraste tu estado de ánimo?</p>
+              <p className="font-semibold text-eira-800">{t('dashboard.dailyTitle')}</p>
+              <p className="text-sm text-eira-600/70">{t('dashboard.dailySubtitle')}</p>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-eira-500">
               <Activity className="h-5 w-5 text-white" />

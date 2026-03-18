@@ -42,47 +42,49 @@ function renderWithProviders(ui: React.ReactElement) {
   );
 }
 
-describe('MoodTracker — Página', () => {
-  describe('Renderizado', () => {
-    it('muestra el título "Mood Tracker"', () => {
+describe('MoodTracker — Page', () => {
+  describe('Rendering', () => {
+    it('shows the "Mood Tracker" title via i18n key', () => {
       renderWithProviders(<MoodTracker />);
-      expect(screen.getByRole('heading', { name: /mood tracker/i })).toBeInTheDocument();
+      // The heading renders the i18n key 'mood.tracker.title' via the mock
+      expect(screen.getByRole('heading', { name: 'mood.tracker.title' })).toBeInTheDocument();
     });
 
-    it('muestra el valor por defecto del slider (5)', () => {
+    it('shows the default slider value (5)', () => {
       renderWithProviders(<MoodTracker />);
       // The score is rendered as a large number alongside "/10"
       expect(screen.getByText('5')).toBeInTheDocument();
     });
 
-    it('muestra botones de emociones (al menos "Alegre")', () => {
+    it('shows emotion buttons (at least "Alegre" via i18n key)', () => {
       renderWithProviders(<MoodTracker />);
-      expect(screen.getByRole('button', { name: /alegre/i })).toBeInTheDocument();
+      // The mock returns the key, so aria-label="mood.emotions.alegre"
+      expect(screen.getByRole('button', { name: 'mood.emotions.alegre' })).toBeInTheDocument();
     });
 
-    it('muestra la etiqueta "Nota (opcional)"', () => {
+    it('shows the "Note (optional)" label via i18n key', () => {
       renderWithProviders(<MoodTracker />);
-      expect(screen.getByLabelText(/nota \(opcional\)/i)).toBeInTheDocument();
+      expect(screen.getByLabelText('mood.tracker.noteLabel')).toBeInTheDocument();
     });
 
-    it('muestra el botón de submit', () => {
+    it('shows the submit button via i18n key', () => {
       renderWithProviders(<MoodTracker />);
-      expect(screen.getByRole('button', { name: /guardar registro/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'mood.tracker.submitButton' })).toBeInTheDocument();
     });
   });
 
-  describe('Interacción', () => {
-    it('selecciona "Triste" al hacer clic (aria-pressed=true)', () => {
+  describe('Interaction', () => {
+    it('selects "triste" on click (aria-pressed=true)', () => {
       renderWithProviders(<MoodTracker />);
-      const tristeBtn = screen.getByRole('button', { name: /triste/i });
+      const tristeBtn = screen.getByRole('button', { name: 'mood.emotions.triste' });
       expect(tristeBtn).toHaveAttribute('aria-pressed', 'false');
       fireEvent.click(tristeBtn);
       expect(tristeBtn).toHaveAttribute('aria-pressed', 'true');
     });
 
-    it('muestra error de validación al enviar sin seleccionar emoción', async () => {
+    it('shows validation error when submitting without selecting an emotion', async () => {
       renderWithProviders(<MoodTracker />);
-      const submitBtn = screen.getByRole('button', { name: /guardar registro/i });
+      const submitBtn = screen.getByRole('button', { name: 'mood.tracker.submitButton' });
       fireEvent.click(submitBtn);
       await waitFor(() => {
         expect(screen.getByText(/selecciona cómo te sientes/i)).toBeInTheDocument();
@@ -90,8 +92,8 @@ describe('MoodTracker — Página', () => {
     });
   });
 
-  describe('SIN inline CSS', () => {
-    it('ningún elemento tiene prop style con colores o dimensiones de layout', () => {
+  describe('No inline CSS', () => {
+    it('no element has a style prop with colors or layout dimensions', () => {
       const { container } = renderWithProviders(<MoodTracker />);
       const elementsWithStyle = container.querySelectorAll('[style]');
       elementsWithStyle.forEach((el) => {

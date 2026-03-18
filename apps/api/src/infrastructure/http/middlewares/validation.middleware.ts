@@ -8,7 +8,7 @@ export function validateBody(schema: ZodSchema) {
       res.status(400).json({
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'Datos inválidos',
+          message: 'Invalid data',
           details: result.error.errors.map((e) => ({
             field: e.path.join('.'),
             message: e.message,

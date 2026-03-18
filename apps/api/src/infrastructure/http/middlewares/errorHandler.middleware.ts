@@ -27,8 +27,8 @@ export function errorHandlerMiddleware(
     return;
   }
 
-  // Error inesperado — no revelar detalles internos
+  // Unexpected error — do not expose internal details
   res.status(500).json({
-    error: { code: 'INTERNAL_ERROR', message: 'Error interno del servidor' },
+    error: { code: 'INTERNAL_ERROR', message: 'Internal server error' },
   });
 }

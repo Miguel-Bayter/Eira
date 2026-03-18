@@ -1,0 +1,169 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "back": "Back",
+    "inDevelopment": "Coming soon..."
+  },
+  "auth": {
+    "login": {
+      "panelHeading": "Welcome\nback",
+      "panelSubtitle": "Your progress is waiting. Every day you return is one more step toward your well-being.",
+      "stat1Label": "3.2k people",
+      "stat1Desc": "caring for their mental health with Eira",
+      "stat2Label": "98% satisfaction",
+      "stat2Desc": "in the last 30 days",
+      "stat3Label": "Always free",
+      "stat3Desc": "no subscription or credit card",
+      "footer": "© 2026 Eira · Made with care for you",
+      "formTitle": "Sign in",
+      "formSubtitle": "Continue where you left off.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Your password",
+      "submitButton": "Sign in",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up for free"
+    },
+    "register": {
+      "panelHeading": "Your safe space\nfor mental well-being",
+      "panelSubtitle": "A calm place to know yourself better, track how you feel, and grow every day.",
+      "feature1": "Emotional analysis powered by AI",
+      "feature2": "Your privacy always protected",
+      "feature3": "Completely free, no credit card needed",
+      "footer": "© 2026 · Made with care for you",
+      "formTitle": "Create account",
+      "formSubtitle": "Start free, no commitments.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Ana García",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "At least 8 characters, 1 uppercase, 1 number",
+      "submitButton": "Create account",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    }
+  },
+  "dashboard": {
+    "logoutAriaLabel": "Sign out",
+    "defaultUser": "User",
+    "greeting": "Good morning",
+    "question": "How are you doing today?",
+    "streakDays": "{{count}}-day streak",
+    "wellnessAriaLabel": "Wellness score: {{score}} out of 100",
+    "wellnessLabel": "wellness",
+    "sectionTitle": "Your space",
+    "dailyTitle": "Today's check-in",
+    "dailySubtitle": "Have you tracked your mood yet?",
+    "nav": {
+      "moodLabel": "Mood Tracker",
+      "moodDesc": "Track how you feel",
+      "journalLabel": "Journal",
+      "journalDesc": "Write and reflect with AI",
+      "chatLabel": "AI Chat",
+      "chatDesc": "Talk to Eira",
+      "communityLabel": "Community",
+      "communityDesc": "Anonymous support",
+      "gamesLabel": "Games",
+      "gamesDesc": "Therapeutic exercises"
+    }
+  },
+  "mood": {
+    "tracker": {
+      "backAriaLabel": "Back to home",
+      "title": "Mood Tracker",
+      "remainingEntries_one": "{{count}} entry remaining today",
+      "remainingEntries_other": "{{count}} entries remaining today",
+      "limitReached": "Daily limit reached",
+      "limitMessage": "You've logged {{max}} moods today. Come back tomorrow.",
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "What's happening today? Anything you want to remember?",
+      "submitButton": "Save entry",
+      "successTitle": "Saved!",
+      "successMessage": "Your mood was recorded",
+      "backToHome": "Back to home"
+    },
+    "slider": {
+      "question": "How are you feeling right now?",
+      "ariaLabel": "Mood",
+      "thumbAriaLabel": "Mood: {{value}} - {{label}}",
+      "scaleMin": "Very bad",
+      "scaleMid": "Neutral",
+      "scaleMax": "Extraordinary",
+      "labels": {
+        "1": "Very bad",
+        "2": "Very bad",
+        "3": "Bad",
+        "4": "A bit low",
+        "5": "Neutral",
+        "6": "Good",
+        "7": "Pretty good",
+        "8": "Very good",
+        "9": "Excellent",
+        "10": "Extraordinary"
+      }
+    },
+    "emotions": {
+      "question": "Which emotion stands out?",
+      "groupAriaLabel": "Select an emotion",
+      "alegre": "Happy",
+      "tranquilo": "Calm",
+      "agradecido": "Grateful",
+      "esperanzador": "Hopeful",
+      "motivado": "Motivated",
+      "ansioso": "Anxious",
+      "triste": "Sad",
+      "enojado": "Angry",
+      "frustrado": "Frustrated",
+      "cansado": "Tired",
+      "confundido": "Confused",
+      "solitario": "Lonely",
+      "abrumado": "Overwhelmed",
+      "asustado": "Scared",
+      "neutral": "Neutral"
+    },
+    "crisis": {
+      "closeAriaLabel": "Close",
+      "title": "We're here for you",
+      "description": "We noticed you may be going through a difficult moment. Talking to someone can help a lot.",
+      "lineLabel": "Free support line · Colombia",
+      "lineAvailability": "Available 24/7 · Confidential",
+      "callButton": "Call 106 now",
+      "continueButton": "Continue in Eira"
+    }
+  },
+  "journal": {
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "subtitle": "This is your space. Write without filters, without judgment.",
+    "previousEntries": "Previous entries",
+    "withTips": "With tips",
+    "viewTips": "View Eira's tips →",
+    "editor": {
+      "label": "What's on your heart today?",
+      "placeholder": "Write freely... there are no right or wrong answers here 🌿",
+      "hint": "Write at least 10 characters to save.",
+      "remaining": "{{count}} remaining",
+      "saveButton": "Save only",
+      "saveAndAnalyzeButton": "Save and get tips",
+      "saving": "Saving...",
+      "analyzing": "Eira is reading..."
+    },
+    "analysis": {
+      "header": "Eira writes to you",
+      "subheader": "Tips for you, with care",
+      "loading": "Eira is reading what you wrote..."
+    }
+  },
+  "navigation": {
+    "page": "Page: {{name}}"
+  },
+  "errors": {
+    "internalServer": "Internal server error"
+  }
+}

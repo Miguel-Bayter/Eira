@@ -23,10 +23,10 @@ export class RegisterUserUseCase {
   ) {}
 
   async execute(input: RegisterUserInput): Promise<RegisterUserOutput> {
-    // 1. Verificar que el email no esté registrado
+    // 1. Check that the email is not already registered
     const existing = await this.userRepo.findByEmail(input.email);
     if (existing) {
-      // Retornamos el usuario existente (idempotente — Supabase ya verificó)
+      // Return the existing user (idempotent — Supabase already verified)
       return {
         id: existing.id,
         email: existing.email.value,
@@ -36,19 +36,19 @@ export class RegisterUserUseCase {
       };
     }
 
-    // 2. Crear la entidad User
+    // 2. Create the User entity
     const user = User.create({
       supabaseId: input.supabaseId,
       email: input.email,
       name: input.name,
     });
 
-    // 3. Persistir
+    // 3. Persist
     await this.userRepo.save(user);
 
-    // 4. Enviar email de bienvenida (fire-and-forget, no bloquear el registro)
+    // 4. Send welcome email (fire-and-forget, do not block registration)
     this.emailService.sendWelcome(user.email.value, user.name).catch(() => {
-      // El error de email no debe fallar el registro
+      // Email errors must not fail the registration
     });
 
     return {

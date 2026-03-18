@@ -18,11 +18,11 @@ export const logger = pino(
 
 export const app = express();
 
-// ═══ SEGURIDAD — Headers HTTP ═══
+// Security — HTTP headers
 app.use(helmet());
 app.disable('x-powered-by');
 
-// ═══ CORS ═══
+// CORS
 const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
   .split(',')
   .map((o) => o.trim());
@@ -33,50 +33,50 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error(`CORS: origen no permitido: ${origin}`));
+        callback(new Error(`CORS: origin not allowed: ${origin}`));
       }
     },
     credentials: true,
   }),
 );
 
-// ═══ RATE LIMITING GLOBAL ═══
+// Global rate limiting
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
+  windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Demasiadas solicitudes, intenta más tarde' } },
+  message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many requests, please try again later' } },
 });
 app.use(globalLimiter);
 
-// ═══ PARSERS ═══
+// Body parsers
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// ═══ HEALTH CHECK ═══
+// Health check
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', service: 'eira-api', timestamp: new Date().toISOString() });
 });
 
-// ═══ RUTAS ═══
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/mood', moodRoutes);
 app.use('/api/journal', journalRoutes);
 
-// ═══ ERROR HANDLER GLOBAL ═══
+// Global error handler
 app.use(errorHandlerMiddleware);
 
-// Solo iniciar el servidor si se ejecuta directamente (no en tests)
+// Only start the server when running directly (not in tests)
 if (process.env.NODE_ENV !== 'test') {
   const PORT = Number(process.env.PORT) || 3001;
   const server = app.listen(PORT, () => {
-    logger.info(`🌿 Eira API corriendo en http://localhost:${PORT}`);
+    logger.info(`🌿 Eira API running at http://localhost:${PORT}`);
     logger.info(`   Health: http://localhost:${PORT}/api/health`);
   });
   server.on('error', (err: NodeJS.ErrnoException) => {
     if (err.code === 'EADDRINUSE') {
-      logger.error(`Puerto ${PORT} ocupado. Ejecuta: taskkill /F /IM node.exe`);
+      logger.error(`Port ${PORT} in use. Run: taskkill /F /IM node.exe`);
       process.exit(1);
     }
     throw err;
