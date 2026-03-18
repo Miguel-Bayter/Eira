@@ -44,14 +44,15 @@ function renderWithProviders(ui: React.ReactElement) {
 
 describe('Journal — Página', () => {
   describe('Renderizado', () => {
-    it('muestra el encabezado "Mi Diario"', () => {
+    it('muestra el saludo del encabezado', () => {
       renderWithProviders(<Journal />);
-      expect(screen.getByRole('heading', { name: /mi diario/i })).toBeInTheDocument();
+      // getDayGreeting returns "Buenos días/tardes/noches ✨" inside an h1
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
     });
 
-    it('muestra el subtítulo del espacio seguro', () => {
+    it('muestra el texto del espacio seguro', () => {
       renderWithProviders(<Journal />);
-      expect(screen.getByText(/un espacio seguro para expresarte/i)).toBeInTheDocument();
+      expect(screen.getByText(/este es tu espacio/i)).toBeInTheDocument();
     });
 
     it('muestra el textarea del editor', () => {
@@ -60,32 +61,31 @@ describe('Journal — Página', () => {
       expect(textarea).toBeInTheDocument();
     });
 
-    it('muestra el label "¿Cómo te sientes hoy?"', () => {
+    it('muestra el label del editor', () => {
       renderWithProviders(<Journal />);
-      expect(screen.getByLabelText(/¿cómo te sientes hoy\?/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/¿qué llevas en el corazón hoy\?/i)).toBeInTheDocument();
     });
 
-    it('muestra el contador de caracteres (0/5000)', () => {
-      renderWithProviders(<Journal />);
-      expect(screen.getByText('0/5000')).toBeInTheDocument();
-    });
-
-    it('muestra el texto de privacidad del diario', () => {
+    it('muestra el texto de ayuda del editor', () => {
       renderWithProviders(<Journal />);
       expect(screen.getByText(/escribe al menos 10 caracteres para guardar/i)).toBeInTheDocument();
     });
 
-    it('NO muestra el panel de análisis de IA cuando no hay entrada guardada', () => {
+    it('NO muestra el panel de Eira cuando no hay entrada guardada', () => {
       renderWithProviders(<Journal />);
-      expect(screen.queryByText(/análisis de eira/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/eira te escribe/i)).not.toBeInTheDocument();
     });
   });
 
-  describe('Estado de autosave', () => {
-    it('no muestra estado de guardado inicialmente', () => {
+  describe('Botones', () => {
+    it('muestra el botón "Solo guardar"', () => {
       renderWithProviders(<Journal />);
-      expect(screen.queryByText(/guardando\.\.\./i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/guardado ✓/i)).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /solo guardar/i })).toBeInTheDocument();
+    });
+
+    it('muestra el botón "Guardar y recibir consejos"', () => {
+      renderWithProviders(<Journal />);
+      expect(screen.getByRole('button', { name: /guardar y recibir consejos/i })).toBeInTheDocument();
     });
   });
 

@@ -1,8 +1,25 @@
 import { useState } from 'react';
-import { BookOpen, Sparkles, Clock } from 'lucide-react';
+import { Sparkles, Clock, PenLine } from 'lucide-react';
 import { JournalEditor } from '@/components/journal/JournalEditor';
 import { JournalAiAnalysis } from '@/components/journal/JournalAiAnalysis';
 import { useAnalyzeJournalEntry, useCreateJournalEntry, useJournalHistory } from '@/hooks/useJournal';
+
+function getDayGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Buenos días';
+  if (hour < 18) return 'Buenas tardes';
+  return 'Buenas noches';
+}
+
+function formatEntryDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('es-CO', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
 
 export default function Journal() {
   const [currentEntryId, setCurrentEntryId] = useState<string | null>(null);
@@ -26,79 +43,97 @@ export default function Journal() {
     setCurrentAnalysis(result.aiAnalysis);
   };
 
+  const today = new Date().toLocaleDateString('es-CO', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-3xl px-4 py-8 space-y-6">
+    <main className="min-h-screen bg-gradient-to-b from-eira-50 via-white to-eira-50/40">
+      <div className="mx-auto max-w-2xl px-4 py-10 space-y-8">
+
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-eira-100">
-            <BookOpen className="h-5 w-5 text-eira-600" />
+        <header className="text-center space-y-2">
+          <div className="flex justify-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-eira-100 shadow-sm">
+              <PenLine className="h-7 w-7 text-eira-600" />
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Mi Diario</h1>
-            <p className="text-sm text-gray-500">Un espacio seguro para expresarte</p>
-          </div>
-        </div>
+          <h1 className="text-2xl font-bold text-gray-800">{getDayGreeting()} ✨</h1>
+          <p className="text-sm text-gray-400 capitalize">{today}</p>
+          <p className="text-sm text-eira-600 font-medium">
+            Este es tu espacio. Escribe sin filtros, sin juicios.
+          </p>
+        </header>
 
         {/* Editor */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm">
-          <JournalEditor
-            onSave={handleSave}
-            onSaveAndAnalyze={handleSaveAndAnalyze}
-            isSaving={isSaving && !isAnalyzing}
-            isAnalyzing={isAnalyzing}
-          />
-        </div>
+        <JournalEditor
+          onSave={handleSave}
+          onSaveAndAnalyze={handleSaveAndAnalyze}
+          isSaving={isSaving && !isAnalyzing}
+          isAnalyzing={isAnalyzing}
+        />
 
-        {/* Consejos de Eira (solo cuando se pidió análisis) */}
+        {/* Consejos de Eira */}
         <JournalAiAnalysis
           analysis={currentAnalysis}
           isLoading={isAnalyzing}
           error={analyzeError?.message ?? null}
-          onAnalyze={() => { if (currentEntryId) void analyze({ entryId: currentEntryId }).then((r) => setCurrentAnalysis(r.aiAnalysis)); }}
           hasEntry={!!currentEntryId}
         />
 
         {/* Historial */}
         {history && history.entries.length > 0 && (
-          <section className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-gray-400" />
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+          <section className="space-y-4">
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-eira-100" />
+              <div className="flex items-center gap-1.5 text-xs font-medium text-eira-400 uppercase tracking-widest">
+                <Clock className="h-3 w-3" />
                 Entradas anteriores
-              </h2>
+              </div>
+              <div className="h-px flex-1 bg-eira-100" />
             </div>
-            <ul className="space-y-3">
+
+            <ul className="space-y-4">
               {history.entries.map((entry) => (
-                <li key={entry.id} className="rounded-xl bg-white p-4 shadow-sm space-y-2">
-                  <div className="flex items-center justify-between">
-                    <time className="text-xs text-gray-400">
-                      {new Date(entry.createdAt).toLocaleDateString('es-CO', {
-                        weekday: 'long',
-                        day: 'numeric',
-                        month: 'long',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </time>
+                <li
+                  key={entry.id}
+                  className="group rounded-2xl bg-white border border-eira-100 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
+                >
+                  {/* Accent bar */}
+                  <div className="h-1 w-full bg-gradient-to-r from-eira-300 to-eira-400" />
+
+                  <div className="p-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <time className="text-xs text-gray-400 capitalize">
+                        {formatEntryDate(entry.createdAt)}
+                      </time>
+                      {entry.aiAnalysis && (
+                        <span className="flex items-center gap-1 rounded-full bg-eira-50 px-2.5 py-0.5 text-xs text-eira-600 font-medium border border-eira-100">
+                          <Sparkles className="h-3 w-3" />
+                          Con consejos
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 italic">
+                      "{entry.content}"
+                    </p>
+
                     {entry.aiAnalysis && (
-                      <span className="flex items-center gap-1 text-xs text-eira-500 font-medium">
-                        <Sparkles className="h-3 w-3" />
-                        Con consejos
-                      </span>
+                      <details className="text-sm">
+                        <summary className="cursor-pointer select-none text-eira-600 hover:text-eira-700 font-medium text-xs">
+                          Ver consejos de Eira →
+                        </summary>
+                        <div className="mt-3 rounded-xl bg-gradient-to-br from-eira-50 to-white border border-eira-100 p-4 text-gray-600 leading-relaxed whitespace-pre-line text-sm">
+                          {entry.aiAnalysis.replace(/\*\*/g, '')}
+                        </div>
+                      </details>
                     )}
                   </div>
-                  <p className="text-sm text-gray-700 line-clamp-3">{entry.content}</p>
-                  {entry.aiAnalysis && (
-                    <details className="text-sm">
-                      <summary className="cursor-pointer text-eira-600 hover:text-eira-700 font-medium">
-                        Ver consejos de Eira
-                      </summary>
-                      <div className="mt-2 rounded-lg bg-eira-50 p-3 text-gray-600 whitespace-pre-line">
-                        {entry.aiAnalysis.replace(/\*\*/g, '')}
-                      </div>
-                    </details>
-                  )}
                 </li>
               ))}
             </ul>
