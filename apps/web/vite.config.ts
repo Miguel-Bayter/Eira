@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      '@eira/shared': resolve(__dirname, '../../packages/shared'),
+      zod: resolve(__dirname, 'node_modules/zod'),
     },
   },
   server: {

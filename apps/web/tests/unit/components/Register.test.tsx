@@ -55,7 +55,8 @@ describe('Register — Page', () => {
       await user.click(submitBtn);
 
       await waitFor(() => {
-        expect(screen.getByText(/al menos 2 caracteres/i)).toBeInTheDocument();
+        // i18n mock returns the key — the translated key is 'validation.name.minLength'
+        expect(screen.getByText('validation.name.minLength')).toBeInTheDocument();
       });
     });
 
@@ -67,7 +68,8 @@ describe('Register — Page', () => {
       await user.click(screen.getByRole('button', { name: 'auth.register.submitButton' }));
 
       await waitFor(() => {
-        expect(screen.getByText(/email inválido/i)).toBeInTheDocument();
+        // i18n mock returns the key — the translated key is 'validation.email.invalid'
+        expect(screen.getByText('validation.email.invalid')).toBeInTheDocument();
       });
     });
   });

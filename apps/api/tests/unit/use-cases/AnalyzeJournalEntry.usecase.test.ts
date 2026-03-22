@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AnalyzeJournalEntryUseCase } from '../../../src/application/use-cases/journal/AnalyzeJournalEntry.usecase';
 import type { IJournalRepository } from '../../../src/domain/repositories/IJournalRepository';
 import type { IUserRepository } from '../../../src/domain/repositories/IUserRepository';
-import type { IAiService } from '../../../src/application/ports/IAiService';
+import type { IAiService } from '../../../src/domain/services/IAiService';
 import { JournalEntry } from '../../../src/domain/entities/JournalEntry';
 import { User } from '../../../src/domain/entities/User';
 import { UserNotFoundError, JournalNotFoundError, DailyLimitExceededError } from '../../../src/domain/errors';

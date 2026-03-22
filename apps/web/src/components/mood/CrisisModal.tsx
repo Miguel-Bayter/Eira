@@ -10,6 +10,7 @@ interface CrisisModalProps {
 
 export function CrisisModal({ isOpen, onClose }: CrisisModalProps) {
   const { t } = useTranslation();
+  const phone = t('mood.crisis.phone');
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
@@ -45,13 +46,13 @@ export function CrisisModal({ isOpen, onClose }: CrisisModalProps) {
             <p className="text-xs font-semibold uppercase tracking-widest text-crisis-500">
               {t('mood.crisis.lineLabel')}
             </p>
-            <p className="mt-1 text-5xl font-bold text-crisis-700">106</p>
+            <p className="mt-1 text-5xl font-bold text-crisis-700">{phone}</p>
             <p className="mt-1 text-xs text-crisis-400">{t('mood.crisis.lineAvailability')}</p>
           </div>
 
           <div className="flex flex-col gap-3">
             <a
-              href="tel:106"
+              href={`tel:${phone}`}
               className="flex items-center justify-center gap-2 rounded-xl bg-crisis-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-crisis-700 focus:outline-none focus:ring-2 focus:ring-crisis-500 focus:ring-offset-2"
             >
               <Phone className="h-4 w-4" />

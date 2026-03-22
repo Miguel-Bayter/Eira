@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { JournalEntry } from '../../../src/domain/entities/JournalEntry';
+import { JournalContentEmptyError, JournalContentTooLongError } from '../../../src/domain/errors';
 
 describe('JournalEntry — Domain Entity', () => {
 
@@ -22,18 +23,18 @@ describe('JournalEntry — Domain Entity', () => {
 
     it('throws if content is empty string', () => {
       expect(() => JournalEntry.create({ userId: 'user-1', content: '' }))
-        .toThrow('El contenido del diario no puede estar vacío');
+        .toThrow(JournalContentEmptyError);
     });
 
     it('throws if content is only whitespace', () => {
       expect(() => JournalEntry.create({ userId: 'user-1', content: '   ' }))
-        .toThrow('El contenido del diario no puede estar vacío');
+        .toThrow(JournalContentEmptyError);
     });
 
     it('throws if content exceeds 5000 characters', () => {
       const longContent = 'a'.repeat(5001);
       expect(() => JournalEntry.create({ userId: 'user-1', content: longContent }))
-        .toThrow('El contenido excede el límite de 5000 caracteres');
+        .toThrow(JournalContentTooLongError);
     });
 
     it('accepts content of exactly 5000 characters', () => {

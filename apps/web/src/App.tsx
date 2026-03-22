@@ -1,11 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'motion/react';
+import { Toaster } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import MoodTracker from './pages/MoodTracker';
 import Journal from './pages/Journal';
+import Chat from './pages/Chat';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { PageTransition } from './components/layout/PageTransition';
+import { CommandPalette } from './components/ui/CommandPalette';
+import { useAuthSessionBootstrap } from './hooks/useAuth';
 
 function PlaceholderPage({ name }: { name: string }) {
   const { t } = useTranslation();
@@ -21,19 +27,104 @@ function PlaceholderPage({ name }: { name: string }) {
 }
 
 export default function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+  const location = useLocation();
 
-      {/* Protected routes — require authentication */}
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/mood" element={<ProtectedRoute><MoodTracker /></ProtectedRoute>} />
-      <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
-      <Route path="/chat" element={<ProtectedRoute><PlaceholderPage name="Chat IA" /></ProtectedRoute>} />
-      <Route path="/community" element={<ProtectedRoute><PlaceholderPage name="Comunidad" /></ProtectedRoute>} />
-      <Route path="/games" element={<ProtectedRoute><PlaceholderPage name="Juegos" /></ProtectedRoute>} />
-    </Routes>
+  useAuthSessionBootstrap();
+
+  return (
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          className: 'font-sans text-sm',
+          duration: 4000,
+        }}
+        richColors
+      />
+      <CommandPalette />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route
+            path="/register"
+            element={
+              <PageTransition>
+                <Register />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PageTransition>
+                <Login />
+              </PageTransition>
+            }
+          />
+
+          {/* Protected routes — require authentication */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <PageTransition>
+                  <Dashboard />
+                </PageTransition>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mood"
+            element={
+              <ProtectedRoute>
+                <PageTransition>
+                  <MoodTracker />
+                </PageTransition>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/journal"
+            element={
+              <ProtectedRoute>
+                <PageTransition>
+                  <Journal />
+                </PageTransition>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                  <PageTransition>
+                    <Chat />
+                  </PageTransition>
+                </ProtectedRoute>
+              }
+          />
+          <Route
+            path="/community"
+            element={
+              <ProtectedRoute>
+                <PageTransition>
+                  <PlaceholderPage name="Comunidad" />
+                </PageTransition>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/games"
+            element={
+              <ProtectedRoute>
+                <PageTransition>
+                  <PlaceholderPage name="Juegos" />
+                </PageTransition>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AnimatePresence>
+    </>
   );
 }

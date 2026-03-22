@@ -6,6 +6,7 @@ export default defineConfig({
     name: 'api',
     environment: 'node',
     globals: true,
+    setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'json', 'html'],
@@ -26,6 +27,7 @@ export default defineConfig({
       '@domain': resolve(__dirname, './src/domain'),
       '@application': resolve(__dirname, './src/application'),
       '@infrastructure': resolve(__dirname, './src/infrastructure'),
+      '@eira/shared': resolve(__dirname, '../../packages/shared/index.ts'),
     },
   },
 });

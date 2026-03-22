@@ -25,8 +25,10 @@ vi.mock('../../../src/store/authStore', () => ({
   useAuthStore: (selector: (s: unknown) => unknown) =>
     selector({
       user: { id: '1', name: 'Test', email: 'test@test.com', wellnessScore: 50, streakDays: 3 },
-      token: 'test-token',
+      isAuthenticated: true,
+      status: 'authenticated',
       setUser: vi.fn(),
+      setAnonymous: vi.fn(),
       logout: vi.fn(),
     }),
 }));

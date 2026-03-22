@@ -8,9 +8,19 @@ import { loginSchema, type LoginFormData } from '../schemas/auth.schema';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 
+/** Translate a Zod validation key (e.g. "validation.email.invalid") at display time.
+ * Uses `as never` to satisfy strict i18next key types for runtime-dynamic keys. */
+function useValidationT() {
+  const { t } = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (key: string | undefined): string | undefined =>
+    key ? t(key as never) : undefined;
+}
+
 export default function Login() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const tv = useValidationT();
   const { mutateAsync: login, isPending, error } = useLogin();
 
   const {
@@ -113,7 +123,7 @@ export default function Login() {
               type="email"
               placeholder="ana@example.com"
               autoComplete="email"
-              error={errors.email?.message}
+              error={tv(errors.email?.message)}
               {...register('email')}
             />
 
@@ -122,7 +132,7 @@ export default function Login() {
               type="password"
               placeholder={t('auth.login.passwordPlaceholder')}
               autoComplete="current-password"
-              error={errors.password?.message}
+              error={tv(errors.password?.message)}
               {...register('password')}
             />
 

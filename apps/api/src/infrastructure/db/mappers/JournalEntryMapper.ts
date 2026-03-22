@@ -1,8 +1,8 @@
-import type { journal_entries } from '@prisma/client';
+import type { journal_entries as PrismaJournalEntry } from '@prisma/client';
 import { JournalEntry } from '@domain/entities/JournalEntry';
 
 export class JournalEntryMapper {
-  static toDomain(row: journal_entries): JournalEntry {
+  static toDomain(row: PrismaJournalEntry): JournalEntry {
     return JournalEntry.reconstruct({
       id: row.id,
       userId: row.user_id,
@@ -13,7 +13,7 @@ export class JournalEntryMapper {
     });
   }
 
-  static toPrisma(entry: JournalEntry) {
+  static toPrisma(entry: JournalEntry): Omit<PrismaJournalEntry, 'updated_at'> & { updated_at: Date } {
     return {
       id: entry.id,
       user_id: entry.userId,

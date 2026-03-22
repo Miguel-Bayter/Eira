@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { z } from 'zod';
 import rateLimit from 'express-rate-limit';
-import { journalContainer } from '../../../container';
+import { journalController } from '../../../container';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { csrfProtection } from '../middlewares/csrf.middleware';
 import { validateBody } from '../middlewares/validation.middleware';
+import { createJournalEntrySchema } from '@eira/shared';
 
 const router = Router();
 
@@ -24,29 +25,27 @@ const journalLimiter = rateLimit({
   keyGenerator: (req) => (req as { userId?: string }).userId ?? req.ip ?? 'anon',
 });
 
-const createSchema = z.object({
-  content: z.string().min(1, 'El contenido no puede estar vacío').max(5000, 'Máximo 5000 caracteres'),
-});
-
 router.use(authMiddleware);
 
 router.post(
   '/',
   journalLimiter,
-  validateBody(createSchema),
-  journalContainer.journalController.create,
+  csrfProtection,
+  validateBody(createJournalEntrySchema),
+  journalController.create,
 );
 
 router.get(
   '/',
   journalLimiter,
-  journalContainer.journalController.list,
+  journalController.list,
 );
 
 router.post(
   '/:id/analyze',
   aiAnalysisLimiter,
-  journalContainer.journalController.analyze,
+  csrfProtection,
+  journalController.analyze,
 );
 
 export { router as journalRoutes };

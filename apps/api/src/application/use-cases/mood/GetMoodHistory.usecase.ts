@@ -19,6 +19,7 @@ export interface MoodEntryDTO {
 export interface GetMoodHistoryOutput {
   entries: MoodEntryDTO[];
   total: number;
+  todayCount: number;
 }
 
 export class GetMoodHistoryUseCase {
@@ -34,6 +35,7 @@ export class GetMoodHistoryUseCase {
 
     const limit = input.limit ?? 30;
     const entries = await this.moodRepo.findByUserId(user.id, limit);
+    const todayCount = await this.moodRepo.countTodayByUser(user.id);
 
     return {
       entries: entries.map((e) => ({
@@ -45,6 +47,7 @@ export class GetMoodHistoryUseCase {
         createdAt: e.createdAt.toISOString(),
       })),
       total: entries.length,
+      todayCount,
     };
   }
 }

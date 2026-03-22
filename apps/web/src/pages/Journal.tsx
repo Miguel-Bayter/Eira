@@ -1,19 +1,24 @@
 import { useState } from 'react';
 import { Sparkles, Clock, PenLine } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { JournalEditor } from '@/components/journal/JournalEditor';
 import { JournalAiAnalysis } from '@/components/journal/JournalAiAnalysis';
+import { JournalFormattedAnalysis } from '@/components/journal/JournalFormattedAnalysis';
 import { useAnalyzeJournalEntry, useCreateJournalEntry, useJournalHistory } from '@/hooks/useJournal';
+import { BackToDashboardLink } from '@/components/ui/BackToDashboardLink';
 
-function getDayGreeting(t: (key: string) => string): string {
+type TranslateFn = TFunction<'translation', undefined>;
+
+function getDayGreeting(t: TranslateFn): string {
   const hour = new Date().getHours();
   if (hour < 12) return t('journal.greeting.morning');
   if (hour < 18) return t('journal.greeting.afternoon');
   return t('journal.greeting.evening');
 }
 
-function formatEntryDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('es-CO', {
+function formatEntryDate(iso: string, locale: string): string {
+  return new Date(iso).toLocaleDateString(locale, {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -23,7 +28,7 @@ function formatEntryDate(iso: string): string {
 }
 
 export default function Journal() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentEntryId, setCurrentEntryId] = useState<string | null>(null);
   const [currentAnalysis, setCurrentAnalysis] = useState<string | null>(null);
 
@@ -45,7 +50,7 @@ export default function Journal() {
     setCurrentAnalysis(result.aiAnalysis);
   };
 
-  const today = new Date().toLocaleDateString('es-CO', {
+  const today = new Date().toLocaleDateString(i18n.language, {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -55,8 +60,10 @@ export default function Journal() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-eira-50 via-white to-eira-50/40">
       <div className="mx-auto max-w-2xl px-4 py-10 space-y-8">
+        <div className="flex justify-start">
+          <BackToDashboardLink />
+        </div>
 
-        {/* Header */}
         <header className="text-center space-y-2">
           <div className="flex justify-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-eira-100 shadow-sm">
@@ -111,7 +118,7 @@ export default function Journal() {
                   <div className="p-5 space-y-3">
                     <div className="flex items-center justify-between">
                       <time className="text-xs text-gray-400 capitalize">
-                        {formatEntryDate(entry.createdAt)}
+                        {formatEntryDate(entry.createdAt, i18n.language)}
                       </time>
                       {entry.aiAnalysis && (
                         <span className="flex items-center gap-1 rounded-full bg-eira-50 px-2.5 py-0.5 text-xs text-eira-600 font-medium border border-eira-100">
@@ -131,7 +138,7 @@ export default function Journal() {
                           {t('journal.viewTips')}
                         </summary>
                         <div className="mt-3 rounded-xl bg-gradient-to-br from-eira-50 to-white border border-eira-100 p-4 text-gray-600 leading-relaxed whitespace-pre-line text-sm">
-                          {entry.aiAnalysis.replace(/\*\*/g, '')}
+                          <JournalFormattedAnalysis content={entry.aiAnalysis} />
                         </div>
                       </details>
                     )}

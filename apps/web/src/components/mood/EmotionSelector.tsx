@@ -1,3 +1,4 @@
+import { motion, useReducedMotion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import type { EmotionValue } from '@/schemas/mood.schema';
@@ -29,6 +30,7 @@ interface EmotionSelectorProps {
 
 export function EmotionSelector({ value, onChange, error }: EmotionSelectorProps) {
   const { t } = useTranslation();
+  const shouldReduce = useReducedMotion();
 
   return (
     <div className="space-y-3">
@@ -41,13 +43,17 @@ export function EmotionSelector({ value, onChange, error }: EmotionSelectorProps
         role="group"
         aria-label={t('mood.emotions.groupAriaLabel')}
       >
-        {EMOTION_LIST.map(({ value: emotion, emoji }) => {
+        {EMOTION_LIST.map(({ value: emotion, emoji }, index) => {
           const label = t(`mood.emotions.${emotion}`);
           const isSelected = value === emotion;
           return (
-            <button
+            <motion.button
               key={emotion}
               type="button"
+              initial={shouldReduce ? {} : { opacity: 0, scale: 0.8 }}
+              animate={shouldReduce ? {} : { opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.03, duration: 0.2 }}
+              whileTap={shouldReduce ? {} : { scale: 0.92 }}
               onClick={() => onChange(emotion)}
               aria-pressed={isSelected}
               aria-label={label}
@@ -61,7 +67,7 @@ export function EmotionSelector({ value, onChange, error }: EmotionSelectorProps
             >
               <span className="text-xl leading-none" aria-hidden="true">{emoji}</span>
               <span className="text-center leading-tight">{label}</span>
-            </button>
+            </motion.button>
           );
         })}
       </div>

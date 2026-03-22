@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 interface User {
   id: string;
@@ -9,30 +8,26 @@ interface User {
   streakDays: number;
 }
 
+type AuthStatus = 'bootstrapping' | 'authenticated' | 'anonymous';
+
 interface AuthState {
   user: User | null;
-  token: string | null;
+  status: AuthStatus;
   isAuthenticated: boolean;
-  setUser: (user: User, token: string) => void;
+  setUser: (user: User) => void;
+  setAnonymous: () => void;
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      setUser: (user, token) => set({ user, token, isAuthenticated: true }),
-      logout: () => set({ user: null, token: null, isAuthenticated: false }),
-    }),
-    {
-      name: 'eira-auth', // clave en localStorage
-      partialize: (state) => ({
-        user: state.user,
-        token: state.token,
-        isAuthenticated: state.isAuthenticated,
-      }),
-    },
-  ),
-);
+if (typeof window !== 'undefined') {
+  window.localStorage.removeItem('eira-auth');
+}
+
+export const useAuthStore = create<AuthState>()((set) => ({
+  user: null,
+  status: 'bootstrapping',
+  isAuthenticated: false,
+  setUser: (user) => set({ user, status: 'authenticated', isAuthenticated: true }),
+  setAnonymous: () => set({ user: null, status: 'anonymous', isAuthenticated: false }),
+  logout: () => set({ user: null, status: 'anonymous', isAuthenticated: false }),
+}));

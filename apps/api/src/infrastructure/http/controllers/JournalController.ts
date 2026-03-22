@@ -3,6 +3,14 @@ import type { CreateJournalEntryUseCase } from '@application/use-cases/journal/C
 import type { AnalyzeJournalEntryUseCase } from '@application/use-cases/journal/AnalyzeJournalEntry.usecase';
 import type { GetJournalHistoryUseCase } from '@application/use-cases/journal/GetJournalHistory.usecase';
 
+/** Extract the primary BCP-47 language tag from an Accept-Language header value. */
+function parseAcceptLanguage(header: string | undefined): string | undefined {
+  if (!header) return undefined;
+  // Accept-Language: es-CO,es;q=0.9,en;q=0.8  → 'es'
+  const primary = header.split(',')[0]?.split(';')[0]?.trim();
+  return primary ?? undefined;
+}
+
 export class JournalController {
   constructor(
     private readonly createJournalEntryUseCase: CreateJournalEntryUseCase,
@@ -24,9 +32,11 @@ export class JournalController {
 
   analyze = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const language = parseAcceptLanguage(req.headers['accept-language']);
       const result = await this.analyzeJournalEntryUseCase.execute({
         userId: req.userId,
         entryId: req.params.id!,
+        ...(language !== undefined && { language }),
       });
       res.json(result);
     } catch (err) {

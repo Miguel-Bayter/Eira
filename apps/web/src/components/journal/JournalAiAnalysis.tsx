@@ -1,5 +1,6 @@
 import { Heart, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { JournalFormattedAnalysis } from './JournalFormattedAnalysis';
 
 interface JournalAiAnalysisProps {
   analysis: string | null;
@@ -57,7 +58,7 @@ export function JournalAiAnalysis({ analysis, isLoading, error, hasEntry }: Jour
             {/* Decorative quote mark */}
             <p className="text-5xl leading-none text-eira-200 font-serif select-none">"</p>
             <div className="text-sm leading-relaxed text-gray-600 whitespace-pre-line -mt-4 px-1">
-              {analysis.replace(/\*\*/g, '')}
+              <JournalFormattedAnalysis content={analysis} />
             </div>
           </div>
         )}

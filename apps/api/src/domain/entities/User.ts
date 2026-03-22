@@ -80,20 +80,14 @@ export class User {
   }
 
   applyHighMoodBonus(): void {
-    this._wellnessScore = WellnessScore.create(
-      Math.min(100, this._wellnessScore.value + 5),
-    );
+    this._wellnessScore = this._wellnessScore.applyBonus(5);
   }
 
   applyLowMoodPenalty(): void {
-    this._wellnessScore = WellnessScore.create(
-      Math.max(0, this._wellnessScore.value - 3),
-    );
+    this._wellnessScore = this._wellnessScore.applyPenalty(3);
   }
 
   applyGameBonus(points: number): void {
-    this._wellnessScore = WellnessScore.create(
-      Math.min(100, this._wellnessScore.value + points),
-    );
+    this._wellnessScore = this._wellnessScore.applyBonus(points);
   }
 }

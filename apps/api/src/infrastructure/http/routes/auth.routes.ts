@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { validateBody } from '../middlewares/validation.middleware';
-import { authContainer } from '../../../container';
-import { z } from 'zod';
+import { authMiddleware } from '../middlewares/auth.middleware';
+import { csrfProtection } from '../middlewares/csrf.middleware';
+import { authController } from '../../../container';
+import { registerSchema, loginSchema } from '@eira/shared';
 
 const router = Router();
 
@@ -15,22 +17,9 @@ const authLimiter = rateLimit({
   message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many attempts. Please try again in 15 minutes.' } },
 });
 
-const registerSchema = z.object({
-  name: z.string().min(2).max(100),
-  email: z.string().email(),
-  password: z
-    .string()
-    .min(8)
-    .regex(/[A-Z]/, 'Must contain an uppercase letter')
-    .regex(/[0-9]/, 'Must contain a number'),
-});
-
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-});
-
-router.post('/register', authLimiter, validateBody(registerSchema), authContainer.authController.register);
-router.post('/login', authLimiter, validateBody(loginSchema), authContainer.authController.login);
+router.post('/register', authLimiter, validateBody(registerSchema), authController.register);
+router.post('/login', authLimiter, validateBody(loginSchema), authController.login);
+router.get('/me', authMiddleware, authController.me);
+router.post('/logout', authMiddleware, csrfProtection, authController.logout);
 
 export default router;

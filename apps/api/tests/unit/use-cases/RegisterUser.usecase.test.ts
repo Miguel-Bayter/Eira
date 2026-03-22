@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { RegisterUserUseCase } from '../../../src/application/use-cases/auth/RegisterUser.usecase';
 import type { IUserRepository } from '../../../src/domain/repositories/IUserRepository';
-import type { IEmailService } from '../../../src/application/ports/IEmailService';
+import type { IEmailService } from '../../../src/domain/services/IEmailService';
+import type { IAuthProvider } from '../../../src/domain/services/IAuthProvider';
 
 // Mocks de los puertos
 const mockUserRepo: IUserRepository = {
@@ -15,6 +16,12 @@ const mockEmailService: IEmailService = {
   sendWelcome: vi.fn().mockResolvedValue(undefined),
 };
 
+const mockAuthProvider: IAuthProvider = {
+  register: vi.fn(),
+  login: vi.fn(),
+  getUserByAccessToken: vi.fn(),
+};
+
 describe('RegisterUserUseCase', () => {
   let useCase: RegisterUserUseCase;
 
@@ -22,7 +29,13 @@ describe('RegisterUserUseCase', () => {
     vi.clearAllMocks();
     mockUserRepo.findByEmail = vi.fn().mockResolvedValue(null);
     mockUserRepo.save = vi.fn().mockResolvedValue(undefined);
-    useCase = new RegisterUserUseCase(mockUserRepo, mockEmailService);
+    mockAuthProvider.register = vi.fn().mockResolvedValue({
+      supabaseId: 'supabase-123',
+      email: 'ana@example.com',
+      name: 'Ana Garcia',
+      accessToken: 'register-token',
+    });
+    useCase = new RegisterUserUseCase(mockUserRepo, mockEmailService, mockAuthProvider);
   });
 
   describe('Registro exitoso', () => {
@@ -30,21 +43,22 @@ describe('RegisterUserUseCase', () => {
       const result = await useCase.execute({
         name: 'Ana García',
         email: 'ana@example.com',
-        supabaseId: 'supabase-123',
+        password: 'Password123',
       });
 
-      expect(result.email).toBe('ana@example.com');
-      expect(result.name).toBe('Ana García');
-      expect(result.wellnessScore).toBe(50);
-      expect(result.streakDays).toBe(0);
-      expect(result.id).toBeDefined();
+      expect(result.user.email).toBe('ana@example.com');
+      expect(result.user.name).toBe('Ana García');
+      expect(result.user.wellnessScore).toBe(50);
+      expect(result.user.streakDays).toBe(0);
+      expect(result.user.id).toBeDefined();
+      expect(result.accessToken).toBe('register-token');
     });
 
     it('guarda el usuario en el repositorio', async () => {
       await useCase.execute({
         name: 'Test',
         email: 'test@x.com',
-        supabaseId: 'sb-1',
+        password: 'Password123',
       });
       expect(mockUserRepo.save).toHaveBeenCalledOnce();
     });
@@ -53,7 +67,7 @@ describe('RegisterUserUseCase', () => {
       await useCase.execute({
         name: 'Test',
         email: 'test@x.com',
-        supabaseId: 'sb-1',
+        password: 'Password123',
       });
       // Email is sent asynchronously (fire-and-forget)
       // Wait for it to be called
@@ -76,10 +90,10 @@ describe('RegisterUserUseCase', () => {
       const result = await useCase.execute({
         name: 'New Name',
         email: 'existing@x.com',
-        supabaseId: 'sb-2',
+        password: 'Password123',
       });
 
-      expect(result.id).toBe('existing-id');
+      expect(result.user.id).toBe('existing-id');
       expect(mockUserRepo.save).not.toHaveBeenCalled();
     });
   });

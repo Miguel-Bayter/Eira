@@ -1,7 +1,14 @@
+import { motion, useReducedMotion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import type { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes, ComponentPropsWithoutRef } from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+// Use motion.button's own prop type to avoid conflicts with React's DragEventHandler
+type MotionButtonProps = ComponentPropsWithoutRef<typeof motion.button>;
+
+interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof MotionButtonProps>,
+    MotionButtonProps {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
@@ -16,11 +23,14 @@ export function Button({
   disabled,
   ...props
 }: ButtonProps) {
+  const { t } = useTranslation();
+  const shouldReduce = useReducedMotion();
+
   const variants = {
-    primary: 'bg-eira-500 text-white hover:bg-eira-600 focus:ring-eira-500',
+    primary:   'bg-eira-500 text-white hover:bg-eira-600 focus:ring-eira-500',
     secondary: 'bg-white text-eira-700 border border-eira-200 hover:bg-eira-50 focus:ring-eira-500',
-    ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 focus:ring-slate-400',
-    danger: 'bg-crisis-500 text-white hover:bg-crisis-600 focus:ring-crisis-500',
+    ghost:     'bg-transparent text-slate-600 hover:bg-slate-100 focus:ring-slate-400',
+    danger:    'bg-crisis-500 text-white hover:bg-crisis-600 focus:ring-crisis-500',
   };
 
   const sizes = {
@@ -30,7 +40,10 @@ export function Button({
   };
 
   return (
-    <button
+    <motion.button
+      whileTap={shouldReduce ? {} : { scale: 0.97 }}
+      whileHover={shouldReduce ? {} : { scale: 1.01 }}
+      transition={{ duration: 0.1 }}
       className={cn(
         'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors',
         'focus:outline-none focus:ring-2 focus:ring-offset-2',
@@ -46,11 +59,11 @@ export function Button({
       {isLoading ? (
         <>
           <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          <span>Cargando...</span>
+          <span>{t('common.loading')}</span>
         </>
       ) : (
         children
       )}
-    </button>
+    </motion.button>
   );
 }

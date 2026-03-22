@@ -90,13 +90,13 @@ describe('CreateJournalEntryUseCase', () => {
     it('throws Error when content is empty', async () => {
       await expect(
         useCase.execute({ userId: 'supabase-uuid', content: '' }),
-      ).rejects.toThrow('El contenido del diario no puede estar vacío');
+      ).rejects.toThrow('Journal content cannot be empty');
     });
 
     it('throws Error when content is only whitespace', async () => {
       await expect(
         useCase.execute({ userId: 'supabase-uuid', content: '   ' }),
-      ).rejects.toThrow('El contenido del diario no puede estar vacío');
+      ).rejects.toThrow('Journal content cannot be empty');
     });
   });
 });

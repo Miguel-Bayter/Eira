@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { z } from 'zod';
 import { authMiddleware } from '../middlewares/auth.middleware';
+import { csrfProtection } from '../middlewares/csrf.middleware';
 import { validateBody } from '../middlewares/validation.middleware';
-import { moodContainer } from '../../../container';
+import { moodController } from '../../../container';
+import { createMoodSchema } from '@eira/shared';
 
 const router = Router();
 
@@ -17,20 +18,10 @@ const moodLimiter = rateLimit({
   message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Demasiadas solicitudes' } },
 });
 
-const createMoodSchema = z.object({
-  score: z.number().int().min(1).max(10),
-  emotion: z.enum([
-    'alegre', 'tranquilo', 'agradecido', 'esperanzador', 'motivado',
-    'ansioso', 'triste', 'enojado', 'frustrado', 'cansado',
-    'confundido', 'solitario', 'abrumado', 'asustado', 'neutral',
-  ]),
-  note: z.string().max(500).optional(),
-});
-
 router.use(authMiddleware);
 router.use(moodLimiter);
 
-router.post('/', validateBody(createMoodSchema), moodContainer.moodController.create);
-router.get('/', moodContainer.moodController.getHistory);
+router.post('/', csrfProtection, validateBody(createMoodSchema), moodController.create);
+router.get('/', moodController.getHistory);
 
 export default router;

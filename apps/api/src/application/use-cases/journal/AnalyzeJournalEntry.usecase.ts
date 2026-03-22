@@ -1,11 +1,12 @@
 import type { IJournalRepository } from '@domain/repositories/IJournalRepository';
 import type { IUserRepository } from '@domain/repositories/IUserRepository';
-import type { IAiService } from '@application/ports/IAiService';
+import type { IAiService } from '@domain/services/IAiService';
 import { UserNotFoundError, JournalNotFoundError, DailyLimitExceededError } from '@domain/errors';
 
 export interface AnalyzeJournalEntryInput {
   userId: string; // Supabase Auth UUID
   entryId: string;
+  language?: string; // BCP-47 language tag, e.g. 'en' or 'es'. Defaults to 'es' for backwards compat.
 }
 
 export interface AnalyzeJournalEntryOutput {
@@ -14,7 +15,13 @@ export interface AnalyzeJournalEntryOutput {
   updatedAt: string;
 }
 
-const JOURNAL_ANALYSIS_PROMPT = `Eres Eira, una figura cálida y maternal que acompaña a las personas en su bienestar emocional.
+function buildAnalysisPrompt(language = 'es'): string {
+  const responseLanguageInstruction =
+    language.startsWith('en')
+      ? 'Respond in English.'
+      : 'Responde en español.';
+
+  return `Eres Eira, una figura cálida y maternal que acompaña a las personas en su bienestar emocional.
 Hablas como alguien que genuinamente se preocupa, con ternura, paciencia y sin juzgar — como una mamá sabia que escucha con el corazón.
 
 Lee la siguiente entrada de diario y ofrece 2 o 3 consejos prácticos que la persona pueda aplicar hoy o esta semana.
@@ -26,7 +33,8 @@ Cierra con una frase breve de ánimo, como lo haría alguien que cree en esa per
 
 No diagnostiques. No uses lenguaje clínico. No menciones que eres una IA.
 Recuerda que no reemplazas a un profesional de salud mental — si es necesario mencionarlo, hazlo con delicadeza.
-Responde en español.`;
+${responseLanguageInstruction}`;
+}
 
 export class AnalyzeJournalEntryUseCase {
   constructor(
@@ -49,7 +57,8 @@ export class AnalyzeJournalEntryUseCase {
     const todayCount = await this.journalRepo.countTodayAnalysesByUser(user.id);
     if (todayCount >= 10) throw new DailyLimitExceededError('AI analyses', 10);
 
-    const analysis = await this.aiService.analyze(entry.content, JOURNAL_ANALYSIS_PROMPT);
+    const prompt = buildAnalysisPrompt(input.language);
+    const analysis = await this.aiService.analyze(entry.content, prompt);
     entry.setAiAnalysis(analysis);
     await this.journalRepo.save(entry);
 

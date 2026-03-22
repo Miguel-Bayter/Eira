@@ -9,26 +9,49 @@ import {
   MessageCircle,
   Users,
 } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
+import NumberFlow from '@number-flow/react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
 import { LanguageSwitcher } from '../components/ui/LanguageSwitcher';
+import { useLogout } from '../hooks/useAuth';
 
 // Static route/style data (no translatable strings here)
 const NAV_ROUTES = [
-  { to: '/mood',      icon: Activity,     labelKey: 'dashboard.nav.moodLabel',      descKey: 'dashboard.nav.moodDesc',      bg: 'bg-eira-100',   iconColor: 'text-eira-600'   },
-  { to: '/journal',   icon: BookOpen,     labelKey: 'dashboard.nav.journalLabel',   descKey: 'dashboard.nav.journalDesc',   bg: 'bg-violet-100', iconColor: 'text-violet-600' },
-  { to: '/chat',      icon: MessageCircle,labelKey: 'dashboard.nav.chatLabel',      descKey: 'dashboard.nav.chatDesc',      bg: 'bg-sky-100',    iconColor: 'text-sky-600'    },
-  { to: '/community', icon: Users,        labelKey: 'dashboard.nav.communityLabel', descKey: 'dashboard.nav.communityDesc', bg: 'bg-amber-100',  iconColor: 'text-amber-600'  },
-  { to: '/games',     icon: Gamepad2,     labelKey: 'dashboard.nav.gamesLabel',     descKey: 'dashboard.nav.gamesDesc',     bg: 'bg-rose-100',   iconColor: 'text-rose-600'   },
+  { to: '/mood',      icon: Activity,      labelKey: 'dashboard.nav.moodLabel',      descKey: 'dashboard.nav.moodDesc',      bg: 'bg-eira-100',   iconColor: 'text-eira-600'   },
+  { to: '/journal',   icon: BookOpen,      labelKey: 'dashboard.nav.journalLabel',   descKey: 'dashboard.nav.journalDesc',   bg: 'bg-violet-100', iconColor: 'text-violet-600' },
+  { to: '/chat',      icon: MessageCircle, labelKey: 'dashboard.nav.chatLabel',      descKey: 'dashboard.nav.chatDesc',      bg: 'bg-sky-100',    iconColor: 'text-sky-600'    },
+  { to: '/community', icon: Users,         labelKey: 'dashboard.nav.communityLabel', descKey: 'dashboard.nav.communityDesc', bg: 'bg-amber-100',  iconColor: 'text-amber-600'  },
+  { to: '/games',     icon: Gamepad2,      labelKey: 'dashboard.nav.gamesLabel',     descKey: 'dashboard.nav.gamesDesc',     bg: 'bg-rose-100',   iconColor: 'text-rose-600'   },
 ] as const;
 
 const RING_RADIUS = 38;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
+// Stagger animation variants for nav card container
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.07, delayChildren: 0.15 },
+  },
+};
+
+// Individual card animation variants
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
 export default function Dashboard() {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
+  const { mutate: logout } = useLogout();
+  const shouldReduce = useReducedMotion();
 
   const score = user?.wellnessScore ?? 0;
   const ringOffset = RING_CIRCUMFERENCE * (1 - score / 100);
@@ -53,7 +76,7 @@ export default function Dashboard() {
               </span>
             )}
             <button
-              onClick={logout}
+              onClick={() => logout()}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
               aria-label={t('dashboard.logoutAriaLabel')}
             >
@@ -110,21 +133,28 @@ export default function Dashboard() {
                       strokeWidth="7"
                       fill="none"
                     />
-                    {/* Progress */}
-                    <circle
+                    {/* Progress — animated with Motion (replaces static style prop) */}
+                    <motion.circle
                       cx="50"
                       cy="50"
                       r={RING_RADIUS}
-                      className="stroke-white transition-all duration-700"
+                      className="stroke-white"
                       strokeWidth="7"
                       fill="none"
                       strokeLinecap="round"
                       strokeDasharray={RING_CIRCUMFERENCE}
-                      style={{ strokeDashoffset: ringOffset }} // Exception: continuous dynamic value
+                      initial={{ strokeDashoffset: RING_CIRCUMFERENCE }}
+                      animate={shouldReduce ? {} : { strokeDashoffset: ringOffset }}
+                      transition={{ duration: 1.2, ease: [0.34, 1.56, 0.64, 1] as const }}
+                      // EXCEPCION: strokeDashoffset must use Motion animate, not Tailwind
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-bold leading-none">{score}</span>
+                    <NumberFlow
+                      value={score}
+                      className="text-2xl font-bold text-white tabular-nums leading-none"
+                      transformTiming={{ duration: 800, easing: 'ease-out' }}
+                    />
                     <span className="mt-0.5 text-xs text-eira-200">{t('dashboard.wellnessLabel')}</span>
                   </div>
                 </div>
@@ -138,10 +168,19 @@ export default function Dashboard() {
           {t('dashboard.sectionTitle')}
         </h2>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <motion.div
+          className="grid grid-cols-2 gap-3 sm:grid-cols-3"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {NAV_ROUTES.map(({ to, icon: Icon, labelKey, descKey, bg, iconColor }) => (
             <Link key={to} to={to}>
-              <div className="group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-all hover:border-eira-200 hover:shadow-md">
+              <motion.div
+                variants={cardVariants}
+                whileHover={shouldReduce ? {} : { y: -2, scale: 1.01 }}
+                className="group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-colors hover:border-eira-200 hover:shadow-md"
+              >
                 <div
                   className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${bg}`}
                 >
@@ -149,10 +188,10 @@ export default function Dashboard() {
                 </div>
                 <p className="font-semibold text-slate-800">{t(labelKey)}</p>
                 <p className="mt-0.5 text-xs text-slate-500">{t(descKey)}</p>
-              </div>
+              </motion.div>
             </Link>
           ))}
-        </div>
+        </motion.div>
 
         {/* Daily call-to-action */}
         <Link to="/mood">

@@ -69,7 +69,7 @@ describe('Mood API — Integration Tests', () => {
 
     // Default: valid authentication
     mocks.getUser.mockResolvedValue({
-      data: { user: { id: 'supabase-test-id' } },
+      data: { user: { id: 'supabase-test-id', email: 'test@example.com', user_metadata: { name: 'Test User' } } },
       error: null,
     });
 
@@ -196,13 +196,30 @@ describe('Mood API — Integration Tests', () => {
   // ─── History endpoint ────────────────────────────────────────────────────────
 
   describe('GET /api/mood — history', () => {
-    it('GET /api/mood with valid auth → 200 with { entries: [], total: 0 }', async () => {
+    it('GET /api/mood with valid auth → 200 with { entries: [], total: 0, todayCount: 0 }', async () => {
       const res = await request(app)
         .get('/api/mood')
         .set('Authorization', 'Bearer valid-token');
 
       expect(res.status).toBe(200);
-      expect(res.body).toMatchObject({ entries: [], total: 0 });
+      expect(res.body).toMatchObject({ entries: [], total: 0, todayCount: 0 });
+    });
+
+    it('GET /api/mood returns todayCount independently from recent entries total', async () => {
+      mocks.moodFindMany.mockResolvedValue(Array.from({ length: 6 }, (_, index) => ({
+        ...mockPrismaMoodEntry,
+        id: `mood-${index + 1}`,
+        created_at: new Date(Date.now() - index * 24 * 60 * 60 * 1000),
+      })));
+      mocks.moodCount.mockResolvedValue(2);
+
+      const res = await request(app)
+        .get('/api/mood')
+        .set('Authorization', 'Bearer valid-token');
+
+      expect(res.status).toBe(200);
+      expect(res.body.total).toBe(6);
+      expect(res.body.todayCount).toBe(2);
     });
   });
 

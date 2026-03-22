@@ -2,8 +2,8 @@ import * as SliderPrimitive from '@radix-ui/react-slider';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
-// Mapping from numeric score to translation key suffix
-const MOOD_LABEL_KEYS: Record<number, string> = {
+// Mapping from numeric score to translation key — all keys exist in en.json
+const MOOD_LABEL_KEYS = {
   1: 'mood.slider.labels.1',
   2: 'mood.slider.labels.2',
   3: 'mood.slider.labels.3',
@@ -14,7 +14,9 @@ const MOOD_LABEL_KEYS: Record<number, string> = {
   8: 'mood.slider.labels.8',
   9: 'mood.slider.labels.9',
   10: 'mood.slider.labels.10',
-};
+} as const;
+
+type MoodLabelKey = typeof MOOD_LABEL_KEYS[keyof typeof MOOD_LABEL_KEYS];
 
 interface MoodSliderProps {
   value: number;
@@ -48,7 +50,8 @@ export function MoodSlider({ value, onChange }: MoodSliderProps) {
       ? 'bg-amber-500 border-amber-300'
       : 'bg-eira-500 border-eira-300';
 
-  const currentLabel = t(MOOD_LABEL_KEYS[value] ?? 'mood.slider.labels.5');
+  const labelKey: MoodLabelKey = (MOOD_LABEL_KEYS as Record<number, MoodLabelKey>)[value] ?? 'mood.slider.labels.5';
+  const currentLabel = t(labelKey);
 
   return (
     <div className="space-y-5">

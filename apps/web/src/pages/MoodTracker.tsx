@@ -14,16 +14,27 @@ import { Button } from '../components/ui/Button';
 
 const MAX_ENTRIES_PER_DAY = 5;
 
+/** Translate a Zod validation key (e.g. "validation.mood.score.required") at display time.
+ * Uses `as never` to satisfy strict i18next key types for runtime-dynamic keys. */
+function useValidationT() {
+  const { t } = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (key: string | undefined): string | undefined =>
+    key ? t(key as never) : undefined;
+}
+
 export default function MoodTracker() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const tv = useValidationT();
   const { mutateAsync: createMood, isPending, error } = useCreateMood();
   const { data: history } = useMoodHistory();
 
   const [showCrisisModal, setShowCrisisModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const remainingEntries = MAX_ENTRIES_PER_DAY - (history?.total ?? 0);
+  const todayCount = history?.todayCount ?? history?.total ?? 0;
+  const remainingEntries = Math.max(0, MAX_ENTRIES_PER_DAY - todayCount);
   const canSubmit = remainingEntries > 0;
 
   const {
@@ -141,7 +152,7 @@ export default function MoodTracker() {
               />
               {errors.score && (
                 <p className="mt-2 text-xs text-crisis-600" role="alert">
-                  {errors.score.message}
+                  {tv(errors.score.message)}
                 </p>
               )}
             </div>
@@ -155,7 +166,7 @@ export default function MoodTracker() {
                   <EmotionSelector
                     value={(field.value as EmotionValue | undefined) ?? ''}
                     onChange={field.onChange}
-                    error={errors.emotion?.message}
+                    error={tv(errors.emotion?.message)}
                   />
                 )}
               />
@@ -184,7 +195,7 @@ export default function MoodTracker() {
                 />
                 {errors.note && (
                   <p className="text-xs text-crisis-600" role="alert">
-                    {errors.note.message}
+                    {tv(errors.note.message)}
                   </p>
                 )}
               </div>

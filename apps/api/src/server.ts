@@ -1,31 +1,50 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
-import pino from 'pino';
 import authRoutes from './infrastructure/http/routes/auth.routes';
 import moodRoutes from './infrastructure/http/routes/mood.routes';
 import { journalRoutes } from './infrastructure/http/routes/journal.routes';
+import { chatRoutes } from './infrastructure/http/routes/chat.routes';
 import { errorHandlerMiddleware } from './infrastructure/http/middlewares/errorHandler.middleware';
-
-const isDev = process.env.NODE_ENV !== 'production';
-
-export const logger = pino(
-  isDev
-    ? { level: 'debug', transport: { target: 'pino-pretty', options: { colorize: true } } }
-    : { level: 'info' },
-);
+import { logger } from './infrastructure/logging/logger';
+import { allowedOrigins } from './infrastructure/http/security/httpSecurity';
 
 export const app = express();
 
-// Security — HTTP headers
-app.use(helmet());
-app.disable('x-powered-by');
+// Trust proxy (required for rate-limiting and IP detection behind reverse proxy)
+app.set('trust proxy', 1);
 
-// CORS
-const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
-  .split(',')
-  .map((o) => o.trim());
+// Security — HTTP headers with explicit CSP
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: [
+          "'self'",
+          'https://*.supabase.co',
+          'https://generativelanguage.googleapis.com',
+          'https://api.groq.com',
+        ],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://rsms.me'],
+        objectSrc: ["'none'"],
+        frameSrc: ["'none'"],
+        upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null,
+      },
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    },
+  }),
+);
+app.disable('x-powered-by');
 
 app.use(
   cors({
@@ -54,6 +73,9 @@ app.use(globalLimiter);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Cookie parser — required for httpOnly cookie auth
+app.use(cookieParser());
+
 // Health check
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', service: 'eira-api', timestamp: new Date().toISOString() });
@@ -63,6 +85,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/mood', moodRoutes);
 app.use('/api/journal', journalRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Global error handler
 app.use(errorHandlerMiddleware);

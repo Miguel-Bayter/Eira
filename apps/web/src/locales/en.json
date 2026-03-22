@@ -46,6 +46,12 @@
       "loginLink": "Sign in"
     }
   },
+  "common": {
+    "loading": "Loading...",
+    "inDevelopment": "This area is still in development.",
+    "backToDashboard": "Back to dashboard",
+    "backToDashboardAriaLabel": "Go back to dashboard"
+  },
   "dashboard": {
     "logoutAriaLabel": "Sign out",
     "defaultUser": "User",
@@ -72,7 +78,7 @@
   },
   "mood": {
     "tracker": {
-      "backAriaLabel": "Back to home",
+      "backAriaLabel": "Back to dashboard",
       "title": "Mood Tracker",
       "remainingEntries_one": "{{count}} entry remaining today",
       "remainingEntries_other": "{{count}} entries remaining today",
@@ -83,7 +89,7 @@
       "submitButton": "Save entry",
       "successTitle": "Saved!",
       "successMessage": "Your mood was recorded",
-      "backToHome": "Back to home"
+      "backToHome": "Back to dashboard"
     },
     "slider": {
       "question": "How are you feeling right now?",
@@ -130,11 +136,13 @@
       "description": "We noticed you may be going through a difficult moment. Talking to someone can help a lot.",
       "lineLabel": "Free support line · Colombia",
       "lineAvailability": "Available 24/7 · Confidential",
-      "callButton": "Call 106 now",
+      "phone": "988",
+      "callButton": "Call 988 now",
       "continueButton": "Continue in Eira"
     }
   },
   "journal": {
+    "backAriaLabel": "Back to dashboard",
     "greeting": {
       "morning": "Good morning",
       "afternoon": "Good afternoon",
@@ -147,7 +155,7 @@
     "editor": {
       "label": "What's on your heart today?",
       "placeholder": "Write freely... there are no right or wrong answers here 🌿",
-      "hint": "Write at least 10 characters to save.",
+      "hint": "Write what you need, even if it is brief.",
       "remaining": "{{count}} remaining",
       "saveButton": "Save only",
       "saveAndAnalyzeButton": "Save and get tips",
@@ -160,10 +168,114 @@
       "loading": "Eira is reading what you wrote..."
     }
   },
+  "chat": {
+    "header": {
+      "badge": "Calm conversation",
+      "title": "Talk with Eira",
+      "subtitle": "A private space to slow down, say what is true, and receive grounded support one message at a time.",
+      "confidentialTitle": "Protected space",
+      "confidentialBody": "Your conversation stays centered on emotional support, with gentle guidance and clear boundaries.",
+      "limitTitle": "Daily rhythm",
+      "limitBody": "{{count}} messages left today so the experience stays calm and reliable."
+    },
+    "conversation": {
+      "eiraLabel": "Eira",
+      "youLabel": "You"
+    },
+    "typing": {
+      "ariaLabel": "Eira is typing"
+    },
+    "composer": {
+      "label": "What feels most present right now?",
+      "placeholder": "Share what is on your mind. Eira will answer with care and practical support.",
+      "sendButton": "Send",
+      "sendAriaLabel": "Send message",
+      "remainingMessages": "{{count}} messages remaining today",
+      "limitReached": "Daily chat limit reached"
+    },
+    "empty": {
+      "title": "Start where your mind already is",
+      "body": "You can vent, ask for perspective, or turn a heavy moment into one next step you can actually take today.",
+      "promptOne": "I need help calming down after a stressful moment.",
+      "promptTwo": "Can you help me sort what I am feeling?",
+      "promptThree": "Give me one gentle plan for the rest of today."
+    },
+    "crisis": {
+      "bannerTitle": "Immediate support matters right now",
+      "bannerBody": "Your message may reflect a crisis moment. Please consider contacting a crisis line or a trusted person right away.",
+      "bannerButton": "Open support options"
+    },
+    "errors": {
+      "dailyLimit": "You have reached today's chat limit. Please come back tomorrow.",
+      "rateLimited": "Too many chat requests. Please wait a moment and try again.",
+      "providerUnavailable": "Eira is having trouble replying right now. Please try again in a moment.",
+      "userNotFound": "We could not prepare your private chat space. Please sign in again.",
+      "validation": "Write a message before sending it.",
+      "unauthorized": "Your session expired. Please sign in again.",
+      "loadFailed": "We could not load your conversation right now.",
+      "sendFailed": "We could not send your message right now."
+    }
+  },
+  "nav": {
+    "mood": "Mood Tracker",
+    "journal": "Journal",
+    "chat": "AI Chat",
+    "dashboard": "Dashboard"
+  },
+  "toast": {
+    "moodSaved": "Mood entry saved!",
+    "journalSaved": "Journal entry saved!",
+    "analysisDone": "Analysis complete",
+    "chatReplyReady": "Eira replied.",
+    "chatCrisisSupport": "Crisis support options are ready for you.",
+    "error": "Something went wrong. Please try again."
+  },
+  "command": {
+    "placeholder": "Search or navigate...",
+    "navigate": "Navigate",
+    "noResults": "No results found."
+  },
+  "games": {
+    "breathing": {
+      "inhale": "Inhale",
+      "hold": "Hold",
+      "exhale": "Exhale",
+      "ready": "Ready",
+      "start": "Start",
+      "stop": "Stop"
+    }
+  },
   "navigation": {
     "page": "Page: {{name}}"
   },
   "errors": {
     "internalServer": "Internal server error"
+  },
+  "validation": {
+    "name": { "minLength": "Name must be at least 2 characters" },
+    "email": { "invalid": "Please enter a valid email" },
+    "password": {
+      "minLength": "Password must be at least 8 characters",
+      "required": "Password is required",
+      "uppercase": "Must contain at least one uppercase letter",
+      "number": "Must contain at least one number"
+    },
+    "mood": {
+      "score": { "required": "Score is required" },
+      "emotion": { "required": "Please select how you feel" },
+      "note": { "maxLength": "Maximum 500 characters" }
+    },
+    "chat": {
+      "message": {
+        "required": "Write a message to continue",
+        "maxLength": "Maximum 2000 characters"
+      }
+    },
+    "journal": {
+      "content": {
+        "required": "Please write something before saving",
+        "maxLength": "Your journal entry must be 5000 characters or less"
+      }
+    }
   }
 }

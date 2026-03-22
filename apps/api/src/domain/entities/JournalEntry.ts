@@ -1,4 +1,6 @@
-import { createId } from '@paralleldrive/cuid2';
+import { JournalContentEmptyError, JournalContentTooLongError } from '@domain/errors';
+
+const JOURNAL_CONTENT_MAX_LENGTH = 5000;
 
 interface JournalEntryProps {
   id: string;
@@ -19,14 +21,14 @@ export class JournalEntry {
 
   static create(props: CreateJournalEntryProps): JournalEntry {
     if (!props.content || props.content.trim().length === 0) {
-      throw new Error('El contenido del diario no puede estar vacío');
+      throw new JournalContentEmptyError();
     }
-    if (props.content.trim().length > 5000) {
-      throw new Error('El contenido excede el límite de 5000 caracteres');
+    if (props.content.trim().length > JOURNAL_CONTENT_MAX_LENGTH) {
+      throw new JournalContentTooLongError(JOURNAL_CONTENT_MAX_LENGTH);
     }
     const now = new Date();
     return new JournalEntry({
-      id: createId(),
+      id: crypto.randomUUID(),
       userId: props.userId,
       content: props.content.trim(),
       aiAnalysis: null,

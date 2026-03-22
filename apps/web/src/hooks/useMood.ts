@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../store/authStore';
 import type { CreateMoodFormData } from '../schemas/mood.schema';
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+import { notify } from '../lib/toast';
+import { API_URL, createJsonHeaders } from '../lib/api';
 
 export interface MoodEntryDTO {
   id: string;
@@ -25,59 +25,70 @@ export interface CreateMoodResponse {
 interface MoodHistoryResponse {
   entries: MoodEntryDTO[];
   total: number;
+  todayCount?: number;
 }
 
-function authHeaders(): HeadersInit {
-  const token = useAuthStore.getState().token;
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
+function handleUnauthorized(): void {
+  useAuthStore.getState().logout();
+  window.location.href = '/login';
 }
 
 async function postMoodEntry(data: CreateMoodFormData): Promise<CreateMoodResponse> {
   const res = await fetch(`${API_URL}/api/mood`, {
     method: 'POST',
-    headers: authHeaders(),
+    headers: createJsonHeaders({ includeCsrf: true }),
+    credentials: 'include',
     body: JSON.stringify(data),
   });
+  if (res.status === 401) {
+    handleUnauthorized();
+    return Promise.reject(new Error('Unauthorized'));
+  }
   if (!res.ok) {
     const body = (await res.json()) as { error?: { message?: string } };
-    throw new Error(body.error?.message ?? 'Error al registrar el estado de ánimo');
+    throw new Error(body.error?.message ?? 'Error registering mood entry');
   }
   return res.json() as Promise<CreateMoodResponse>;
 }
 
 async function fetchMoodHistory(): Promise<MoodHistoryResponse> {
   const res = await fetch(`${API_URL}/api/mood?limit=30`, {
-    headers: authHeaders(),
+    credentials: 'include', // httpOnly cookie sent automatically
   });
-  if (!res.ok) throw new Error('Error al cargar el historial');
+  if (res.status === 401) {
+    handleUnauthorized();
+    return Promise.reject(new Error('Unauthorized'));
+  }
+  if (!res.ok) throw new Error('Error loading mood history');
   return res.json() as Promise<MoodHistoryResponse>;
 }
 
 export function useCreateMood() {
   const queryClient = useQueryClient();
   const user = useAuthStore((s) => s.user);
-  const token = useAuthStore((s) => s.token);
   const setUser = useAuthStore((s) => s.setUser);
 
   return useMutation({
     mutationFn: postMoodEntry,
     onSuccess: (data) => {
-      if (user && token) {
-        setUser({ ...user, wellnessScore: data.wellnessScore }, token);
+      if (user) {
+        setUser({ ...user, wellnessScore: data.wellnessScore });
       }
       void queryClient.invalidateQueries({ queryKey: ['mood-history'] });
+      notify.success('toast.moodSaved');
+    },
+    onError: () => {
+      notify.error('toast.error');
     },
   });
 }
 
 export function useMoodHistory() {
-  const token = useAuthStore((s) => s.token);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const status = useAuthStore((s) => s.status);
   return useQuery({
     queryKey: ['mood-history'],
     queryFn: fetchMoodHistory,
-    enabled: !!token,
+    enabled: status !== 'bootstrapping' && isAuthenticated,
   });
 }

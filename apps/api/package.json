@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec tsx src/server.ts",
+    "dev": "nodemon --watch src --watch .env --ext ts,env --exec tsx src/bootstrap.ts",
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -16,12 +16,14 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@eira/shared": "workspace:*",
     "@google/generative-ai": "^0.17.0",
-    "@paralleldrive/cuid2": "^3.3.0",
     "@prisma/client": "^5.15.0",
     "@supabase/supabase-js": "^2.43.0",
-    "bcryptjs": "^2.4.3",
+    "@types/cookie-parser": "^1.4.10",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
     "express": "^4.19.0",
     "express-rate-limit": "^7.3.0",
     "groq-sdk": "^0.11.0",
@@ -31,7 +33,6 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/supertest": "^6.0.2",

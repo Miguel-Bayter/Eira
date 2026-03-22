@@ -1,43 +1,49 @@
 import type { Request, Response, NextFunction } from 'express';
-import { createClient } from '@supabase/supabase-js';
 import type { RegisterUserUseCase } from '@application/use-cases/auth/RegisterUser.usecase';
+import type { LoginUserUseCase } from '@application/use-cases/auth/LoginUser.usecase';
 import type { GetOrCreateUserUseCase } from '@application/use-cases/auth/GetOrCreateUser.usecase';
+import { authCookieOptions, AUTH_COOKIE_NAME } from '../security/httpSecurity';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL ?? '',
-  process.env.SUPABASE_ANON_KEY ?? '',
-);
+interface SafeUserDto {
+  id: string;
+  email: string;
+  name: string;
+  wellnessScore: number;
+  streakDays: number;
+}
+
+function toSafeUserDto(user: SafeUserDto): SafeUserDto {
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    wellnessScore: user.wellnessScore,
+    streakDays: user.streakDays ?? 0,
+  };
+}
 
 export class AuthController {
   constructor(
     private readonly registerUser: RegisterUserUseCase,
+    private readonly loginUser: LoginUserUseCase,
     private readonly getOrCreateUser: GetOrCreateUserUseCase,
   ) {}
 
   register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { name, email, password } = req.body as { name: string; email: string; password: string };
-
-      // 1. Create user in Supabase Auth
-      const { data, error } = await supabase.auth.signUp({ email, password });
-
-      if (error !== null || data.user === null) {
-        res.status(400).json({
-          error: { code: 'SUPABASE_ERROR', message: error?.message ?? 'Registration error' },
-        });
-        return;
-      }
-
-      // 2. Create user in our DB
       const user = await this.registerUser.execute({
         name,
         email,
-        supabaseId: data.user.id,
+        password,
       });
 
+      if (user.accessToken) {
+        res.cookie(AUTH_COOKIE_NAME, user.accessToken, authCookieOptions);
+      }
+
       res.status(201).json({
-        user: { id: user.id, email: user.email, name: user.name, wellnessScore: user.wellnessScore },
-        token: data.session?.access_token ?? '',
+        user: toSafeUserDto(user.user),
       });
     } catch (err) {
       next(err);
@@ -47,27 +53,12 @@ export class AuthController {
   login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { email, password } = req.body as { email: string; password: string };
+      const result = await this.loginUser.execute({ email, password });
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error !== null || data.user === null || data.session === null) {
-        // SECURITY: same message for non-existent email and wrong password
-        res.status(401).json({
-          error: { code: 'INVALID_CREDENTIALS', message: 'Invalid credentials' },
-        });
-        return;
-      }
-
-      // Get or create user in our DB
-      const user = await this.getOrCreateUser.execute({
-        supabaseId: data.user.id,
-        email: data.user.email ?? email,
-        name: (data.user.user_metadata as { name?: string } | null)?.name ?? 'User',
-      });
+      res.cookie(AUTH_COOKIE_NAME, result.token, authCookieOptions);
 
       res.status(200).json({
-        user: { id: user.id, email: user.email, name: user.name, wellnessScore: user.wellnessScore },
-        token: data.session.access_token,
+        user: toSafeUserDto(result.user),
       });
     } catch (err) {
       next(err);
@@ -76,17 +67,27 @@ export class AuthController {
 
   me = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      // req.userId comes from authMiddleware
-      const supabaseId = req.userId;
+      const authUser = req.authUser;
+      if (!authUser?.email) {
+        res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Unauthorized' } });
+        return;
+      }
 
-      const {
-        data: { user: supabaseUser },
-      } = await supabase.auth.getUser();
+      const fallbackName = authUser.email.split('@')[0] ?? 'Eira User';
+      const user = await this.getOrCreateUser.execute({
+        supabaseId: req.userId,
+        email: authUser.email,
+        name: authUser.name ?? fallbackName,
+      });
 
-      // Look up by supabaseId
-      res.status(200).json({ userId: supabaseId, supabaseUser });
+      res.status(200).json({ user: toSafeUserDto(user) });
     } catch (err) {
       next(err);
     }
+  };
+
+  logout = async (_req: Request, res: Response): Promise<void> => {
+    res.clearCookie(AUTH_COOKIE_NAME, authCookieOptions);
+    res.status(200).json({ success: true });
   };
 }

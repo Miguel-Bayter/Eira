@@ -46,6 +46,12 @@
       "loginLink": "Inicia sesión"
     }
   },
+  "common": {
+    "loading": "Cargando...",
+    "inDevelopment": "Esta sección sigue en desarrollo.",
+    "backToDashboard": "Volver al dashboard",
+    "backToDashboardAriaLabel": "Volver al dashboard"
+  },
   "dashboard": {
     "logoutAriaLabel": "Cerrar sesión",
     "defaultUser": "Usuario",
@@ -72,7 +78,7 @@
   },
   "mood": {
     "tracker": {
-      "backAriaLabel": "Volver al inicio",
+      "backAriaLabel": "Volver al dashboard",
       "title": "Mood Tracker",
       "remainingEntries_one": "{{count}} registro restante hoy",
       "remainingEntries_other": "{{count}} registros restantes hoy",
@@ -83,7 +89,7 @@
       "submitButton": "Guardar registro",
       "successTitle": "¡Registrado!",
       "successMessage": "Tu estado de ánimo fue guardado",
-      "backToHome": "Volver al inicio"
+      "backToHome": "Volver al dashboard"
     },
     "slider": {
       "question": "¿Cómo te sientes ahora?",
@@ -130,11 +136,13 @@
       "description": "Notamos que puedes estar pasando un momento difícil. Hablar con alguien puede ayudar mucho.",
       "lineLabel": "Línea de atención gratuita · Colombia",
       "lineAvailability": "Disponible 24/7 · Confidencial",
+      "phone": "106",
       "callButton": "Llamar al 106 ahora",
       "continueButton": "Continuar en Eira"
     }
   },
   "journal": {
+    "backAriaLabel": "Volver al dashboard",
     "greeting": {
       "morning": "Buenos días",
       "afternoon": "Buenas tardes",
@@ -147,7 +155,7 @@
     "editor": {
       "label": "¿Qué llevas en el corazón hoy?",
       "placeholder": "Escribe libremente... aquí no hay respuestas correctas ni incorrectas 🌿",
-      "hint": "Escribe al menos 10 caracteres para guardar.",
+      "hint": "Escribe lo que necesites, aunque sea breve.",
       "remaining": "{{count}} restantes",
       "saveButton": "Solo guardar",
       "saveAndAnalyzeButton": "Guardar y recibir consejos",
@@ -160,10 +168,114 @@
       "loading": "Eira está leyendo lo que escribiste..."
     }
   },
+  "chat": {
+    "header": {
+      "badge": "Conversación serena",
+      "title": "Habla con Eira",
+      "subtitle": "Un espacio privado para bajar el ritmo, decir lo que es cierto y recibir apoyo aterrizado un mensaje a la vez.",
+      "confidentialTitle": "Espacio protegido",
+      "confidentialBody": "Tu conversación se mantiene centrada en apoyo emocional, con guía amable y límites claros.",
+      "limitTitle": "Ritmo diario",
+      "limitBody": "Te quedan {{count}} mensajes hoy para que la experiencia siga siendo tranquila y confiable."
+    },
+    "conversation": {
+      "eiraLabel": "Eira",
+      "youLabel": "Tú"
+    },
+    "typing": {
+      "ariaLabel": "Eira está escribiendo"
+    },
+    "composer": {
+      "label": "¿Qué se siente más presente ahora mismo?",
+      "placeholder": "Cuéntame qué tienes en mente. Eira responderá con cuidado y apoyo práctico.",
+      "sendButton": "Enviar",
+      "sendAriaLabel": "Enviar mensaje",
+      "remainingMessages": "{{count}} mensajes restantes hoy",
+      "limitReached": "Límite diario del chat alcanzado"
+    },
+    "empty": {
+      "title": "Empieza desde donde ya está tu mente",
+      "body": "Puedes desahogarte, pedir perspectiva o convertir un momento pesado en un siguiente paso que sí puedas tomar hoy.",
+      "promptOne": "Necesito ayuda para calmarme después de un momento estresante.",
+      "promptTwo": "¿Me ayudas a ordenar lo que estoy sintiendo?",
+      "promptThree": "Dame un plan suave para el resto del día."
+    },
+    "crisis": {
+      "bannerTitle": "El apoyo inmediato importa ahora mismo",
+      "bannerBody": "Tu mensaje puede reflejar un momento de crisis. Considera contactar una línea de ayuda o a una persona de confianza ahora mismo.",
+      "bannerButton": "Abrir opciones de apoyo"
+    },
+    "errors": {
+      "dailyLimit": "Ya alcanzaste el límite de chat de hoy. Vuelve mañana.",
+      "rateLimited": "Demasiadas solicitudes de chat. Espera un momento e inténtalo otra vez.",
+      "providerUnavailable": "Eira tiene problemas para responder en este momento. Inténtalo otra vez en un momento.",
+      "userNotFound": "No pudimos preparar tu espacio privado de chat. Inicia sesión de nuevo.",
+      "validation": "Escribe un mensaje antes de enviarlo.",
+      "unauthorized": "Tu sesión expiró. Inicia sesión de nuevo.",
+      "loadFailed": "No pudimos cargar tu conversación en este momento.",
+      "sendFailed": "No pudimos enviar tu mensaje en este momento."
+    }
+  },
+  "nav": {
+    "mood": "Mood Tracker",
+    "journal": "Diario",
+    "chat": "Chat IA",
+    "dashboard": "Inicio"
+  },
+  "toast": {
+    "moodSaved": "¡Registro de ánimo guardado!",
+    "journalSaved": "¡Entrada del diario guardada!",
+    "analysisDone": "Análisis completado",
+    "chatReplyReady": "Eira ya te respondió.",
+    "chatCrisisSupport": "Las opciones de apoyo en crisis ya están listas para ti.",
+    "error": "Algo salió mal. Por favor, inténtalo de nuevo."
+  },
+  "command": {
+    "placeholder": "Buscar o navegar...",
+    "navigate": "Navegar",
+    "noResults": "Sin resultados."
+  },
+  "games": {
+    "breathing": {
+      "inhale": "Inhala",
+      "hold": "Mantén",
+      "exhale": "Exhala",
+      "ready": "Listo",
+      "start": "Empezar",
+      "stop": "Detener"
+    }
+  },
   "navigation": {
     "page": "Página: {{name}}"
   },
   "errors": {
-    "internalServer": "Internal server error"
+    "internalServer": "Error interno del servidor"
+  },
+  "validation": {
+    "name": { "minLength": "El nombre debe tener al menos 2 caracteres" },
+    "email": { "invalid": "Por favor ingresa un email válido" },
+    "password": {
+      "minLength": "La contraseña debe tener al menos 8 caracteres",
+      "required": "La contraseña es requerida",
+      "uppercase": "Debe contener al menos una mayúscula",
+      "number": "Debe contener al menos un número"
+    },
+    "mood": {
+      "score": { "required": "El puntaje es requerido" },
+      "emotion": { "required": "Selecciona cómo te sientes" },
+      "note": { "maxLength": "Máximo 500 caracteres" }
+    },
+    "chat": {
+      "message": {
+        "required": "Escribe un mensaje para continuar",
+        "maxLength": "Máximo 2000 caracteres"
+      }
+    },
+    "journal": {
+      "content": {
+        "required": "Escribe algo antes de guardar",
+        "maxLength": "Tu entrada del diario debe tener 5000 caracteres o menos"
+      }
+    }
   }
 }

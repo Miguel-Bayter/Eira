@@ -18,7 +18,10 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@eira/shared": ["../../packages/shared/index.ts"],
+      "@eira/shared/*": ["../../packages/shared/*"],
+      "zod": ["node_modules/zod/index.d.ts"]
     }
   },
   "include": ["src", "tests"]

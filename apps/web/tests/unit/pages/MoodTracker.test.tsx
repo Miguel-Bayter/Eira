@@ -20,8 +20,10 @@ vi.mock('../../../src/store/authStore', () => ({
   useAuthStore: (selector: (s: unknown) => unknown) =>
     selector({
       user: { id: '1', name: 'Test', email: 'test@test.com', wellnessScore: 50, streakDays: 3 },
-      token: 'test-token',
+      isAuthenticated: true,
+      status: 'authenticated',
       setUser: vi.fn(),
+      setAnonymous: vi.fn(),
       logout: vi.fn(),
     }),
 }));
@@ -87,7 +89,8 @@ describe('MoodTracker — Page', () => {
       const submitBtn = screen.getByRole('button', { name: 'mood.tracker.submitButton' });
       fireEvent.click(submitBtn);
       await waitFor(() => {
-        expect(screen.getByText(/selecciona cómo te sientes/i)).toBeInTheDocument();
+        // i18n mock returns the key — the translated key is 'validation.mood.emotion.required'
+        expect(screen.getByText('validation.mood.emotion.required')).toBeInTheDocument();
       });
     });
   });

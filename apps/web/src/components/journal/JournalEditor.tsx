@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Loader2, Sparkles, BookmarkCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { JOURNAL_CONTENT_MAX_LENGTH } from '@eira/shared';
 
 interface JournalEditorProps {
   onSave: (content: string) => Promise<void>;
@@ -13,8 +14,8 @@ export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing 
   const { t } = useTranslation();
   const [content, setContent] = useState('');
   const isPending = isSaving || isAnalyzing;
-  const canSubmit = content.trim().length >= 10 && !isPending;
-  const remaining = 5000 - content.length;
+  const canSubmit = content.trim().length >= 1 && !isPending;
+  const remaining = JOURNAL_CONTENT_MAX_LENGTH - content.length;
 
   const handleSave = async () => {
     await onSave(content);
@@ -47,7 +48,7 @@ export function JournalEditor({ onSave, onSaveAndAnalyze, isSaving, isAnalyzing 
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder={t('journal.editor.placeholder')}
-            maxLength={5000}
+            maxLength={JOURNAL_CONTENT_MAX_LENGTH}
             rows={11}
             disabled={isPending}
             className="w-full resize-none rounded-2xl border border-gray-100 bg-eira-50/30 p-5 text-base leading-relaxed text-gray-700 placeholder-gray-300 focus:border-eira-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-eira-100 disabled:opacity-60 transition-colors duration-200"

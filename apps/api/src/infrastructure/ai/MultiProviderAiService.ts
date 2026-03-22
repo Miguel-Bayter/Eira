@@ -1,4 +1,5 @@
-import type { IAiService, AiMessage } from '@application/ports/IAiService';
+import type { IAiService, AiMessage } from '@domain/services/IAiService';
+import { AiServiceUnavailableError } from '@domain/errors';
 
 export class MultiProviderAiService implements IAiService {
   constructor(
@@ -10,7 +11,11 @@ export class MultiProviderAiService implements IAiService {
     try {
       return await this.primary.chat(messages, systemPrompt);
     } catch {
-      return this.fallback.chat(messages, systemPrompt);
+      try {
+        return await this.fallback.chat(messages, systemPrompt);
+      } catch {
+        throw new AiServiceUnavailableError();
+      }
     }
   }
 
@@ -18,7 +23,11 @@ export class MultiProviderAiService implements IAiService {
     try {
       return await this.primary.analyze(text, prompt);
     } catch {
-      return this.fallback.analyze(text, prompt);
+      try {
+        return await this.fallback.analyze(text, prompt);
+      } catch {
+        throw new AiServiceUnavailableError();
+      }
     }
   }
 

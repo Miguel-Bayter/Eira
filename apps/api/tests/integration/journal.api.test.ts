@@ -95,7 +95,7 @@ describe('Journal API — Integration Tests', () => {
 
     // Default: valid authentication
     mocks.getUser.mockResolvedValue({
-      data: { user: { id: 'supabase-test-id' } },
+      data: { user: { id: 'supabase-test-id', email: 'test@example.com', user_metadata: { name: 'Test User' } } },
       error: null,
     });
 

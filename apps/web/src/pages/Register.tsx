@@ -8,9 +8,19 @@ import { registerSchema, type RegisterFormData } from '../schemas/auth.schema';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 
+/** Translate a Zod validation key (e.g. "validation.name.minLength") at display time.
+ * Uses `as never` to satisfy strict i18next key types for runtime-dynamic keys. */
+function useValidationT() {
+  const { t } = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (key: string | undefined): string | undefined =>
+    key ? t(key as never) : undefined;
+}
+
 export default function Register() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const tv = useValidationT();
   const { mutateAsync: register, isPending, error } = useRegister();
 
   const {
@@ -110,7 +120,7 @@ export default function Register() {
               type="text"
               placeholder={t('auth.register.namePlaceholder')}
               autoComplete="name"
-              error={errors.name?.message}
+              error={tv(errors.name?.message)}
               {...formRegister('name')}
             />
 
@@ -119,7 +129,7 @@ export default function Register() {
               type="email"
               placeholder="ana@example.com"
               autoComplete="email"
-              error={errors.email?.message}
+              error={tv(errors.email?.message)}
               {...formRegister('email')}
             />
 
@@ -128,7 +138,7 @@ export default function Register() {
               type="password"
               placeholder={t('auth.register.passwordPlaceholder')}
               autoComplete="new-password"
-              error={errors.password?.message}
+              error={tv(errors.password?.message)}
               {...formRegister('password')}
             />
 

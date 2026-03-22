@@ -1,5 +1,6 @@
 import { MoodScore } from '../value-objects/MoodScore';
 import { Emotion } from '../value-objects/Emotion';
+import { containsCrisisKeywords } from '@domain/services/CrisisSignalDetector';
 
 export interface CreateMoodEntryProps {
   userId: string;
@@ -17,11 +18,6 @@ export interface MoodEntryProps {
   isCrisis: boolean;
   createdAt: Date;
 }
-
-const CRISIS_KEYWORDS = [
-  'suicidio', 'morir', 'hacerme daño', 'no quiero vivir', 'acabar con todo',
-  'matarme', 'quitarme la vida', 'no tiene sentido vivir',
-];
 
 export class MoodEntry {
   private constructor(
@@ -62,8 +58,6 @@ export class MoodEntry {
   }
 
   private static noteContainsCrisisKeywords(note: string | null): boolean {
-    if (!note) return false;
-    const lower = note.toLowerCase();
-    return CRISIS_KEYWORDS.some((kw) => lower.includes(kw));
+    return containsCrisisKeywords(note);
   }
 }

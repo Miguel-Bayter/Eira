@@ -32,6 +32,24 @@ export class InvalidEmailError extends DomainError {
   }
 }
 
+export class InvalidCredentialsError extends DomainError {
+  constructor() {
+    super('INVALID_CREDENTIALS', 'Invalid credentials');
+  }
+}
+
+export class RegistrationFailedError extends DomainError {
+  constructor() {
+    super('REGISTRATION_ERROR', 'Could not complete registration. Please try again.');
+  }
+}
+
+export class AuthProviderUnavailableError extends DomainError {
+  constructor() {
+    super('AUTH_PROVIDER_UNAVAILABLE', 'Authentication provider is temporarily unavailable');
+  }
+}
+
 export class CrisisDetectedError extends DomainError {
   constructor() {
     super('CRISIS_DETECTED', 'Crisis indicators detected');
@@ -53,5 +71,35 @@ export class WellnessScoreOutOfRangeError extends DomainError {
 export class JournalNotFoundError extends DomainError {
   constructor(id: string) {
     super('JOURNAL_NOT_FOUND', `Journal entry ${id} not found`);
+  }
+}
+
+export class JournalContentEmptyError extends DomainError {
+  constructor() {
+    super('JOURNAL_CONTENT_EMPTY', 'Journal content cannot be empty');
+  }
+}
+
+export class JournalContentTooLongError extends DomainError {
+  constructor(limit: number) {
+    super('JOURNAL_CONTENT_TOO_LONG', `Journal content exceeds the ${limit} character limit`);
+  }
+}
+
+export class ChatMessageEmptyError extends DomainError {
+  constructor() {
+    super('CHAT_MESSAGE_EMPTY', 'Chat message cannot be empty');
+  }
+}
+
+export class ChatResponseEmptyError extends DomainError {
+  constructor() {
+    super('CHAT_RESPONSE_EMPTY', 'AI response cannot be empty');
+  }
+}
+
+export class AiServiceUnavailableError extends DomainError {
+  constructor() {
+    super('AI_SERVICE_UNAVAILABLE', 'AI service is temporarily unavailable');
   }
 }

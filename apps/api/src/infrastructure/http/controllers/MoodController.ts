@@ -28,7 +28,8 @@ export class MoodController {
 
   getHistory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const limit = req.query.limit ? Number(req.query.limit) : 30;
+      const rawLimit = Number(req.query.limit);
+      const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? Math.min(rawLimit, 100) : 30;
       const result = await this.getMoodHistory.execute({
         userId: req.userId,
         limit,

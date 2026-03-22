@@ -20,6 +20,9 @@ export interface GetJournalHistoryOutput {
   total: number;
 }
 
+const MAX_LIMIT = 100;
+const DEFAULT_LIMIT = 30;
+
 export class GetJournalHistoryUseCase {
   constructor(
     private readonly journalRepo: IJournalRepository,
@@ -30,7 +33,12 @@ export class GetJournalHistoryUseCase {
     const user = await this.userRepo.findBySupabaseId(input.userId);
     if (!user) throw new UserNotFoundError(input.userId);
 
-    const limit = input.limit ?? 30;
+    // Cap limit at MAX_LIMIT to prevent abuse
+    const rawLimit = input.limit ?? DEFAULT_LIMIT;
+    const limit = Number.isFinite(rawLimit) && rawLimit > 0
+      ? Math.min(rawLimit, MAX_LIMIT)
+      : DEFAULT_LIMIT;
+
     const entries = await this.journalRepo.findByUserId(user.id, limit);
 
     return {
