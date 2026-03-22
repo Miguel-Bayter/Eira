@@ -19,6 +19,30 @@ const config: Config = {
           900: '#134e4a',
           950: '#042f2e',
         },
+        warm: {
+          50:  '#fdf8f2',
+          100: '#faf0e3',
+          200: '#f4dfc2',
+          300: '#eac9a0',
+          400: '#deae78',
+          500: '#d09050',
+          600: '#b47235',
+          700: '#8f5520',
+          800: '#623810',
+          900: '#361e05',
+        },
+        sage: {
+          50:  '#f4f7f3',
+          100: '#e6ede4',
+          200: '#ccdbc8',
+          300: '#a7c2a1',
+          400: '#7da276',
+          500: '#5d8456',
+          600: '#496843',
+          700: '#3b5336',
+          800: '#30422b',
+          900: '#283724',
+        },
         crisis: {
           50:  '#fff1f2',
           100: '#ffe4e6',
@@ -40,6 +64,10 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'soft': '0 2px 12px 0 rgba(0,0,0,0.06)',
+        'warm': '0 2px 16px 0 rgba(180,114,53,0.08)',
       },
       animation: {
         'breathe-in':  'scale-up 4s ease-in-out',

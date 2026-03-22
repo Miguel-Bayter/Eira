@@ -7,6 +7,7 @@ import authRoutes from './infrastructure/http/routes/auth.routes';
 import moodRoutes from './infrastructure/http/routes/mood.routes';
 import { journalRoutes } from './infrastructure/http/routes/journal.routes';
 import { chatRoutes } from './infrastructure/http/routes/chat.routes';
+import { dashboardRoutes } from './infrastructure/http/routes/dashboard.routes';
 import { errorHandlerMiddleware } from './infrastructure/http/middlewares/errorHandler.middleware';
 import { logger } from './infrastructure/logging/logger';
 import { allowedOrigins } from './infrastructure/http/security/httpSecurity';
@@ -86,6 +87,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/mood', moodRoutes);
 app.use('/api/journal', journalRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Global error handler
 app.use(errorHandlerMiddleware);

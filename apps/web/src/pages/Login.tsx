@@ -91,7 +91,7 @@ export default function Login() {
       </div>
 
       {/* Right panel: form */}
-      <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 py-12 lg:min-h-0">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#faf9f7] px-6 py-12 lg:min-h-0">
         {/* Mobile logo */}
         <div className="mb-8 flex items-center gap-2 lg:hidden">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-eira-100">
@@ -102,7 +102,7 @@ export default function Login() {
 
         <div className="w-full max-w-sm">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-slate-900">{t('auth.login.formTitle')}</h2>
+            <h2 className="text-2xl font-bold text-slate-800">{t('auth.login.formTitle')}</h2>
             <p className="mt-1 text-sm text-slate-500">
               {t('auth.login.formSubtitle')}
             </p>

@@ -5,7 +5,9 @@
     "loading": "Cargando...",
     "error": "Ocurrió un error",
     "back": "Volver",
-    "inDevelopment": "En desarrollo..."
+    "inDevelopment": "Esta sección sigue en desarrollo.",
+    "backToDashboard": "Volver al dashboard",
+    "backToDashboardAriaLabel": "Volver al dashboard"
   },
   "auth": {
     "login": {
@@ -46,12 +48,6 @@
       "loginLink": "Inicia sesión"
     }
   },
-  "common": {
-    "loading": "Cargando...",
-    "inDevelopment": "Esta sección sigue en desarrollo.",
-    "backToDashboard": "Volver al dashboard",
-    "backToDashboardAriaLabel": "Volver al dashboard"
-  },
   "dashboard": {
     "logoutAriaLabel": "Cerrar sesión",
     "defaultUser": "Usuario",
@@ -63,9 +59,12 @@
     "sectionTitle": "Tu espacio",
     "dailyTitle": "Registro de hoy",
     "dailySubtitle": "¿Ya registraste tu estado de ánimo?",
+    "stats": {
+      "sectionTitle": "Tu semana"
+    },
     "nav": {
-      "moodLabel": "Mood Tracker",
-      "moodDesc": "Registra cómo te sientes",
+      "moodLabel": "Cómo estoy",
+      "moodDesc": "Marca tu ánimo de hoy",
       "journalLabel": "Diario",
       "journalDesc": "Escribe y analiza con IA",
       "chatLabel": "Chat IA",
@@ -74,22 +73,44 @@
       "communityDesc": "Apoyo anónimo",
       "gamesLabel": "Juegos",
       "gamesDesc": "Ejercicios terapéuticos"
+    },
+    "heatmap": {
+      "title": "Cada día importa",
+      "subtitle": "Un año de momentos — el tuyo",
+      "noData": "Sin registro",
+      "legend": {
+        "noData": "Sin datos",
+        "hard": "Días difíciles",
+        "okay": "Días regulares",
+        "good": "Días buenos",
+        "great": "Días excelentes"
+      }
+    },
+    "trend": {
+      "title": "Tu semana",
+      "subtitle": "Cómo has estado — día a día",
+      "scoreLabel": "Ánimo"
+    },
+    "weeklyPlan": {
+      "title": "Sugerencias de Eira",
+      "noData": "Registra cómo te sientes esta semana y Eira preparará ideas personalizadas para ti 🌿"
     }
   },
   "mood": {
     "tracker": {
-      "backAriaLabel": "Volver al dashboard",
-      "title": "Mood Tracker",
+      "backAriaLabel": "Volver al inicio",
+      "title": "¿Cómo estás hoy?",
+      "welcomeMessage": "Este es tu espacio. Sin juicios, sin prisa.",
       "remainingEntries_one": "{{count}} registro restante hoy",
       "remainingEntries_other": "{{count}} registros restantes hoy",
-      "limitReached": "Límite diario alcanzado",
-      "limitMessage": "Ya registraste {{max}} estados de ánimo hoy. Vuelve mañana.",
-      "noteLabel": "Nota (opcional)",
-      "notePlaceholder": "¿Qué está pasando hoy? ¿Hay algo que quieras recordar?",
-      "submitButton": "Guardar registro",
-      "successTitle": "¡Registrado!",
-      "successMessage": "Tu estado de ánimo fue guardado",
-      "backToHome": "Volver al dashboard"
+      "limitReached": "Ya registraste suficiente por hoy",
+      "limitMessage": "Vuelve mañana — cada día es una nueva oportunidad.",
+      "noteLabel": "¿Algo más que quieras recordar? (opcional)",
+      "notePlaceholder": "Puedes escribir sobre lo que pasó hoy, cómo te sentiste, o simplemente lo primero que venga a la mente...",
+      "submitButton": "Guardar mi estado",
+      "successTitle": "Guardado con cariño",
+      "successMessage": "Gracias por tomarte un momento para ti",
+      "backToHome": "Volver al inicio"
     },
     "slider": {
       "question": "¿Cómo te sientes ahora?",
@@ -217,7 +238,7 @@
     }
   },
   "nav": {
-    "mood": "Mood Tracker",
+    "mood": "Cómo estoy",
     "journal": "Diario",
     "chat": "Chat IA",
     "dashboard": "Inicio"

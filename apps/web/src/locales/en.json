@@ -5,7 +5,9 @@
     "loading": "Loading...",
     "error": "Something went wrong",
     "back": "Back",
-    "inDevelopment": "Coming soon..."
+    "inDevelopment": "This area is still in development.",
+    "backToDashboard": "Back to dashboard",
+    "backToDashboardAriaLabel": "Go back to dashboard"
   },
   "auth": {
     "login": {
@@ -46,12 +48,6 @@
       "loginLink": "Sign in"
     }
   },
-  "common": {
-    "loading": "Loading...",
-    "inDevelopment": "This area is still in development.",
-    "backToDashboard": "Back to dashboard",
-    "backToDashboardAriaLabel": "Go back to dashboard"
-  },
   "dashboard": {
     "logoutAriaLabel": "Sign out",
     "defaultUser": "User",
@@ -63,9 +59,12 @@
     "sectionTitle": "Your space",
     "dailyTitle": "Today's check-in",
     "dailySubtitle": "Have you tracked your mood yet?",
+    "stats": {
+      "sectionTitle": "Your week"
+    },
     "nav": {
-      "moodLabel": "Mood Tracker",
-      "moodDesc": "Track how you feel",
+      "moodLabel": "How I'm Doing",
+      "moodDesc": "Check in with yourself",
       "journalLabel": "Journal",
       "journalDesc": "Write and reflect with AI",
       "chatLabel": "AI Chat",
@@ -74,22 +73,44 @@
       "communityDesc": "Anonymous support",
       "gamesLabel": "Games",
       "gamesDesc": "Therapeutic exercises"
+    },
+    "heatmap": {
+      "title": "Every day matters",
+      "subtitle": "A year of your moments",
+      "noData": "No entry",
+      "legend": {
+        "noData": "No data",
+        "hard": "Hard days",
+        "okay": "Okay days",
+        "good": "Good days",
+        "great": "Great days"
+      }
+    },
+    "trend": {
+      "title": "Your week",
+      "subtitle": "How you've been — day by day",
+      "scoreLabel": "Mood"
+    },
+    "weeklyPlan": {
+      "title": "Eira's suggestions",
+      "noData": "Log how you're feeling this week and Eira will prepare personalized ideas for you 🌿"
     }
   },
   "mood": {
     "tracker": {
       "backAriaLabel": "Back to dashboard",
-      "title": "Mood Tracker",
+      "title": "How are you today?",
+      "welcomeMessage": "This is your space. No judgment, no rush.",
       "remainingEntries_one": "{{count}} entry remaining today",
       "remainingEntries_other": "{{count}} entries remaining today",
-      "limitReached": "Daily limit reached",
-      "limitMessage": "You've logged {{max}} moods today. Come back tomorrow.",
-      "noteLabel": "Note (optional)",
-      "notePlaceholder": "What's happening today? Anything you want to remember?",
-      "submitButton": "Save entry",
-      "successTitle": "Saved!",
-      "successMessage": "Your mood was recorded",
-      "backToHome": "Back to dashboard"
+      "limitReached": "You've checked in enough for today",
+      "limitMessage": "Come back tomorrow — every day is a fresh start.",
+      "noteLabel": "Anything else on your mind? (optional)",
+      "notePlaceholder": "You can write about what happened today, how you felt, or simply whatever comes to mind...",
+      "submitButton": "Save how I feel",
+      "successTitle": "Saved with care",
+      "successMessage": "Thank you for taking a moment for yourself",
+      "backToHome": "Back to home"
     },
     "slider": {
       "question": "How are you feeling right now?",
@@ -217,7 +238,7 @@
     }
   },
   "nav": {
-    "mood": "Mood Tracker",
+    "mood": "How I'm Doing",
     "journal": "Journal",
     "chat": "AI Chat",
     "dashboard": "Dashboard"

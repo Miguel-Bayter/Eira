@@ -87,7 +87,12 @@ export class AuthController {
   };
 
   logout = async (_req: Request, res: Response): Promise<void> => {
-    res.clearCookie(AUTH_COOKIE_NAME, authCookieOptions);
+    res.clearCookie(AUTH_COOKIE_NAME, {
+      httpOnly: authCookieOptions.httpOnly,
+      secure: authCookieOptions.secure,
+      sameSite: authCookieOptions.sameSite,
+      path: authCookieOptions.path,
+    });
     res.status(200).json({ success: true });
   };
 }

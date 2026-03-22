@@ -69,13 +69,13 @@ export default function MoodTracker() {
 
   if (submitted) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-sage-100 to-white px-6">
         <div className="w-full max-w-sm text-center">
-          <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-eira-100">
-            <CheckCircle2 className="h-10 w-10 text-eira-600" />
+          <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-sage-100 shadow-sm ring-4 ring-sage-50">
+            <CheckCircle2 className="h-10 w-10 text-sage-600" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">{t('mood.tracker.successTitle')}</h1>
-          <p className="mt-2 text-sm text-slate-500">{t('mood.tracker.successMessage')}</p>
+          <h1 className="text-2xl font-bold text-sage-800">{t('mood.tracker.successTitle')}</h1>
+          <p className="mt-2 text-sm text-sage-600">{t('mood.tracker.successMessage')}</p>
           <Button
             variant="primary"
             size="lg"
@@ -91,19 +91,20 @@ export default function MoodTracker() {
 
   return (
     <>
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-gradient-to-b from-sage-100 via-sage-50 to-white">
         {/* Header */}
-        <header className="sticky top-0 z-10 border-b border-slate-100 bg-white/80 px-6 py-4 backdrop-blur-sm">
+        <header className="sticky top-0 z-10 border-b border-sage-200 bg-sage-50/90 px-6 py-4 backdrop-blur-sm">
           <div className="mx-auto flex max-w-xl items-center gap-3">
             <Link
               to="/dashboard"
-              className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-stone-100 hover:text-slate-600"
               aria-label={t('mood.tracker.backAriaLabel')}
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-base font-bold text-slate-900">{t('mood.tracker.title')}</h1>
+              <h1 className="text-base font-bold text-sage-900">{t('mood.tracker.title')}</h1>
+              <p className="text-xs text-sage-500 font-medium">{t('mood.tracker.welcomeMessage')}</p>
               <p className="text-xs text-slate-400">
                 {canSubmit
                   ? t('mood.tracker.remainingEntries_other', { count: remainingEntries })
@@ -139,7 +140,7 @@ export default function MoodTracker() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8" noValidate>
             {/* Mood Slider */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-sage-200 bg-sage-50 p-6 shadow-sm">
               <Controller
                 name="score"
                 control={control}
@@ -158,7 +159,7 @@ export default function MoodTracker() {
             </div>
 
             {/* Emotion Selector */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-sage-200 bg-sage-50 p-6 shadow-sm">
               <Controller
                 name="emotion"
                 control={control}
@@ -173,12 +174,12 @@ export default function MoodTracker() {
             </div>
 
             {/* Note */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-sage-200 bg-sage-50 p-6 shadow-sm">
               <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
                   <label
                     htmlFor="mood-note"
-                    className="block text-sm font-medium text-slate-700"
+                    className="block text-sm font-medium text-sage-700"
                   >
                     {t('mood.tracker.noteLabel')}
                   </label>
@@ -190,7 +191,7 @@ export default function MoodTracker() {
                   id="mood-note"
                   rows={4}
                   placeholder={t('mood.tracker.notePlaceholder')}
-                  className="w-full resize-none rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-eira-500 focus:outline-none focus:ring-2 focus:ring-eira-500 focus:ring-offset-1"
+                  className="w-full resize-none rounded-xl border border-stone-200 bg-[#faf9f7]/60 px-4 py-3 text-sm text-slate-700 placeholder:text-sage-400 focus:border-sage-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sage-200 focus:ring-offset-1 transition-colors duration-200"
                   {...register('note')}
                 />
                 {errors.note && (

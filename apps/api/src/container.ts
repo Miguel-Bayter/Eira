@@ -19,10 +19,12 @@ import { AnalyzeJournalEntryUseCase } from './application/use-cases/journal/Anal
 import { GetJournalHistoryUseCase } from './application/use-cases/journal/GetJournalHistory.usecase';
 import { GetChatConversationUseCase } from './application/use-cases/chat/GetChatConversation.usecase';
 import { SendChatMessageUseCase } from './application/use-cases/chat/SendChatMessage.usecase';
+import { GetDashboardStatsUseCase } from './application/use-cases/dashboard/GetDashboardStats.usecase';
 import { AuthController } from './infrastructure/http/controllers/AuthController';
 import { MoodController } from './infrastructure/http/controllers/MoodController';
 import { JournalController } from './infrastructure/http/controllers/JournalController';
 import { ChatController } from './infrastructure/http/controllers/ChatController';
+import { DashboardController } from './infrastructure/http/controllers/DashboardController';
 
 // Fail fast at startup if required environment variables are missing
 // In test environments, fall back to empty string so mocked services can be instantiated
@@ -67,6 +69,9 @@ const getJournalHistoryUseCase = new GetJournalHistoryUseCase(journalRepository,
 const getChatConversationUseCase = new GetChatConversationUseCase(chatRepository, userRepository);
 const sendChatMessageUseCase = new SendChatMessageUseCase(chatRepository, userRepository, aiService);
 
+// Use Cases — Dashboard
+const getDashboardStatsUseCase = new GetDashboardStatsUseCase(userRepository, moodRepository, aiService);
+
 // Controllers
 const authController = new AuthController(registerUserUseCase, loginUserUseCase, getOrCreateUserUseCase);
 const moodController = new MoodController(createMoodEntryUseCase, getMoodHistoryUseCase);
@@ -76,5 +81,6 @@ const journalController = new JournalController(
   getJournalHistoryUseCase,
 );
 const chatController = new ChatController(getOrCreateUserUseCase, getChatConversationUseCase, sendChatMessageUseCase);
+const dashboardController = new DashboardController(getDashboardStatsUseCase);
 
-export { authController, moodController, journalController, chatController };
+export { authController, moodController, journalController, chatController, dashboardController };

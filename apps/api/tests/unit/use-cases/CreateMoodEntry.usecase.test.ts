@@ -19,6 +19,8 @@ const mockMoodRepo: IMoodRepository = {
   findByUserId: vi.fn(),
   countTodayByUser: vi.fn(),
   findRecentByUserId: vi.fn(),
+  findHeatmapByUserId: vi.fn(),
+  findTrendByUserId: vi.fn(),
 };
 
 // ─── Factory ──────────────────────────────────────────────────────────────────
