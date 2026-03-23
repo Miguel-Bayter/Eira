@@ -287,13 +287,44 @@
     }
   },
   "games": {
+    "title": "Therapeutic Games",
+    "subtitle": "Play, breathe, create — each session adds wellness points.",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "complete": "Complete session",
+    "exit": "Exit",
+    "pointsEarned": "wellness points earned!",
+    "newScore": "New wellness score: {{score}}",
+    "sessionSaved": "+{{points}} wellness points added!",
+    "sessionError": "Could not save session. Try again.",
     "breathing": {
+      "title": "4-7-8 Breathing",
+      "benefit": "Reduces anxiety and activates the relaxation response.",
       "inhale": "Inhale",
       "hold": "Hold",
       "exhale": "Exhale",
       "ready": "Ready",
-      "start": "Start",
-      "stop": "Stop"
+      "done": "Done!",
+      "completed": "Great job! Your session is complete.",
+      "cycle": "Cycle {{current}} of {{total}}"
+    },
+    "bubblePop": {
+      "title": "Bubble Pop",
+      "benefit": "Releases tension through playful, satisfying interactions."
+    },
+    "zenGarden": {
+      "title": "Zen Garden",
+      "benefit": "Mindful creativity to quiet a restless mind."
+    },
+    "coloring": {
+      "title": "Mandala Coloring",
+      "benefit": "Focused coloring promotes calm and presence."
+    },
+    "zen": {
+      "rake": "Rake",
+      "stone": "Stone",
+      "plant": "Plant"
     }
   },
   "navigation": {

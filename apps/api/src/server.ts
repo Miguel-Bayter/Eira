@@ -9,6 +9,7 @@ import { journalRoutes } from './infrastructure/http/routes/journal.routes';
 import { chatRoutes } from './infrastructure/http/routes/chat.routes';
 import { dashboardRoutes } from './infrastructure/http/routes/dashboard.routes';
 import { communityRoutes } from './infrastructure/http/routes/community.routes';
+import { gameRoutes } from './infrastructure/http/routes/game.routes';
 import { errorHandlerMiddleware } from './infrastructure/http/middlewares/errorHandler.middleware';
 import { logger } from './infrastructure/logging/logger';
 import { allowedOrigins } from './infrastructure/http/security/httpSecurity';
@@ -92,6 +93,7 @@ app.use('/api/journal', journalRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/community', communityRoutes);
+app.use('/api/games', gameRoutes);
 
 // Global error handler
 app.use(errorHandlerMiddleware);

@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import { Toaster } from 'sonner';
-import { useTranslation } from 'react-i18next';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -9,27 +8,14 @@ import MoodTracker from './pages/MoodTracker';
 import Journal from './pages/Journal';
 import Chat from './pages/Chat';
 import Community from './pages/Community';
+import Games from './pages/Games';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { PageTransition } from './components/layout/PageTransition';
 import { CommandPalette } from './components/ui/CommandPalette';
 import { useAuthSessionBootstrap } from './hooks/useAuth';
 
-function PlaceholderPage({ name }: { name: string }) {
-  const { t } = useTranslation();
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-eira-50">
-      <div className="rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="text-2xl font-bold text-eira-700">🌿 Eira</h1>
-        <p className="mt-2 text-slate-500">{t('navigation.page', { name })}</p>
-        <p className="mt-1 text-xs text-slate-400">{t('common.inDevelopment')}</p>
-      </div>
-    </div>
-  );
-}
-
 export default function App() {
   const location = useLocation();
-  const { t } = useTranslation();
 
   useAuthSessionBootstrap();
 
@@ -120,7 +106,7 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <PageTransition>
-                  <PlaceholderPage name={t('dashboard.nav.gamesLabel')} />
+                  <Games />
                 </PageTransition>
               </ProtectedRoute>
             }

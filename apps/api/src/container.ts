@@ -5,6 +5,7 @@ import { PrismaMoodRepository } from './infrastructure/db/PrismaMoodRepository';
 import { PrismaJournalRepository } from './infrastructure/db/PrismaJournalRepository';
 import { PrismaChatRepository } from './infrastructure/db/PrismaChatRepository';
 import { PrismaCommunityRepository } from './infrastructure/db/PrismaCommunityRepository';
+import { PrismaGameRepository } from './infrastructure/db/PrismaGameRepository';
 import { ResendEmailService } from './infrastructure/email/ResendEmailService';
 import { GeminiAiAdapter } from './infrastructure/ai/GeminiAiAdapter';
 import { GroqAiAdapter } from './infrastructure/ai/GroqAiAdapter';
@@ -23,12 +24,14 @@ import { SendChatMessageUseCase } from './application/use-cases/chat/SendChatMes
 import { GetDashboardStatsUseCase } from './application/use-cases/dashboard/GetDashboardStats.usecase';
 import { CreateCommunityPostUseCase } from './application/use-cases/community/CreateCommunityPost.usecase';
 import { GetCommunityFeedUseCase } from './application/use-cases/community/GetCommunityFeed.usecase';
+import { RecordGameSessionUseCase } from './application/use-cases/games/RecordGameSession.usecase';
 import { AuthController } from './infrastructure/http/controllers/AuthController';
 import { MoodController } from './infrastructure/http/controllers/MoodController';
 import { JournalController } from './infrastructure/http/controllers/JournalController';
 import { ChatController } from './infrastructure/http/controllers/ChatController';
 import { DashboardController } from './infrastructure/http/controllers/DashboardController';
 import { CommunityController } from './infrastructure/http/controllers/CommunityController';
+import { GameController } from './infrastructure/http/controllers/GameController';
 
 // Fail fast at startup if required environment variables are missing
 // In test environments, fall back to empty string so mocked services can be instantiated
@@ -49,6 +52,7 @@ const moodRepository = new PrismaMoodRepository(prisma);
 const journalRepository = new PrismaJournalRepository(prisma);
 const chatRepository = new PrismaChatRepository(prisma);
 const communityRepository = new PrismaCommunityRepository(prisma);
+const gameRepository = new PrismaGameRepository(prisma);
 
 // Services
 const emailService = new ResendEmailService(process.env.RESEND_API_KEY ?? 're_placeholder');
@@ -101,6 +105,9 @@ const createCommunityPostUseCase = new CreateCommunityPostUseCase(
 );
 const getCommunityFeedUseCase = new GetCommunityFeedUseCase(communityRepository);
 
+// Use Cases — Games
+const recordGameSessionUseCase = new RecordGameSessionUseCase(gameRepository, userRepository);
+
 // Controllers
 const authController = new AuthController(
   registerUserUseCase,
@@ -123,6 +130,7 @@ const communityController = new CommunityController(
   createCommunityPostUseCase,
   getCommunityFeedUseCase,
 );
+const gameController = new GameController(recordGameSessionUseCase);
 
 export {
   authController,
@@ -131,4 +139,5 @@ export {
   chatController,
   dashboardController,
   communityController,
+  gameController,
 };

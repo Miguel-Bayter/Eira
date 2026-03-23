@@ -287,13 +287,44 @@
     }
   },
   "games": {
+    "title": "Juegos Terapéuticos",
+    "subtitle": "Juega, respira, crea — cada sesión suma puntos de bienestar.",
+    "start": "Comenzar",
+    "pause": "Pausar",
+    "resume": "Continuar",
+    "complete": "Completar sesión",
+    "exit": "Salir",
+    "pointsEarned": "puntos de bienestar ganados!",
+    "newScore": "Nuevo puntaje de bienestar: {{score}}",
+    "sessionSaved": "+{{points}} puntos de bienestar añadidos!",
+    "sessionError": "No se pudo guardar la sesión. Inténtalo de nuevo.",
     "breathing": {
+      "title": "Respiración 4-7-8",
+      "benefit": "Reduce la ansiedad y activa la respuesta de relajación.",
       "inhale": "Inhala",
       "hold": "Mantén",
       "exhale": "Exhala",
       "ready": "Listo",
-      "start": "Empezar",
-      "stop": "Detener"
+      "done": "¡Listo!",
+      "completed": "¡Excelente! Tu sesión está completa.",
+      "cycle": "Ciclo {{current}} de {{total}}"
+    },
+    "bubblePop": {
+      "title": "Reventar Burbujas",
+      "benefit": "Libera tensión a través de interacciones lúdicas y satisfactorias."
+    },
+    "zenGarden": {
+      "title": "Jardín Zen",
+      "benefit": "Creatividad consciente para calmar una mente inquieta."
+    },
+    "coloring": {
+      "title": "Colorear Mandala",
+      "benefit": "Colorear con atención promueve la calma y la presencia."
+    },
+    "zen": {
+      "rake": "Rastrillo",
+      "stone": "Piedra",
+      "plant": "Planta"
     }
   },
   "navigation": {
