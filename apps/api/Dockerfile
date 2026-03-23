@@ -1,5 +1,6 @@
 # ---- base ----
-FROM node:20-alpine AS base
+FROM node:20-slim AS base
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm@9
 WORKDIR /app
 
@@ -17,7 +18,7 @@ COPY apps/api ./apps/api
 RUN pnpm --filter @eira/api exec prisma generate
 
 # ---- runner ----
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 RUN npm install -g pnpm@9
 WORKDIR /app
 
