@@ -294,6 +294,7 @@
     "resume": "Resume",
     "complete": "Complete session",
     "exit": "Exit",
+    "tapToPlay": "Tap to play",
     "pointsEarned": "wellness points earned!",
     "newScore": "New wellness score: {{score}}",
     "sessionSaved": "+{{points}} wellness points added!",
@@ -307,7 +308,9 @@
       "ready": "Ready",
       "done": "Done!",
       "completed": "Great job! Your session is complete.",
-      "cycle": "Cycle {{current}} of {{total}}"
+      "cycle": "Cycle {{current}} of {{total}}",
+      "start": "Start",
+      "stop": "Stop"
     },
     "bubblePop": {
       "title": "Bubble Pop",
@@ -319,7 +322,9 @@
     },
     "coloring": {
       "title": "Mandala Coloring",
-      "benefit": "Focused coloring promotes calm and presence."
+      "benefit": "Focused coloring promotes calm and presence.",
+      "pickColor": "Pick a color",
+      "sections": "sections"
     },
     "zen": {
       "rake": "Rake",

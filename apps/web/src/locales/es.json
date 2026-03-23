@@ -294,6 +294,7 @@
     "resume": "Continuar",
     "complete": "Completar sesión",
     "exit": "Salir",
+    "tapToPlay": "Toca para jugar",
     "pointsEarned": "puntos de bienestar ganados!",
     "newScore": "Nuevo puntaje de bienestar: {{score}}",
     "sessionSaved": "+{{points}} puntos de bienestar añadidos!",
@@ -307,7 +308,9 @@
       "ready": "Listo",
       "done": "¡Listo!",
       "completed": "¡Excelente! Tu sesión está completa.",
-      "cycle": "Ciclo {{current}} de {{total}}"
+      "cycle": "Ciclo {{current}} de {{total}}",
+      "start": "Empezar",
+      "stop": "Detener"
     },
     "bubblePop": {
       "title": "Reventar Burbujas",
@@ -319,7 +322,9 @@
     },
     "coloring": {
       "title": "Colorear Mandala",
-      "benefit": "Colorear con atención promueve la calma y la presencia."
+      "benefit": "Colorear con atención promueve la calma y la presencia.",
+      "pickColor": "Elige un color",
+      "sections": "secciones"
     },
     "zen": {
       "rake": "Rastrillo",
