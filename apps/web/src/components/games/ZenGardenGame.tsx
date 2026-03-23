@@ -416,7 +416,7 @@ export function ZenGardenGame({ onComplete }: ZenGardenGameProps) {
           height={CANVAS_H}
           className="w-full block touch-none"
           // eslint-disable-next-line no-restricted-syntax
-          style={{ cursor: tool === 'rake' ? 'crosshair' : 'cell' }}
+          style={{ cursor: tool === 'rake' ? 'crosshair' : 'cell' }} // EXCEPCION
           onMouseDown={handleDown}
           onMouseMove={handleMove}
           onMouseUp={handleUp}

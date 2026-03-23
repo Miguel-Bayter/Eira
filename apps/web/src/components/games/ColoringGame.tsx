@@ -331,7 +331,7 @@ export function ColoringGame({ onComplete }: ColoringGameProps) {
                   : 'border-slate-200 hover:scale-110 hover:border-slate-400'
               }`}
               // eslint-disable-next-line no-restricted-syntax
-              style={{ backgroundColor: c }}
+              style={{ backgroundColor: c }} // EXCEPCION
               aria-label={c}
             />
           ))}
