@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 declare global {
-  // eslint-disable-next-line no-var
-  var __prisma: PrismaClient | undefined;
+  var __prisma: PrismaClient | undefined; // var required by TypeScript global augmentation
 }
 
 // Singleton to avoid multiple connections in development (hot reload)

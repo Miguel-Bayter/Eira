@@ -12,9 +12,7 @@ import { Button } from '../components/ui/Button';
  * Uses `as never` to satisfy strict i18next key types for runtime-dynamic keys. */
 function useValidationT() {
   const { t } = useTranslation();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (key: string | undefined): string | undefined =>
-    key ? t(key as never) : undefined;
+  return (key: string | undefined): string | undefined => (key ? t(key as never) : undefined);
 }
 
 export default function Register() {
@@ -46,7 +44,10 @@ export default function Register() {
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
       {/* Left panel: branding (desktop only) */}
-      <div aria-hidden="true" className="relative hidden overflow-hidden bg-gradient-to-br from-eira-600 via-eira-700 to-eira-900 lg:flex lg:flex-col lg:justify-between lg:p-12">
+      <div
+        aria-hidden="true"
+        className="relative hidden overflow-hidden bg-gradient-to-br from-eira-600 via-eira-700 to-eira-900 lg:flex lg:flex-col lg:justify-between lg:p-12"
+      >
         {/* Decorative orbs */}
         <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-eira-400/20 blur-3xl" />
         <div className="absolute bottom-0 -left-16 h-80 w-80 rounded-full bg-eira-900/40 blur-3xl" />
@@ -64,9 +65,7 @@ export default function Register() {
           <h2 className="text-4xl font-bold leading-tight text-white whitespace-pre-line">
             {t('auth.register.panelHeading')}
           </h2>
-          <p className="mt-4 text-lg text-eira-200/80">
-            {t('auth.register.panelSubtitle')}
-          </p>
+          <p className="mt-4 text-lg text-eira-200/80">{t('auth.register.panelSubtitle')}</p>
 
           <ul className="mt-10 space-y-4">
             {features.map(({ icon: Icon, text }) => (
@@ -81,9 +80,7 @@ export default function Register() {
         </div>
 
         {/* Footer */}
-        <p className="relative text-xs text-eira-400/70">
-          {t('auth.register.footer')}
-        </p>
+        <p className="relative text-xs text-eira-400/70">{t('auth.register.footer')}</p>
       </div>
 
       {/* Right panel: form */}
@@ -99,9 +96,7 @@ export default function Register() {
         <div className="w-full max-w-sm">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-slate-800">{t('auth.register.formTitle')}</h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {t('auth.register.formSubtitle')}
-            </p>
+            <p className="mt-1 text-sm text-slate-500">{t('auth.register.formSubtitle')}</p>
           </div>
 
           {/* Global error */}
@@ -155,10 +150,7 @@ export default function Register() {
 
           <p className="mt-6 text-center text-sm text-slate-500">
             {t('auth.register.hasAccount')}{' '}
-            <Link
-              to="/login"
-              className="font-semibold text-eira-600 hover:text-eira-700"
-            >
+            <Link to="/login" className="font-semibold text-eira-600 hover:text-eira-700">
               {t('auth.register.loginLink')}
             </Link>
           </p>

@@ -13,9 +13,9 @@ interface CommandItem {
 }
 
 const NAVIGATION_ITEMS: readonly CommandItem[] = [
-  { id: 'mood',      labelKey: 'nav.mood',      path: '/mood',      iconEmoji: '🌊' },
-  { id: 'journal',   labelKey: 'nav.journal',   path: '/journal',   iconEmoji: '📓' },
-  { id: 'chat',      labelKey: 'nav.chat',      path: '/chat',      iconEmoji: '💬' },
+  { id: 'mood', labelKey: 'nav.mood', path: '/mood', iconEmoji: '🌊' },
+  { id: 'journal', labelKey: 'nav.journal', path: '/journal', iconEmoji: '📓' },
+  { id: 'chat', labelKey: 'nav.chat', path: '/chat', iconEmoji: '💬' },
   { id: 'dashboard', labelKey: 'nav.dashboard', path: '/dashboard', iconEmoji: '✨' },
 ] as const;
 
@@ -47,8 +47,13 @@ export function CommandPalette() {
   };
   const dialogVariants = {
     hidden: { opacity: 0, scale: 0.96, y: -8 },
-    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const } },
-    exit:    { opacity: 0, scale: 0.96, y: -8, transition: { duration: 0.12 } },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const },
+    },
+    exit: { opacity: 0, scale: 0.96, y: -8, transition: { duration: 0.12 } },
   };
 
   return (
@@ -89,7 +94,6 @@ export function CommandPalette() {
                   {NAVIGATION_ITEMS.map((item) => (
                     <Command.Item
                       key={item.id}
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       value={t(item.labelKey as never)}
                       onSelect={() => handleSelect(item.path)}
                       className={cn(
@@ -99,7 +103,6 @@ export function CommandPalette() {
                       )}
                     >
                       <span className="text-base">{item.iconEmoji}</span>
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       <span>{t(item.labelKey as never)}</span>
                     </Command.Item>
                   ))}

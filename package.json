@@ -1,13 +1,35 @@
 {
   "name": "eira-monorepo",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev:api": "pnpm --filter @eira/api dev",
     "dev:web": "pnpm --filter @eira/web dev",
     "test": "pnpm --filter @eira/api test && pnpm --filter @eira/web test",
     "typecheck": "pnpm --filter @eira/api typecheck && pnpm --filter @eira/web typecheck",
-    "lint": "pnpm --filter @eira/api lint && pnpm --filter @eira/web lint"
+    "lint": "eslint apps packages --max-warnings=0",
+    "lint:fix": "eslint apps packages --fix",
+    "format": "prettier --write \"apps/**/*.{ts,tsx,json,css}\" \"packages/**/*.{ts,json}\"",
+    "format:check": "prettier --check \"apps/**/*.{ts,tsx,json,css}\" \"packages/**/*.{ts,json}\"",
+    "prepare": "husky"
   },
-  "engines": { "node": ">=20.0.0", "pnpm": ">=9.0.0" }
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
+    "eslint": "^10.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.57.1"
+  }
 }

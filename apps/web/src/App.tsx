@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import MoodTracker from './pages/MoodTracker';
 import Journal from './pages/Journal';
 import Chat from './pages/Chat';
+import Community from './pages/Community';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { PageTransition } from './components/layout/PageTransition';
 import { CommandPalette } from './components/ui/CommandPalette';
@@ -28,6 +29,7 @@ function PlaceholderPage({ name }: { name: string }) {
 
 export default function App() {
   const location = useLocation();
+  const { t } = useTranslation();
 
   useAuthSessionBootstrap();
 
@@ -97,18 +99,18 @@ export default function App() {
             path="/chat"
             element={
               <ProtectedRoute>
-                  <PageTransition>
-                    <Chat />
-                  </PageTransition>
-                </ProtectedRoute>
-              }
+                <PageTransition>
+                  <Chat />
+                </PageTransition>
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/community"
             element={
               <ProtectedRoute>
                 <PageTransition>
-                  <PlaceholderPage name="Comunidad" />
+                  <Community />
                 </PageTransition>
               </ProtectedRoute>
             }
@@ -118,7 +120,7 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <PageTransition>
-                  <PlaceholderPage name="Juegos" />
+                  <PlaceholderPage name={t('dashboard.nav.gamesLabel')} />
                 </PageTransition>
               </ProtectedRoute>
             }

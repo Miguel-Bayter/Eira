@@ -11,7 +11,7 @@ interface BreathingPhase {
 
 const BREATHING_PHASES: readonly BreathingPhase[] = [
   { labelKey: 'games.breathing.inhale', duration: 4, scale: 1.5 },
-  { labelKey: 'games.breathing.hold',   duration: 7, scale: 1.5 },
+  { labelKey: 'games.breathing.hold', duration: 7, scale: 1.5 },
   { labelKey: 'games.breathing.exhale', duration: 8, scale: 1.0 },
 ] as const;
 
@@ -71,7 +71,6 @@ export function BreathingCircle({ className, onCycleComplete }: BreathingCircleP
         <div className="relative z-10 text-center text-white">
           <p className="text-2xl font-bold tabular-nums">{isRunning ? countdown : ''}</p>
           <p className="text-xs font-medium tracking-wide uppercase mt-1">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {isRunning ? t(currentPhase.labelKey as never) : t('games.breathing.ready')}
           </p>
         </div>

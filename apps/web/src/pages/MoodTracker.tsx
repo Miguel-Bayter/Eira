@@ -18,9 +18,7 @@ const MAX_ENTRIES_PER_DAY = 5;
  * Uses `as never` to satisfy strict i18next key types for runtime-dynamic keys. */
 function useValidationT() {
   const { t } = useTranslation();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (key: string | undefined): string | undefined =>
-    key ? t(key as never) : undefined;
+  return (key: string | undefined): string | undefined => (key ? t(key as never) : undefined);
 }
 
 export default function MoodTracker() {
@@ -104,7 +102,9 @@ export default function MoodTracker() {
             </Link>
             <div className="flex-1">
               <h1 className="text-base font-bold text-sage-900">{t('mood.tracker.title')}</h1>
-              <p className="text-xs text-sage-500 font-medium">{t('mood.tracker.welcomeMessage')}</p>
+              <p className="text-xs text-sage-500 font-medium">
+                {t('mood.tracker.welcomeMessage')}
+              </p>
               <p className="text-xs text-slate-400">
                 {canSubmit
                   ? t('mood.tracker.remainingEntries_other', { count: remainingEntries })
@@ -121,7 +121,9 @@ export default function MoodTracker() {
               className="mb-6 rounded-2xl border border-amber-100 bg-amber-50 px-5 py-4"
               role="alert"
             >
-              <p className="text-sm font-semibold text-amber-800">{t('mood.tracker.limitReached')}</p>
+              <p className="text-sm font-semibold text-amber-800">
+                {t('mood.tracker.limitReached')}
+              </p>
               <p className="mt-1 text-xs text-amber-600">
                 {t('mood.tracker.limitMessage', { max: MAX_ENTRIES_PER_DAY })}
               </p>
@@ -145,10 +147,7 @@ export default function MoodTracker() {
                 name="score"
                 control={control}
                 render={({ field }) => (
-                  <MoodSlider
-                    value={field.value ?? 5}
-                    onChange={field.onChange}
-                  />
+                  <MoodSlider value={field.value ?? 5} onChange={field.onChange} />
                 )}
               />
               {errors.score && (
@@ -177,15 +176,10 @@ export default function MoodTracker() {
             <div className="rounded-2xl border border-sage-200 bg-sage-50 p-6 shadow-sm">
               <div className="space-y-2">
                 <div className="flex items-baseline justify-between">
-                  <label
-                    htmlFor="mood-note"
-                    className="block text-sm font-medium text-sage-700"
-                  >
+                  <label htmlFor="mood-note" className="block text-sm font-medium text-sage-700">
                     {t('mood.tracker.noteLabel')}
                   </label>
-                  <span className="text-xs text-slate-400">
-                    {noteValue.length}/500
-                  </span>
+                  <span className="text-xs text-slate-400">{noteValue.length}/500</span>
                 </div>
                 <textarea
                   id="mood-note"

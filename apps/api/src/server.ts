@@ -8,6 +8,7 @@ import moodRoutes from './infrastructure/http/routes/mood.routes';
 import { journalRoutes } from './infrastructure/http/routes/journal.routes';
 import { chatRoutes } from './infrastructure/http/routes/chat.routes';
 import { dashboardRoutes } from './infrastructure/http/routes/dashboard.routes';
+import { communityRoutes } from './infrastructure/http/routes/community.routes';
 import { errorHandlerMiddleware } from './infrastructure/http/middlewares/errorHandler.middleware';
 import { logger } from './infrastructure/logging/logger';
 import { allowedOrigins } from './infrastructure/http/security/httpSecurity';
@@ -66,7 +67,9 @@ const globalLimiter = rateLimit({
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many requests, please try again later' } },
+  message: {
+    error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many requests, please try again later' },
+  },
 });
 app.use(globalLimiter);
 
@@ -88,6 +91,7 @@ app.use('/api/mood', moodRoutes);
 app.use('/api/journal', journalRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/community', communityRoutes);
 
 // Global error handler
 app.use(errorHandlerMiddleware);

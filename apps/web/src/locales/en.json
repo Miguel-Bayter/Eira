@@ -256,6 +256,36 @@
     "navigate": "Navigate",
     "noResults": "No results found."
   },
+  "community": {
+    "title": "Community",
+    "subtitle": "An anonymous space to share and feel supported.",
+    "composer": {
+      "label": "What would you like to share today?",
+      "placeholder": "Share how you feel, a thought, a reflection... Everything is welcome here 🌿",
+      "submitButton": "Post",
+      "cancelButton": "Cancel",
+      "openButton": "Share something",
+      "hint": "You will appear with an automatically generated anonymous alias.",
+      "publishing": "Publishing..."
+    },
+    "feed": {
+      "empty": "No posts yet. Be the first to share!",
+      "loadMore": "Load more",
+      "loading": "Loading posts...",
+      "ago": "{{time}} ago"
+    },
+    "post": {
+      "anonymous": "Anonymous"
+    },
+    "errors": {
+      "loadFailed": "We could not load the community right now.",
+      "postFailed": "We could not publish your message. Please try again.",
+      "limitReached": "You have posted enough for today. Come back tomorrow."
+    },
+    "toast": {
+      "posted": "Your message was shared!"
+    }
+  },
   "games": {
     "breathing": {
       "inhale": "Inhale",
@@ -296,6 +326,12 @@
       "content": {
         "required": "Please write something before saving",
         "maxLength": "Your journal entry must be 5000 characters or less"
+      }
+    },
+    "community": {
+      "content": {
+        "minLength": "Your message must be at least 10 characters",
+        "maxLength": "Your message must be 1000 characters or fewer"
       }
     }
   }

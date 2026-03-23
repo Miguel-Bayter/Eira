@@ -20,7 +20,10 @@ function buildHeatmapData(overrides: Partial<{ date: string; score: number | nul
     d.setDate(d.getDate() - i);
     const dateKey = d.toISOString().slice(0, 10);
     const override = overrides.find((o) => o.date === dateKey);
-    data.push({ date: dateKey, score: override?.score !== undefined ? (override.score ?? null) : null });
+    data.push({
+      date: dateKey,
+      score: override?.score !== undefined ? (override.score ?? null) : null,
+    });
   }
   return data;
 }
@@ -39,7 +42,7 @@ describe('MoodHeatmap', () => {
 
     const cells = screen.getAllByRole('img');
     const nullCell = cells[0];
-    expect(nullCell?.className).toContain('bg-gray-100');
+    expect(nullCell?.className).toContain('bg-stone-100');
   });
 
   it('applies crisis color class (bg-red-200) for score 1-3', () => {
@@ -52,7 +55,7 @@ describe('MoodHeatmap', () => {
 
     const cells = screen.getAllByRole('img');
     const lastCell = cells[cells.length - 1];
-    expect(lastCell?.className).toContain('bg-red-200');
+    expect(lastCell?.className).toContain('bg-rose-200');
   });
 
   it('applies good color class (bg-eira-200) for score 7-8', () => {
@@ -65,6 +68,6 @@ describe('MoodHeatmap', () => {
 
     const cells = screen.getAllByRole('img');
     const lastCell = cells[cells.length - 1];
-    expect(lastCell?.className).toContain('bg-eira-200');
+    expect(lastCell?.className).toContain('bg-teal-200');
   });
 });

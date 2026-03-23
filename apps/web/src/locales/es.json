@@ -256,6 +256,36 @@
     "navigate": "Navegar",
     "noResults": "Sin resultados."
   },
+  "community": {
+    "title": "Comunidad",
+    "subtitle": "Un espacio anónimo para compartir y sentirte acompañado.",
+    "composer": {
+      "label": "¿Qué quieres compartir hoy?",
+      "placeholder": "Comparte cómo te sientes, un pensamiento, una reflexión... Todo es bienvenido aquí 🌿",
+      "submitButton": "Publicar",
+      "cancelButton": "Cancelar",
+      "openButton": "Compartir algo",
+      "hint": "Aparecerás con un alias anónimo generado automáticamente.",
+      "publishing": "Publicando..."
+    },
+    "feed": {
+      "empty": "Aún no hay publicaciones. ¡Sé el primero en compartir!",
+      "loadMore": "Cargar más",
+      "loading": "Cargando publicaciones...",
+      "ago": "hace {{time}}"
+    },
+    "post": {
+      "anonymous": "Anónimo"
+    },
+    "errors": {
+      "loadFailed": "No pudimos cargar la comunidad en este momento.",
+      "postFailed": "No pudimos publicar tu mensaje. Inténtalo de nuevo.",
+      "limitReached": "Ya publicaste suficiente por hoy. Vuelve mañana."
+    },
+    "toast": {
+      "posted": "¡Tu mensaje fue compartido!"
+    }
+  },
   "games": {
     "breathing": {
       "inhale": "Inhala",
@@ -296,6 +326,12 @@
       "content": {
         "required": "Escribe algo antes de guardar",
         "maxLength": "Tu entrada del diario debe tener 5000 caracteres o menos"
+      }
+    },
+    "community": {
+      "content": {
+        "minLength": "Tu mensaje debe tener al menos 10 caracteres",
+        "maxLength": "Tu mensaje debe tener 1000 caracteres o menos"
       }
     }
   }

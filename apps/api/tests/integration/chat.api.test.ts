@@ -79,6 +79,9 @@ const mockPrismaUser = {
   updated_at: new Date('2026-03-21T10:00:00.000Z'),
 };
 
+// Use today's date so isSameCalendarDay check keeps the existing conversation open
+const TODAY = new Date();
+TODAY.setHours(9, 0, 0, 0);
 const mockChatConversation = {
   id: 'chat-1',
   user_id: 'user-db-id',
@@ -87,18 +90,18 @@ const mockChatConversation = {
       id: 'message-1',
       role: 'user',
       content: 'I had a rough morning',
-      createdAt: new Date('2026-03-21T09:00:00.000Z').toISOString(),
+      createdAt: TODAY.toISOString(),
     },
     {
       id: 'message-2',
       role: 'assistant',
       content: 'Thank you for telling me. What felt heaviest about it?',
-      createdAt: new Date('2026-03-21T09:00:00.000Z').toISOString(),
+      createdAt: TODAY.toISOString(),
     },
   ],
   has_crisis: false,
-  created_at: new Date('2026-03-21T09:00:00.000Z'),
-  updated_at: new Date('2026-03-21T09:00:00.000Z'),
+  created_at: TODAY,
+  updated_at: TODAY,
 };
 
 function buildPersistedMessages(userMessageCount: number) {
@@ -129,8 +132,12 @@ describe('Chat API — Integration Tests', () => {
     mocks.chatFindFirst.mockResolvedValue(mockChatConversation);
     mocks.chatFindMany.mockResolvedValue([{ messages: buildPersistedMessages(1) }]);
     mocks.chatUpsert.mockResolvedValue(mockChatConversation);
-    mocks.aiChat.mockResolvedValue({ response: { text: () => 'Let us take this one breath at a time.' } });
-    mocks.aiAnalyze.mockResolvedValue({ choices: [{ message: { content: 'Let us take this one breath at a time.' } }] });
+    mocks.aiChat.mockResolvedValue({
+      response: { text: () => 'Let us take this one breath at a time.' },
+    });
+    mocks.aiAnalyze.mockResolvedValue({
+      choices: [{ message: { content: 'Let us take this one breath at a time.' } }],
+    });
   });
 
   it('GET /api/chat without authentication returns 401', async () => {
@@ -141,9 +148,7 @@ describe('Chat API — Integration Tests', () => {
   });
 
   it('GET /api/chat returns the latest conversation for the authenticated user', async () => {
-    const response = await request(app)
-      .get('/api/chat')
-      .set('Authorization', 'Bearer valid-token');
+    const response = await request(app).get('/api/chat').set('Authorization', 'Bearer valid-token');
 
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
@@ -155,13 +160,9 @@ describe('Chat API — Integration Tests', () => {
   });
 
   it('GET /api/chat bootstraps the local user when the auth session exists but the local record is missing', async () => {
-    mocks.usersFindUnique
-      .mockResolvedValueOnce(null)
-      .mockResolvedValue(mockPrismaUser);
+    mocks.usersFindUnique.mockResolvedValueOnce(null).mockResolvedValue(mockPrismaUser);
 
-    const response = await request(app)
-      .get('/api/chat')
-      .set('Authorization', 'Bearer valid-token');
+    const response = await request(app).get('/api/chat').set('Authorization', 'Bearer valid-token');
 
     expect(response.status).toBe(200);
     expect(mocks.usersUpsert).toHaveBeenCalledOnce();

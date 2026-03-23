@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Bot, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { ChatMessageDto } from '@/hooks/useChat';
 import { cn } from '@/lib/utils';
@@ -25,9 +25,11 @@ export function ChatBubble({ message }: ChatBubbleProps) {
       className={cn('flex gap-3', isAssistant ? 'justify-start' : 'justify-end')}
     >
       {isAssistant && (
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-eira-200 bg-eira-100 text-eira-700 shadow-sm">
-          <Bot className="h-4 w-4" />
-        </div>
+        <img
+          src="/logo.png"
+          alt="Eira"
+          className="h-10 w-10 shrink-0 rounded-2xl object-cover shadow-sm"
+        />
       )}
 
       <div className={cn('max-w-[88%] space-y-2 sm:max-w-[70%]', !isAssistant && 'items-end')}>
@@ -42,9 +44,16 @@ export function ChatBubble({ message }: ChatBubbleProps) {
           <p className="whitespace-pre-wrap text-sm leading-7">{message.content}</p>
         </div>
 
-        <div className={cn('flex items-center gap-2 px-1 text-[11px] font-medium uppercase tracking-[0.22em]', isAssistant ? 'text-slate-400' : 'justify-end text-eira-500')}>
+        <div
+          className={cn(
+            'flex items-center gap-2 px-1 text-[11px] font-medium uppercase tracking-[0.22em]',
+            isAssistant ? 'text-slate-400' : 'justify-end text-eira-500',
+          )}
+        >
           {isAssistant && <Sparkles className="h-3 w-3" />}
-          <span>{isAssistant ? t('chat.conversation.eiraLabel') : t('chat.conversation.youLabel')}</span>
+          <span>
+            {isAssistant ? t('chat.conversation.eiraLabel') : t('chat.conversation.youLabel')}
+          </span>
           <span className="text-slate-300">•</span>
           <time className="tracking-[0.16em] text-slate-400">{timestamp}</time>
         </div>

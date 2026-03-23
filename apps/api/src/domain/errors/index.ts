@@ -103,3 +103,15 @@ export class AiServiceUnavailableError extends DomainError {
     super('AI_SERVICE_UNAVAILABLE', 'AI service is temporarily unavailable');
   }
 }
+
+export class CommunityContentTooShortError extends DomainError {
+  constructor(min: number) {
+    super('COMMUNITY_CONTENT_TOO_SHORT', `Post must be at least ${min} characters`);
+  }
+}
+
+export class CommunityContentTooLongError extends DomainError {
+  constructor(max: number) {
+    super('COMMUNITY_CONTENT_TOO_LONG', `Post must be ${max} characters or fewer`);
+  }
+}

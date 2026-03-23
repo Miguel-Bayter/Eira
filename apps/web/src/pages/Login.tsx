@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Heart, Leaf, Star } from 'lucide-react';
+import { ArrowRight, Heart, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLogin } from '../hooks/useAuth';
 import { loginSchema, type LoginFormData } from '../schemas/auth.schema';
@@ -12,9 +12,7 @@ import { Button } from '../components/ui/Button';
  * Uses `as never` to satisfy strict i18next key types for runtime-dynamic keys. */
 function useValidationT() {
   const { t } = useTranslation();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (key: string | undefined): string | undefined =>
-    key ? t(key as never) : undefined;
+  return (key: string | undefined): string | undefined => (key ? t(key as never) : undefined);
 }
 
 export default function Login() {
@@ -53,11 +51,13 @@ export default function Login() {
         <div className="absolute top-1/2 right-8 h-48 w-48 rounded-full bg-eira-500/20 blur-2xl" />
 
         {/* Logo */}
-        <div className="relative flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15">
-            <Leaf className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-xl font-bold text-white">Eira</span>
+        <div className="relative flex items-center gap-1">
+          <img
+            src="/icon.png"
+            alt="Eira"
+            className="h-16 w-16 rounded-2xl drop-shadow-lg -translate-y-1"
+          />
+          <span className="brand-name-hero text-white">Eira</span>
         </div>
 
         {/* Central content */}
@@ -65,9 +65,7 @@ export default function Login() {
           <h2 className="text-4xl font-bold leading-tight text-white whitespace-pre-line">
             {t('auth.login.panelHeading')}
           </h2>
-          <p className="mt-4 text-lg text-eira-200/80">
-            {t('auth.login.panelSubtitle')}
-          </p>
+          <p className="mt-4 text-lg text-eira-200/80">{t('auth.login.panelSubtitle')}</p>
 
           {/* Motivation cards */}
           <div className="mt-10 space-y-4">
@@ -85,27 +83,21 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="relative text-xs text-eira-400/70">
-          {t('auth.login.footer')}
-        </p>
+        <p className="relative text-xs text-eira-400/70">{t('auth.login.footer')}</p>
       </div>
 
       {/* Right panel: form */}
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#faf9f7] px-6 py-12 lg:min-h-0">
         {/* Mobile logo */}
         <div className="mb-8 flex items-center gap-2 lg:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-eira-100">
-            <Leaf className="h-4 w-4 text-eira-600" />
-          </div>
-          <span className="text-lg font-bold text-eira-800">Eira</span>
+          <img src="/icon.png" alt="Eira" className="h-10 w-10 rounded-lg" />
+          <span className="brand-name">Eira</span>
         </div>
 
         <div className="w-full max-w-sm">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-slate-800">{t('auth.login.formTitle')}</h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {t('auth.login.formSubtitle')}
-            </p>
+            <p className="mt-1 text-sm text-slate-500">{t('auth.login.formSubtitle')}</p>
           </div>
 
           {error && (
@@ -149,10 +141,7 @@ export default function Login() {
 
           <p className="mt-6 text-center text-sm text-slate-500">
             {t('auth.login.noAccount')}{' '}
-            <Link
-              to="/register"
-              className="font-semibold text-eira-600 hover:text-eira-700"
-            >
+            <Link to="/register" className="font-semibold text-eira-600 hover:text-eira-700">
               {t('auth.login.registerLink')}
             </Link>
           </p>

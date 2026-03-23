@@ -1,14 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  Activity,
-  BookOpen,
-  Flame,
-  Gamepad2,
-  Leaf,
-  LogOut,
-  MessageCircle,
-  Users,
-} from 'lucide-react';
+import { Activity, BookOpen, Flame, Gamepad2, LogOut, MessageCircle, Users } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 import NumberFlow from '@number-flow/react';
 import { useTranslation } from 'react-i18next';
@@ -22,11 +13,46 @@ import { WeeklyPlanCard } from '../components/dashboard/WeeklyPlanCard';
 
 // Static route/style data (no translatable strings here)
 const NAV_ROUTES = [
-  { to: '/mood',      icon: Activity,      labelKey: 'dashboard.nav.moodLabel',      descKey: 'dashboard.nav.moodDesc',      bg: 'bg-eira-100',   iconColor: 'text-eira-600'   },
-  { to: '/journal',   icon: BookOpen,      labelKey: 'dashboard.nav.journalLabel',   descKey: 'dashboard.nav.journalDesc',   bg: 'bg-violet-100', iconColor: 'text-violet-600' },
-  { to: '/chat',      icon: MessageCircle, labelKey: 'dashboard.nav.chatLabel',      descKey: 'dashboard.nav.chatDesc',      bg: 'bg-sky-100',    iconColor: 'text-sky-600'    },
-  { to: '/community', icon: Users,         labelKey: 'dashboard.nav.communityLabel', descKey: 'dashboard.nav.communityDesc', bg: 'bg-amber-100',  iconColor: 'text-amber-600'  },
-  { to: '/games',     icon: Gamepad2,      labelKey: 'dashboard.nav.gamesLabel',     descKey: 'dashboard.nav.gamesDesc',     bg: 'bg-rose-100',   iconColor: 'text-rose-600'   },
+  {
+    to: '/mood',
+    icon: Activity,
+    labelKey: 'dashboard.nav.moodLabel',
+    descKey: 'dashboard.nav.moodDesc',
+    bg: 'bg-eira-100',
+    iconColor: 'text-eira-600',
+  },
+  {
+    to: '/journal',
+    icon: BookOpen,
+    labelKey: 'dashboard.nav.journalLabel',
+    descKey: 'dashboard.nav.journalDesc',
+    bg: 'bg-violet-100',
+    iconColor: 'text-violet-600',
+  },
+  {
+    to: '/chat',
+    icon: MessageCircle,
+    labelKey: 'dashboard.nav.chatLabel',
+    descKey: 'dashboard.nav.chatDesc',
+    bg: 'bg-sky-100',
+    iconColor: 'text-sky-600',
+  },
+  {
+    to: '/community',
+    icon: Users,
+    labelKey: 'dashboard.nav.communityLabel',
+    descKey: 'dashboard.nav.communityDesc',
+    bg: 'bg-amber-100',
+    iconColor: 'text-amber-600',
+  },
+  {
+    to: '/games',
+    icon: Gamepad2,
+    labelKey: 'dashboard.nav.gamesLabel',
+    descKey: 'dashboard.nav.gamesDesc',
+    bg: 'bg-rose-100',
+    iconColor: 'text-rose-600',
+  },
 ] as const;
 
 const RING_RADIUS = 38;
@@ -66,11 +92,9 @@ export default function Dashboard() {
       {/* Top nav */}
       <header className="sticky top-0 z-10 border-b border-stone-100 bg-[#faf9f7]/80 px-6 py-4 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-eira-100">
-              <Leaf className="h-4 w-4 text-eira-600" />
-            </div>
-            <span className="font-bold text-eira-800">Eira</span>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Eira" className="h-14 w-14 rounded-2xl object-cover" />
+            <span className="brand-name">Eira</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -102,9 +126,7 @@ export default function Dashboard() {
             {/* Left text */}
             <div className="flex-1">
               <p className="mb-1 text-sm font-medium text-eira-200">{t('dashboard.greeting')}</p>
-              <h1 className="text-3xl font-bold">
-                {user?.name ?? t('dashboard.defaultUser')}
-              </h1>
+              <h1 className="text-3xl font-bold">{user?.name ?? t('dashboard.defaultUser')}</h1>
               <p className="mt-2 text-eira-100/80">{t('dashboard.question')}</p>
 
               {user && (
@@ -160,7 +182,9 @@ export default function Dashboard() {
                       className="text-2xl font-bold text-white tabular-nums leading-none"
                       transformTiming={{ duration: 800, easing: 'ease-out' }}
                     />
-                    <span className="mt-0.5 text-xs text-eira-200">{t('dashboard.wellnessLabel')}</span>
+                    <span className="mt-0.5 text-xs text-eira-200">
+                      {t('dashboard.wellnessLabel')}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -186,9 +210,7 @@ export default function Dashboard() {
                 whileHover={shouldReduce ? {} : { y: -2, scale: 1.01 }}
                 className="group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-colors hover:border-eira-200 hover:shadow-md"
               >
-                <div
-                  className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${bg}`}
-                >
+                <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${bg}`}>
                   <Icon className={`h-5 w-5 ${iconColor}`} />
                 </div>
                 <p className="font-semibold text-slate-800">{t(labelKey)}</p>
