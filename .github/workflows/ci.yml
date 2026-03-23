@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [develop, main]
+    branches: [master, main, develop]
   pull_request:
-    branches: [main]
+    branches: [master, main]
 
 jobs:
   ci:
@@ -66,11 +66,20 @@ jobs:
 
       # ═══ TESTS ═══
 
+      - name: Generar Prisma client
+        run: pnpm --filter @eira/api exec prisma generate
+
       - name: Tests unitarios e integración (Backend)
         run: pnpm --filter @eira/api test
         env:
           NODE_ENV: test
-          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          JWT_SECRET: test-jwt-secret-for-ci
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Tests de componentes y accesibilidad (Frontend)
         run: pnpm --filter @eira/web test
