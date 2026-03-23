@@ -41,7 +41,13 @@ export class SendChatMessageUseCase {
     const language = input.language ?? 'en';
     const aiResponse = normalizeAiResponse(
       await this.aiService.chat(
-        [...conversation.messages.map((message) => ({ role: message.role, content: message.content })), { role: 'user', content: normalizedMessage }],
+        [
+          ...conversation.messages.map((message) => ({
+            role: message.role,
+            content: message.content,
+          })),
+          { role: 'user', content: normalizedMessage },
+        ],
         buildSystemPrompt(language, hasUserCrisisSignal),
       ),
       language,
@@ -83,7 +89,8 @@ function buildSystemPrompt(language: string, hasUserCrisisSignal: boolean): stri
 }
 
 function normalizeAiResponse(response: string, language: string): string {
-  const normalized = response.trim();
+  // Strip HTML/script tags from AI response before storing
+  const normalized = response.replace(/<[^>]*>/g, '').trim();
   if (normalized.length > 0) return normalized;
 
   return language.startsWith('en')
@@ -99,9 +106,11 @@ function shouldStartNewConversation(conversation: ChatConversation | null): conv
 }
 
 function isSameCalendarDay(left: Date, right: Date): boolean {
-  return left.getFullYear() === right.getFullYear()
-    && left.getMonth() === right.getMonth()
-    && left.getDate() === right.getDate();
+  return (
+    left.getFullYear() === right.getFullYear() &&
+    left.getMonth() === right.getMonth() &&
+    left.getDate() === right.getDate()
+  );
 }
 
 function mapMessageToDto(message: ChatMessage): ChatMessageDto {

@@ -23,7 +23,9 @@ export class CommunityController {
 
   feed = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const cursor = typeof req.query.cursor === 'string' ? req.query.cursor : null;
+      const rawCursor = req.query.cursor;
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const cursor = typeof rawCursor === 'string' && uuidRegex.test(rawCursor) ? rawCursor : null;
       const rawLimit = Number(req.query.limit);
       const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? Math.min(rawLimit, 50) : 20;
       const result = await this.getFeed.execute({ cursor, limit });

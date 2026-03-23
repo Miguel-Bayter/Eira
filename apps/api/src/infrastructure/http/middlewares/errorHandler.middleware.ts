@@ -36,10 +36,14 @@ export function errorHandlerMiddleware(
     return;
   }
 
-  // Log unexpected errors with request context
-  // req.userId is available via global Express.Request augmentation in auth.middleware.ts
+  // Log unexpected errors — strip query strings to avoid logging tokens/PII
   logger.error(
-    { err, method: req.method, path: req.path, userId: (req as Request & { userId?: string }).userId },
+    {
+      err,
+      method: req.method,
+      path: req.path.split('?')[0],
+      userId: (req as Request & { userId?: string }).userId,
+    },
     'Unhandled server error',
   );
 

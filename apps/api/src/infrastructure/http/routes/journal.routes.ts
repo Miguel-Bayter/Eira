@@ -3,8 +3,11 @@ import rateLimit from 'express-rate-limit';
 import { journalController } from '../../../container';
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { csrfProtection } from '../middlewares/csrf.middleware';
-import { validateBody } from '../middlewares/validation.middleware';
+import { validateBody, validateParams } from '../middlewares/validation.middleware';
 import { createJournalEntrySchema } from '@eira/shared';
+import { z } from 'zod';
+
+const uuidParamSchema = z.object({ id: z.string().uuid() });
 
 const router = Router();
 
@@ -15,7 +18,9 @@ const aiAnalysisLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   keyGenerator: (req) => (req as { userId?: string }).userId ?? req.ip ?? 'anon',
-  message: { error: { code: 'DAILY_LIMIT_EXCEEDED', message: 'Límite de 10 análisis IA por día alcanzado' } },
+  message: {
+    error: { code: 'DAILY_LIMIT_EXCEEDED', message: 'Límite de 10 análisis IA por día alcanzado' },
+  },
 });
 
 // General journal rate limiter
@@ -35,16 +40,13 @@ router.post(
   journalController.create,
 );
 
-router.get(
-  '/',
-  journalLimiter,
-  journalController.list,
-);
+router.get('/', journalLimiter, journalController.list);
 
 router.post(
   '/:id/analyze',
   aiAnalysisLimiter,
   csrfProtection,
+  validateParams(uuidParamSchema),
   journalController.analyze,
 );
 

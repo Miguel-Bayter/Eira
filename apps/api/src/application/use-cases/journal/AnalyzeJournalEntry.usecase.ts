@@ -16,10 +16,9 @@ export interface AnalyzeJournalEntryOutput {
 }
 
 function buildAnalysisPrompt(language = 'es'): string {
-  const responseLanguageInstruction =
-    language.startsWith('en')
-      ? 'Respond in English.'
-      : 'Responde en español.';
+  const responseLanguageInstruction = language.startsWith('en')
+    ? 'Respond in English.'
+    : 'Responde en español.';
 
   return `Eres Eira, una figura cálida y maternal que acompaña a las personas en su bienestar emocional.
 Hablas como alguien que genuinamente se preocupa, con ternura, paciencia y sin juzgar — como una mamá sabia que escucha con el corazón.
@@ -58,7 +57,9 @@ export class AnalyzeJournalEntryUseCase {
     if (todayCount >= 10) throw new DailyLimitExceededError('AI analyses', 10);
 
     const prompt = buildAnalysisPrompt(input.language);
-    const analysis = await this.aiService.analyze(entry.content, prompt);
+    const rawAnalysis = await this.aiService.analyze(entry.content, prompt);
+    // Strip any HTML/script tags that an AI response could theoretically contain
+    const analysis = rawAnalysis.replace(/<[^>]*>/g, '').trim();
     entry.setAiAnalysis(analysis);
     await this.journalRepo.save(entry);
 
