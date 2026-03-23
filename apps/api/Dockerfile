@@ -1,33 +1,22 @@
-# ---- base ----
-FROM node:20-slim AS base
+FROM node:20-slim
+
 RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm@9
+
 WORKDIR /app
 
-# ---- dependencies ----
-FROM base AS deps
+# Instalar dependencias primero (cache layer)
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/shared/package.json ./packages/shared/
 COPY apps/api/package.json ./apps/api/
 RUN pnpm install --frozen-lockfile
 
-# ---- builder ----
-FROM deps AS builder
+# Copiar código fuente
 COPY packages/shared ./packages/shared
 COPY apps/api ./apps/api
+
+# Generar cliente Prisma
 RUN pnpm --filter @eira/api exec prisma generate
-
-# ---- runner ----
-FROM node:20-slim AS runner
-RUN npm install -g pnpm@9
-WORKDIR /app
-
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-lock.yaml ./
-COPY --from=builder /app/pnpm-workspace.yaml ./
-COPY --from=builder /app/packages ./packages
-COPY --from=builder /app/apps/api ./apps/api
-COPY --from=builder /app/node_modules ./node_modules
 
 ENV NODE_ENV=production
 EXPOSE 3001
