@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, Leaf, Shield, Sparkles } from 'lucide-react';
+import { CheckCircle2, Shield, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRegister } from '../hooks/useAuth';
 import { registerSchema, type RegisterFormData } from '../schemas/auth.schema';
@@ -54,10 +54,13 @@ export default function Register() {
         <div className="absolute top-1/2 right-8 h-48 w-48 rounded-full bg-eira-500/20 blur-2xl" />
 
         {/* Logo */}
-        <div className="relative flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15">
-            <Leaf className="h-5 w-5 text-white" />
-          </div>
+        <div className="relative flex items-center gap-1">
+          <img
+            src="/icon.png"
+            alt="Eira"
+            className="h-16 w-16 rounded-2xl drop-shadow-lg -translate-y-1"
+          />
+          <span className="brand-name-hero text-white">Eira</span>
         </div>
 
         {/* Central content */}
@@ -87,10 +90,8 @@ export default function Register() {
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#faf9f7] px-6 py-12 lg:min-h-0">
         {/* Mobile logo */}
         <div className="mb-8 flex items-center gap-2 lg:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-eira-100">
-            <Leaf className="h-4 w-4 text-eira-600" />
-          </div>
-          <span className="text-lg font-bold text-eira-800">Eira</span>
+          <img src="/icon.png" alt="Eira" className="h-10 w-10 rounded-lg" />
+          <span className="brand-name">Eira</span>
         </div>
 
         <div className="w-full max-w-sm">

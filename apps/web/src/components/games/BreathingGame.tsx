@@ -16,6 +16,48 @@ const CYCLE_SEQUENCE: { phase: Exclude<Phase, 'idle' | 'done'>; durationMs: numb
 
 const TOTAL_CYCLES = 5;
 
+// Full Tailwind class strings so JIT includes them
+const PHASE_STYLES: Record<
+  Phase,
+  { circle: string; ambient: string; ring: string; countText: string; labelText: string }
+> = {
+  idle: {
+    circle: 'from-teal-300/60 to-cyan-200/50',
+    ambient: 'bg-teal-200/25',
+    ring: 'border-teal-300/30',
+    countText: 'text-teal-700',
+    labelText: 'text-teal-500',
+  },
+  inhale: {
+    circle: 'from-teal-500 to-emerald-400',
+    ambient: 'bg-teal-300/30',
+    ring: 'border-teal-400/40',
+    countText: 'text-white',
+    labelText: 'text-teal-100',
+  },
+  hold: {
+    circle: 'from-violet-400 to-teal-400',
+    ambient: 'bg-violet-300/25',
+    ring: 'border-violet-400/35',
+    countText: 'text-white',
+    labelText: 'text-violet-100',
+  },
+  exhale: {
+    circle: 'from-sky-400 to-teal-300',
+    ambient: 'bg-sky-300/25',
+    ring: 'border-sky-300/35',
+    countText: 'text-white',
+    labelText: 'text-sky-100',
+  },
+  done: {
+    circle: 'from-emerald-400 to-teal-300',
+    ambient: 'bg-emerald-200/30',
+    ring: 'border-emerald-300/40',
+    countText: 'text-white',
+    labelText: 'text-emerald-100',
+  },
+};
+
 export function BreathingGame({ onComplete }: BreathingGameProps) {
   const { t } = useTranslation();
   const [phase, setPhase] = useState<Phase>('idle');
@@ -87,8 +129,10 @@ export function BreathingGame({ onComplete }: BreathingGameProps) {
 
   useEffect(() => () => clearTimer(), []);
 
-  const circleScale =
-    phase === 'inhale' ? 1.6 : phase === 'hold' ? 1.6 : phase === 'exhale' ? 1 : 1;
+  const circleScale = phase === 'inhale' ? 1.55 : phase === 'hold' ? 1.55 : 1;
+  const phaseDuration = phase === 'inhale' ? 4 : phase === 'exhale' ? 8 : 0.4;
+  const styles = PHASE_STYLES[phase];
+
   const phaseLabel =
     phase === 'idle'
       ? t('games.breathing.ready')
@@ -101,59 +145,110 @@ export function BreathingGame({ onComplete }: BreathingGameProps) {
             : t('games.breathing.done');
 
   return (
-    <div className="flex flex-col items-center gap-8 py-8">
-      <div className="text-center">
-        <p className="text-sm font-medium text-teal-600 uppercase tracking-widest">
-          {t('games.breathing.cycle', { current: cycle + 1, total: TOTAL_CYCLES })}
-        </p>
+    <div className="flex flex-col items-center gap-7 py-6">
+      {/* Cycle progress dots */}
+      <div className="flex items-center gap-2">
+        {Array.from({ length: TOTAL_CYCLES }).map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              width: i === cycle && phase !== 'idle' && phase !== 'done' ? 20 : 8,
+              opacity: i < cycle ? 1 : i === cycle && phase !== 'idle' ? 1 : 0.35,
+            }}
+            transition={{ duration: 0.3 }}
+            className={`h-2 rounded-full ${i < cycle ? 'bg-teal-400' : 'bg-teal-500'}`}
+          />
+        ))}
       </div>
 
-      <div className="relative flex items-center justify-center">
+      {/* Breathing circle */}
+      <div className="relative flex items-center justify-center w-56 h-56">
+        {/* Ambient blur glow — largest layer */}
         <motion.div
-          className="h-40 w-40 rounded-full bg-teal-100"
-          animate={{ scale: circleScale }}
-          transition={{
-            duration: phase === 'inhale' ? 4 : phase === 'exhale' ? 8 : 0.3,
-            ease: 'easeInOut',
-          }}
+          className={`absolute inset-0 rounded-full ${styles.ambient} blur-2xl`}
+          animate={{ scale: circleScale * 1.25 }}
+          transition={{ duration: phaseDuration, ease: 'easeInOut' }}
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
-          <span className="text-3xl font-bold text-teal-700">
-            {phase !== 'idle' && phase !== 'done' ? countdown : ''}
-          </span>
-          <span className="text-sm font-medium text-teal-600">{phaseLabel}</span>
+
+        {/* Ripple border ring */}
+        <motion.div
+          className={`absolute inset-3 rounded-full border-2 ${styles.ring}`}
+          animate={{ scale: circleScale * 1.07, opacity: phase !== 'idle' ? 0.7 : 0.3 }}
+          transition={{ duration: phaseDuration, ease: 'easeInOut' }}
+        />
+
+        {/* Main gradient circle */}
+        <motion.div
+          className={`absolute inset-8 rounded-full bg-gradient-to-br ${styles.circle} shadow-2xl`}
+          animate={{ scale: circleScale }}
+          transition={{ duration: phaseDuration, ease: 'easeInOut' }}
+        />
+
+        {/* Center text */}
+        <div className="relative z-10 flex flex-col items-center justify-center gap-0.5">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={countdown}
+              initial={{ opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.4 }}
+              transition={{ duration: 0.25 }}
+              className={`text-5xl font-bold tabular-nums leading-none ${styles.countText}`}
+            >
+              {phase !== 'idle' && phase !== 'done' ? countdown : ''}
+            </motion.span>
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={phaseLabel}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.25 }}
+              className={`text-sm font-semibold tracking-wider uppercase ${styles.labelText}`}
+            >
+              {phaseLabel}
+            </motion.span>
+          </AnimatePresence>
         </div>
       </div>
 
+      {/* Controls */}
       <AnimatePresence mode="wait">
         {phase === 'done' ? (
           <motion.p
             key="done"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center text-teal-700 font-medium"
+            className="text-center text-teal-700 font-semibold"
           >
             {t('games.breathing.completed')}
           </motion.p>
         ) : (
-          <motion.div key="controls" className="flex gap-3">
+          <motion.div
+            key="controls"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
             {phase === 'idle' ? (
               <button
-                className="rounded-2xl bg-teal-600 px-8 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
+                className="rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 px-10 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-300/40 hover:shadow-teal-400/50 hover:scale-[1.04] active:scale-[0.97] transition-all duration-200"
                 onClick={start}
               >
                 {t('games.start')}
               </button>
             ) : isPaused ? (
               <button
-                className="rounded-2xl bg-teal-600 px-8 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
+                className="rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 px-10 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-300/40 hover:shadow-teal-400/50 hover:scale-[1.04] active:scale-[0.97] transition-all duration-200"
                 onClick={resume}
               >
                 {t('games.resume')}
               </button>
             ) : (
               <button
-                className="rounded-2xl border border-teal-300 px-8 py-3 text-sm font-semibold text-teal-700 hover:bg-teal-50 transition-colors"
+                className="rounded-full border-2 border-teal-200 bg-white/90 px-10 py-3 text-sm font-semibold text-teal-600 hover:bg-teal-50 hover:border-teal-300 active:scale-[0.97] transition-all duration-200 shadow-sm"
                 onClick={pause}
               >
                 {t('games.pause')}
