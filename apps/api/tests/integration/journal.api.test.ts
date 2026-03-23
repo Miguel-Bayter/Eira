@@ -78,7 +78,7 @@ const mockPrismaUser = {
 };
 
 const mockPrismaJournalEntry = {
-  id: 'journal-entry-1',
+  id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
   user_id: 'user-test-id',
   content: 'Hoy me sentí bien con el trabajo.',
   ai_analysis: null,
@@ -89,13 +89,18 @@ const mockPrismaJournalEntry = {
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
 describe('Journal API — Integration Tests', () => {
-
   beforeEach(() => {
     vi.clearAllMocks();
 
     // Default: valid authentication
     mocks.getUser.mockResolvedValue({
-      data: { user: { id: 'supabase-test-id', email: 'test@example.com', user_metadata: { name: 'Test User' } } },
+      data: {
+        user: {
+          id: 'supabase-test-id',
+          email: 'test@example.com',
+          user_metadata: { name: 'Test User' },
+        },
+      },
       error: null,
     });
 
@@ -111,7 +116,14 @@ describe('Journal API — Integration Tests', () => {
 
     // Default: AI returns a valid analysis
     mocks.aiAnalyze.mockResolvedValue({
-      choices: [{ message: { content: '**Emociones detectadas**: calma.\n**Patrones identificados**: estabilidad.\n**Sugerencia**: Continúa así.' } }],
+      choices: [
+        {
+          message: {
+            content:
+              '**Emociones detectadas**: calma.\n**Patrones identificados**: estabilidad.\n**Sugerencia**: Continúa así.',
+          },
+        },
+      ],
     });
   });
 
@@ -119,9 +131,7 @@ describe('Journal API — Integration Tests', () => {
 
   describe('Authentication', () => {
     it('POST /api/journal without Authorization header → 401', async () => {
-      const res = await request(app)
-        .post('/api/journal')
-        .send({ content: 'Hoy fue un buen día.' });
+      const res = await request(app).post('/api/journal').send({ content: 'Hoy fue un buen día.' });
 
       expect(res.status).toBe(401);
       expect(res.body.error.code).toBe('UNAUTHORIZED');
@@ -196,9 +206,7 @@ describe('Journal API — Integration Tests', () => {
 
   describe('GET /api/journal — list entries', () => {
     it('returns list with valid auth → 200 with { entries: [], total: 0 }', async () => {
-      const res = await request(app)
-        .get('/api/journal')
-        .set('Authorization', 'Bearer valid-token');
+      const res = await request(app).get('/api/journal').set('Authorization', 'Bearer valid-token');
 
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({ entries: [], total: 0 });
@@ -207,9 +215,7 @@ describe('Journal API — Integration Tests', () => {
     it('returns entries when they exist', async () => {
       mocks.journalFindMany.mockResolvedValue([mockPrismaJournalEntry]);
 
-      const res = await request(app)
-        .get('/api/journal')
-        .set('Authorization', 'Bearer valid-token');
+      const res = await request(app).get('/api/journal').set('Authorization', 'Bearer valid-token');
 
       expect(res.status).toBe(200);
       expect(res.body.entries).toHaveLength(1);
@@ -222,11 +228,11 @@ describe('Journal API — Integration Tests', () => {
   describe('POST /api/journal/:id/analyze', () => {
     it('analyzes a journal entry → 200 with aiAnalysis', async () => {
       const res = await request(app)
-        .post('/api/journal/journal-entry-1/analyze')
+        .post('/api/journal/a1b2c3d4-e5f6-7890-abcd-ef1234567890/analyze')
         .set('Authorization', 'Bearer valid-token');
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('id', 'journal-entry-1');
+      expect(res.body).toHaveProperty('id', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
       expect(res.body).toHaveProperty('aiAnalysis');
       expect(res.body).toHaveProperty('updatedAt');
       expect(typeof res.body.aiAnalysis).toBe('string');
@@ -236,7 +242,7 @@ describe('Journal API — Integration Tests', () => {
       mocks.journalFindUnique.mockResolvedValue(null);
 
       const res = await request(app)
-        .post('/api/journal/nonexistent/analyze')
+        .post('/api/journal/00000000-0000-0000-0000-000000000000/analyze')
         .set('Authorization', 'Bearer valid-token');
 
       expect(res.status).toBe(404);
@@ -247,12 +253,11 @@ describe('Journal API — Integration Tests', () => {
       mocks.journalCount.mockResolvedValue(10);
 
       const res = await request(app)
-        .post('/api/journal/journal-entry-1/analyze')
+        .post('/api/journal/a1b2c3d4-e5f6-7890-abcd-ef1234567890/analyze')
         .set('Authorization', 'Bearer valid-token');
 
       expect(res.status).toBe(429);
       expect(res.body.error.code).toBe('DAILY_LIMIT_EXCEEDED');
     });
   });
-
 });
