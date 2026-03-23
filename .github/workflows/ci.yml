@@ -56,6 +56,11 @@ jobs:
           fi
           echo "Verificación de tipos completada"
 
+      # ═══ PRISMA ═══
+
+      - name: Generar Prisma client
+        run: pnpm --filter @eira/api exec prisma generate
+
       # ═══ TYPECHECK ═══
 
       - name: TypeScript — Verificar tipos (Backend)
@@ -65,9 +70,6 @@ jobs:
         run: pnpm --filter @eira/web typecheck
 
       # ═══ TESTS ═══
-
-      - name: Generar Prisma client
-        run: pnpm --filter @eira/api exec prisma generate
 
       - name: Tests unitarios e integración (Backend)
         run: pnpm --filter @eira/api test
