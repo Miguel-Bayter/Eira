@@ -42,7 +42,7 @@ export default function Login() {
   ];
 
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-2">
+    <div className="min-h-dvh lg:grid lg:grid-cols-2">
       {/* Left panel: branding (desktop only) */}
       <div className="relative hidden overflow-hidden bg-gradient-to-br from-eira-600 via-eira-700 to-eira-900 lg:flex lg:flex-col lg:justify-between lg:p-12">
         {/* Decorative orbs */}
@@ -87,7 +87,7 @@ export default function Login() {
       </div>
 
       {/* Right panel: form */}
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#faf9f7] px-6 py-12 lg:min-h-0">
+      <div className="flex min-h-dvh flex-col items-center justify-center bg-[#faf9f7] px-6 py-12 lg:min-h-0">
         {/* Mobile logo */}
         <div className="mb-8 flex items-center gap-2 lg:hidden">
           <img src="/icon.png" alt="Eira" className="h-10 w-10 rounded-lg" />

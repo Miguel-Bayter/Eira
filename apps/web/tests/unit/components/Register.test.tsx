@@ -8,7 +8,12 @@ import Register from '../../../src/pages/Register';
 // Mock useRegister hook
 vi.mock('../../../src/hooks/useAuth', () => ({
   useRegister: () => ({
-    mutateAsync: vi.fn().mockResolvedValue({ user: { id: '1', email: 'a@b.com', name: 'Test', wellnessScore: 50 }, token: 'token' }),
+    mutateAsync: vi
+      .fn()
+      .mockResolvedValue({
+        user: { id: '1', email: 'a@b.com', name: 'Test', wellnessScore: 50 },
+        token: 'token',
+      }),
     isPending: false,
     error: null,
   }),
@@ -24,7 +29,9 @@ function renderWithProviders(ui: React.ReactElement) {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>{ui}</MemoryRouter>
+      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        {ui}
+      </MemoryRouter>
     </QueryClientProvider>,
   );
 }
@@ -42,7 +49,8 @@ describe('Register — Page', () => {
 
     it('shows the Eira logo', () => {
       renderWithProviders(<Register />);
-      expect(screen.getByText(/eira/i)).toBeInTheDocument();
+      // The logo appears in both the desktop panel and the mobile header
+      expect(screen.getAllByText(/eira/i).length).toBeGreaterThan(0);
     });
   });
 

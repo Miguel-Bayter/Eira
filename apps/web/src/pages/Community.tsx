@@ -35,7 +35,7 @@ export default function Community() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-sage-100 via-sage-50 to-white">
+    <main className="min-h-dvh bg-gradient-to-b from-sage-100 via-sage-50 to-white">
       <div className="mx-auto max-w-2xl px-4 py-10 space-y-8">
         <div className="flex justify-start">
           <BackToDashboardLink />

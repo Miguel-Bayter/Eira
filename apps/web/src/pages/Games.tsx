@@ -107,7 +107,7 @@ export default function Games() {
   const activeCard = GAMES.find((g) => g.type === activeGame);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50">
+    <div className="min-h-dvh bg-gradient-to-br from-slate-50 via-white to-teal-50">
       <div className="mx-auto max-w-2xl px-4 py-8">
         <BackToDashboardLink />
 

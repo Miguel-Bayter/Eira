@@ -88,7 +88,7 @@ export default function Dashboard() {
   const ringOffset = RING_CIRCUMFERENCE * (1 - score / 100);
 
   return (
-    <div className="min-h-screen bg-[#faf9f7]">
+    <div className="min-h-dvh bg-[#faf9f7]">
       {/* Top nav */}
       <header className="sticky top-0 z-10 border-b border-stone-100 bg-[#faf9f7]/80 px-6 py-4 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between">

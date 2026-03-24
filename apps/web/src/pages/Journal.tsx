@@ -5,7 +5,11 @@ import type { TFunction } from 'i18next';
 import { JournalEditor } from '@/components/journal/JournalEditor';
 import { JournalAiAnalysis } from '@/components/journal/JournalAiAnalysis';
 import { JournalFormattedAnalysis } from '@/components/journal/JournalFormattedAnalysis';
-import { useAnalyzeJournalEntry, useCreateJournalEntry, useJournalHistory } from '@/hooks/useJournal';
+import {
+  useAnalyzeJournalEntry,
+  useCreateJournalEntry,
+  useJournalHistory,
+} from '@/hooks/useJournal';
 import { BackToDashboardLink } from '@/components/ui/BackToDashboardLink';
 
 type TranslateFn = TFunction<'translation', undefined>;
@@ -33,7 +37,11 @@ export default function Journal() {
   const [currentAnalysis, setCurrentAnalysis] = useState<string | null>(null);
 
   const { mutateAsync: createEntry, isPending: isSaving } = useCreateJournalEntry();
-  const { mutateAsync: analyze, isPending: isAnalyzing, error: analyzeError } = useAnalyzeJournalEntry();
+  const {
+    mutateAsync: analyze,
+    isPending: isAnalyzing,
+    error: analyzeError,
+  } = useAnalyzeJournalEntry();
   const { data: history } = useJournalHistory();
 
   const handleSave = async (content: string) => {
@@ -58,7 +66,7 @@ export default function Journal() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-warm-100 via-warm-50 to-white">
+    <main className="min-h-dvh bg-gradient-to-b from-warm-100 via-warm-50 to-white">
       <div className="mx-auto max-w-2xl px-4 py-10 space-y-8">
         <div className="flex justify-start">
           <BackToDashboardLink />
@@ -72,9 +80,7 @@ export default function Journal() {
           </div>
           <h1 className="text-2xl font-bold text-warm-800">{getDayGreeting(t)} ✨</h1>
           <p className="text-sm text-gray-400 capitalize">{today}</p>
-          <p className="text-sm text-warm-600 font-medium">
-            {t('journal.subtitle')}
-          </p>
+          <p className="text-sm text-warm-600 font-medium">{t('journal.subtitle')}</p>
         </header>
 
         {/* Editor */}

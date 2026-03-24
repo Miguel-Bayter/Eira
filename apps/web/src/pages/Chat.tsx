@@ -27,7 +27,10 @@ export default function Chat() {
 
   useEffect(() => {
     if (typeof bottomRef.current?.scrollIntoView === 'function') {
-      bottomRef.current.scrollIntoView({ behavior: shouldReduce ? 'auto' : 'smooth', block: 'end' });
+      bottomRef.current.scrollIntoView({
+        behavior: shouldReduce ? 'auto' : 'smooth',
+        block: 'end',
+      });
     }
   }, [messages.length, isPending, shouldReduce]);
 
@@ -40,8 +43,8 @@ export default function Chat() {
 
   return (
     <>
-      <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.14),_transparent_30%),linear-gradient(180deg,_#f6fffc_0%,_#fbfffe_34%,_#edf8f4_100%)]">
-        <div className="relative mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 pb-6 pt-5 sm:px-6 lg:px-8">
+      <main className="min-h-dvh overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.14),_transparent_30%),linear-gradient(180deg,_#f6fffc_0%,_#fbfffe_34%,_#edf8f4_100%)]">
+        <div className="relative mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-4 pb-6 pt-5 sm:px-6 lg:px-8">
           <div className="pointer-events-none absolute inset-x-10 top-12 h-40 rounded-full bg-eira-200/20 blur-3xl" />
 
           <header className="relative z-10">
@@ -55,8 +58,12 @@ export default function Chat() {
                       {t('chat.header.badge')}
                     </div>
                     <div>
-                      <h1 className="text-[1.75rem] font-semibold tracking-tight text-slate-900 sm:text-[2rem]">{t('chat.header.title')}</h1>
-                      <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-500">{t('chat.header.subtitle')}</p>
+                      <h1 className="text-[1.75rem] font-semibold tracking-tight text-slate-900 sm:text-[2rem]">
+                        {t('chat.header.title')}
+                      </h1>
+                      <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-500">
+                        {t('chat.header.subtitle')}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -68,8 +75,12 @@ export default function Chat() {
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-eira-700">{t('chat.header.confidentialTitle')}</p>
-                    <p className="mt-1 leading-6 text-slate-500">{t('chat.header.confidentialBody')}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-eira-700">
+                      {t('chat.header.confidentialTitle')}
+                    </p>
+                    <p className="mt-1 leading-6 text-slate-500">
+                      {t('chat.header.confidentialBody')}
+                    </p>
                   </div>
                 </div>
 
@@ -78,8 +89,12 @@ export default function Chat() {
                     <HeartHandshake className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-eira-700">{t('chat.header.limitTitle')}</p>
-                    <p className="mt-1 leading-6 text-slate-500">{t('chat.header.limitBody', { count: remainingMessages })}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-eira-700">
+                      {t('chat.header.limitTitle')}
+                    </p>
+                    <p className="mt-1 leading-6 text-slate-500">
+                      {t('chat.header.limitBody', { count: remainingMessages })}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -95,8 +110,12 @@ export default function Chat() {
                 role="alert"
               >
                 <div>
-                  <p className="text-sm font-semibold text-crisis-700">{t('chat.crisis.bannerTitle')}</p>
-                  <p className="mt-1 text-sm leading-6 text-crisis-600">{t('chat.crisis.bannerBody')}</p>
+                  <p className="text-sm font-semibold text-crisis-700">
+                    {t('chat.crisis.bannerTitle')}
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-crisis-600">
+                    {t('chat.crisis.bannerBody')}
+                  </p>
                 </div>
                 <Button variant="danger" size="md" onClick={() => setShowCrisisModal(true)}>
                   {t('chat.crisis.bannerButton')}
@@ -110,12 +129,21 @@ export default function Chat() {
                   <div className="flex h-16 w-16 items-center justify-center rounded-[24px] border border-eira-100 bg-eira-50 text-eira-600 shadow-sm">
                     <Sparkles className="h-7 w-7" />
                   </div>
-                  <h2 className="mt-6 text-2xl font-semibold tracking-tight text-slate-900">{t('chat.empty.title')}</h2>
-                  <p className="mt-3 max-w-xl text-sm leading-7 text-slate-500">{t('chat.empty.body')}</p>
+                  <h2 className="mt-6 text-2xl font-semibold tracking-tight text-slate-900">
+                    {t('chat.empty.title')}
+                  </h2>
+                  <p className="mt-3 max-w-xl text-sm leading-7 text-slate-500">
+                    {t('chat.empty.body')}
+                  </p>
                   <div className="mt-6 grid w-full gap-3 sm:grid-cols-3">
                     {['promptOne', 'promptTwo', 'promptThree'].map((key) => (
-                      <div key={key} className="rounded-3xl border border-slate-200 bg-white/90 px-4 py-4 text-left shadow-sm">
-                        <p className="text-sm leading-6 text-slate-600">{t(`chat.empty.${key}` as never)}</p>
+                      <div
+                        key={key}
+                        className="rounded-3xl border border-slate-200 bg-white/90 px-4 py-4 text-left shadow-sm"
+                      >
+                        <p className="text-sm leading-6 text-slate-600">
+                          {t(`chat.empty.${key}` as never)}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -123,17 +151,20 @@ export default function Chat() {
               ) : (
                 <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
                   <div className="mx-auto flex h-full w-full max-w-3xl flex-col justify-end space-y-4">
-                  {messages.map((message) => (
-                    <ChatBubble key={message.id} message={message} />
-                  ))}
-                  {isPending && <TypingIndicator />}
-                  <div ref={bottomRef} />
+                    {messages.map((message) => (
+                      <ChatBubble key={message.id} message={message} />
+                    ))}
+                    {isPending && <TypingIndicator />}
+                    <div ref={bottomRef} />
                   </div>
                 </div>
               )}
 
               {error && (
-                <div className="mx-4 mb-4 rounded-[20px] border border-crisis-100 bg-crisis-50 px-4 py-3 text-sm text-crisis-700 sm:mx-6" role="alert">
+                <div
+                  className="mx-4 mb-4 rounded-[20px] border border-crisis-100 bg-crisis-50 px-4 py-3 text-sm text-crisis-700 sm:mx-6"
+                  role="alert"
+                >
                   {t(error.message as never)}
                 </div>
               )}

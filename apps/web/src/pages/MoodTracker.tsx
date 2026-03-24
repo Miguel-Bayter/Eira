@@ -67,7 +67,7 @@ export default function MoodTracker() {
 
   if (submitted) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-sage-100 to-white px-6">
+      <div className="flex min-h-dvh flex-col items-center justify-center bg-gradient-to-b from-sage-100 to-white px-6">
         <div className="w-full max-w-sm text-center">
           <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-sage-100 shadow-sm ring-4 ring-sage-50">
             <CheckCircle2 className="h-10 w-10 text-sage-600" />
@@ -89,7 +89,7 @@ export default function MoodTracker() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-sage-100 via-sage-50 to-white">
+      <div className="min-h-dvh bg-gradient-to-b from-sage-100 via-sage-50 to-white">
         {/* Header */}
         <header className="sticky top-0 z-10 border-b border-sage-200 bg-sage-50/90 px-6 py-4 backdrop-blur-sm">
           <div className="mx-auto flex max-w-xl items-center gap-3">

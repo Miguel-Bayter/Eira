@@ -22,7 +22,9 @@ describe('BreathingGame', () => {
 
   it('shows cycle indicator', () => {
     renderGame();
-    expect(screen.getByText(/games\.breathing\.cycle/i)).toBeInTheDocument();
+    // The cycle indicator is now 5 progress dots (one per cycle)
+    const dots = document.querySelectorAll('.flex.items-center.gap-2 > div');
+    expect(dots.length).toBe(5);
   });
 
   it('NO INLINE CSS — no color/margin/padding style props', () => {
