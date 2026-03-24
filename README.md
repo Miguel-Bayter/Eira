@@ -8,7 +8,7 @@ _A full-stack therapeutic platform that combines AI-powered support, mood scienc
 
 [![CI](https://github.com/Miguel-Bayter/Eira/actions/workflows/ci.yml/badge.svg)](https://github.com/Miguel-Bayter/Eira/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -79,7 +79,7 @@ The result is a codebase I am confident presenting to technical reviewers: it re
 
 ### Mindfulness & Therapeutic Games
 
-- 🌬️ **Guided Breathing** — Animated 4-7-8 breathing exercise with visual pacing
+- 🌬️ **Guided Breathing** — Animated 4-7-8 breathing exercise with layered gradient circles, phase-specific color transitions (teal / violet / sky), and animated cycle progress indicators
 - 🫧 **Bubble Pop** — Stress-relief game with satisfying tactile interactions
 - 🪴 **Zen Garden** — Canvas-based karesansui sand garden for focused relaxation
 - 🎨 **Mandala Coloring** — Procedurally generated SVG mandalas (4 unique designs, random per session)
@@ -92,7 +92,7 @@ The result is a codebase I am confident presenting to technical reviewers: it re
 ### Platform
 
 - 🌐 **Bilingual i18n** — Full Spanish/English UI with browser-detected locale (react-i18next)
-- 📱 **Responsive Design** — Mobile-first TailwindCSS layout across all viewports
+- 📱 **Responsive Design** — Mobile-first TailwindCSS layout with `dvh` units (dynamic viewport height) for correct full-screen sizing on iOS Safari and Android Chrome
 - ⚡ **PWA Ready** — Service worker via vite-plugin-pwa for offline capability
 - ♿ **Accessible** — Radix UI primitives, ARIA labels, keyboard navigation
 
@@ -104,7 +104,7 @@ Eira uses **Hexagonal Architecture** (Ports & Adapters) on the backend. The doma
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         CLIENT (React 18)                       │
+│                         CLIENT (React 19)                       │
 │  TanStack Query · Zustand · React Hook Form · Motion · Recharts  │
 └───────────────────────────┬─────────────────────────────────────┘
                             │ HTTPS / REST
@@ -156,7 +156,7 @@ Request → GeminiAiAdapter
 eira/
 ├── apps/
 │   ├── api/          — Express + Hexagonal backend
-│   └── web/          — React 18 + Vite frontend
+│   └── web/          — React 19 + Vite frontend
 ├── packages/
 │   └── shared/       — Shared Zod schemas, TypeScript types
 └── .github/
@@ -171,7 +171,7 @@ eira/
 
 | Technology             | Version | Purpose                           |
 | ---------------------- | ------- | --------------------------------- |
-| React                  | 18.3    | UI framework                      |
+| React                  | 19.0    | UI framework                      |
 | TypeScript             | 5.4     | Static typing                     |
 | Vite                   | 5.3     | Build tool & dev server           |
 | TailwindCSS            | 3.4     | Utility-first styling             |
@@ -382,17 +382,17 @@ A GitHub Actions workflow also pings Supabase every 3 days to prevent the free-t
 
 Eira is built with OWASP Top 10 compliance as a design requirement, not an afterthought.
 
-| Threat                              | Mitigation                                                                                                                                                                   |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Injection (A03)**                 | Prisma ORM parameterized queries — no raw SQL. Zod validates all inputs at the request boundary before they reach the domain. UUID validation on all route params.           |
-| **Broken Authentication (A07)**     | Supabase-managed auth, httpOnly + Secure + SameSite=Strict cookies, server-side session validation on every protected route.                                                 |
-| **Sensitive Data Exposure (A02)**   | HTTPS enforced via HSTS, secrets in environment variables only, query strings stripped from error logs, no PII in API error responses.                                       |
-| **XSS (A03)**                       | Helmet CSP with strict directives, React's built-in JSX escaping on all rendered content, HTML tags stripped from AI responses before storage, no `dangerouslySetInnerHTML`. |
-| **CSRF (A01)**                      | Custom header `x-eira-csrf` required on all state-mutating cookie-authenticated requests, combined with Origin/Referer validation.                                           |
-| **Rate Limiting (A04)**             | `express-rate-limit` on all routes; stricter per-user limits on auth (10/15min), AI analysis (10/day), and chat (50/day).                                                    |
-| **Security Misconfiguration (A05)** | Helmet sets X-Frame-Options, X-Content-Type-Options, HSTS (31536000s), and Referrer-Policy. Stack traces disabled in production.                                             |
-| **Broken Access Control (A01)**     | JWT from httpOnly cookie validated on every protected route. Users can only access their own resources — enforced at the use-case layer, not just middleware.                |
-| **Vulnerable Dependencies (A06)**   | pnpm lockfile pinned versions, GitHub Dependabot alerts enabled.                                                                                                             |
+| Threat                              | Mitigation                                                                                                                                                                                                                                                                                             |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Injection (A03)**                 | Prisma ORM parameterized queries — no raw SQL. Zod validates all inputs at the request boundary before they reach the domain. UUID validation on all route params.                                                                                                                                     |
+| **Broken Authentication (A07)**     | Supabase-managed auth, httpOnly + Secure cookies. `SameSite=None` in production for cross-domain cookie delivery (Vercel → Render) while CSRF protection via custom header is maintained. RLS enabled on all Supabase tables — direct DB access is denied to any client not using the `postgres` role. |
+| **Sensitive Data Exposure (A02)**   | HTTPS enforced via HSTS, secrets in environment variables only, query strings stripped from error logs, no PII in API error responses.                                                                                                                                                                 |
+| **XSS (A03)**                       | Helmet CSP with strict directives, React's built-in JSX escaping on all rendered content, HTML tags stripped from AI responses before storage, no `dangerouslySetInnerHTML`.                                                                                                                           |
+| **CSRF (A01)**                      | Custom header `x-eira-csrf` required on all state-mutating cookie-authenticated requests, combined with Origin/Referer validation.                                                                                                                                                                     |
+| **Rate Limiting (A04)**             | `express-rate-limit` on all routes; stricter per-user limits on auth (10/15min), AI analysis (10/day), and chat (50/day).                                                                                                                                                                              |
+| **Security Misconfiguration (A05)** | Helmet sets X-Frame-Options, X-Content-Type-Options, HSTS (31536000s), and Referrer-Policy. Stack traces disabled in production.                                                                                                                                                                       |
+| **Broken Access Control (A01)**     | JWT from httpOnly cookie validated on every protected route. Users can only access their own resources — enforced at the use-case layer, not just middleware.                                                                                                                                          |
+| **Vulnerable Dependencies (A06)**   | pnpm lockfile pinned versions, GitHub Dependabot alerts enabled.                                                                                                                                                                                                                                       |
 
 ---
 
