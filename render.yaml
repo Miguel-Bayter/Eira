@@ -11,6 +11,9 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: '3001'
+      # --- Secrets: set manually in Render dashboard with "Sensitive" toggle ON ---
       - key: DATABASE_URL
         sync: false
       - key: SUPABASE_URL
@@ -23,9 +26,8 @@ services:
         sync: false
       - key: RESEND_API_KEY
         sync: false
+      # --- Non-secret config: set manually in Render dashboard ---
       - key: EMAIL_FROM
         sync: false
       - key: ALLOWED_ORIGINS
         sync: false
-      - key: PORT
-        value: '3001'

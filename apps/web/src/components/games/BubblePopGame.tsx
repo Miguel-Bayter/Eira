@@ -9,6 +9,8 @@ const GAME_DURATION = 60;
 export function BubblePopGame({ onComplete }: BubblePopGameProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<import('phaser').Game | null>(null);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     let cancelled = false;
@@ -63,7 +65,7 @@ export function BubblePopGame({ onComplete }: BubblePopGameProps) {
           this.timerText.setText(`${this.timeLeft}s`);
           if (this.timeLeft <= 0) {
             this.scene.pause();
-            this.time.delayedCall(500, () => onComplete(GAME_DURATION));
+            setTimeout(() => onCompleteRef.current(GAME_DURATION), 500);
           }
         }
 
@@ -126,7 +128,7 @@ export function BubblePopGame({ onComplete }: BubblePopGameProps) {
       gameRef.current?.destroy(true);
       gameRef.current = null;
     };
-  }, [onComplete]);
+  }, []);
 
   return <div ref={containerRef} className="w-full rounded-2xl overflow-hidden" />;
 }
