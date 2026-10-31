@@ -10,7 +10,7 @@ export class GeminiAiAdapter implements IAiService {
 
   async chat(messages: AiMessage[], systemPrompt: string): Promise<string> {
     const model = this.genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.8-flash',
       systemInstruction: systemPrompt,
     });
 
@@ -28,7 +28,7 @@ export class GeminiAiAdapter implements IAiService {
   async analyze(text: string, prompt: string): Promise<string> {
     // Use systemInstruction to separate prompt from user content (prevents prompt injection)
     const model = this.genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.8-flash',
       systemInstruction: prompt,
     });
     const result = await model.generateContent(text);
@@ -37,7 +37,7 @@ export class GeminiAiAdapter implements IAiService {
 
   async moderate(text: string): Promise<{ isApproved: boolean; reason?: string }> {
     const model = this.genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.8-flash',
       systemInstruction: `You are a content moderator for a mental wellness app.
 Analyze if the text is appropriate for an emotional support community.
 Respond ONLY with JSON: {"isApproved": true/false, "reason": "reason if rejected"}`,
