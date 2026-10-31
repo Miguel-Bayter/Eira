@@ -1,4 +1,4 @@
-export const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+export const API_URL = import.meta.env.VITE_API_URL ?? '';
 export const CSRF_HEADER_NAME = 'x-eira-csrf';
 export const CSRF_HEADER_VALUE = '1';
 
