@@ -15,10 +15,17 @@ export const authCookieOptions: CookieOptions = {
   path: '/',
 };
 
-export const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter((origin) => origin.length > 0);
+// Production Vercel domain is always allowed — it's a public URL, not a secret.
+// This prevents CSRF failures when ALLOWED_ORIGINS is missing/misconfigured in Render.
+const PRODUCTION_ORIGINS = ['https://eira-woad.vercel.app'];
+
+export const allowedOrigins = [
+  ...PRODUCTION_ORIGINS,
+  ...(process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0),
+];
 
 export function isAllowedOrigin(origin: string): boolean {
   return allowedOrigins.includes(origin);
