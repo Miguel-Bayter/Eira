@@ -1,5 +1,6 @@
 import type { IAiService, AiMessage } from '@domain/services/IAiService';
 import { AiServiceUnavailableError } from '@domain/errors';
+import { logger } from '../logging/logger';
 
 export class MultiProviderAiService implements IAiService {
   constructor(
@@ -11,11 +12,11 @@ export class MultiProviderAiService implements IAiService {
     try {
       return await this.primary.chat(messages, systemPrompt);
     } catch (primaryErr) {
-      console.error('[AI] Primary (Groq) chat failed:', primaryErr);
+      logger.error({ err: primaryErr }, '[AI] Primary (Groq) chat failed');
       try {
         return await this.fallback.chat(messages, systemPrompt);
       } catch (fallbackErr) {
-        console.error('[AI] Fallback (Gemini) chat failed:', fallbackErr);
+        logger.error({ err: fallbackErr }, '[AI] Fallback (Gemini) chat failed');
         throw new AiServiceUnavailableError();
       }
     }
@@ -25,11 +26,11 @@ export class MultiProviderAiService implements IAiService {
     try {
       return await this.primary.analyze(text, prompt);
     } catch (primaryErr) {
-      console.error('[AI] Primary (Groq) analyze failed:', primaryErr);
+      logger.error({ err: primaryErr }, '[AI] Primary (Groq) analyze failed');
       try {
         return await this.fallback.analyze(text, prompt);
       } catch (fallbackErr) {
-        console.error('[AI] Fallback (Gemini) analyze failed:', fallbackErr);
+        logger.error({ err: fallbackErr }, '[AI] Fallback (Gemini) analyze failed');
         throw new AiServiceUnavailableError();
       }
     }
@@ -39,7 +40,7 @@ export class MultiProviderAiService implements IAiService {
     try {
       return await this.primary.moderate(text);
     } catch (primaryErr) {
-      console.error('[AI] Primary (Groq) moderate failed:', primaryErr);
+      logger.error({ err: primaryErr }, '[AI] Primary (Groq) moderate failed');
       return this.fallback.moderate(text);
     }
   }

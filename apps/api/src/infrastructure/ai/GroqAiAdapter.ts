@@ -10,7 +10,7 @@ export class GroqAiAdapter implements IAiService {
 
   async chat(messages: AiMessage[], systemPrompt: string): Promise<string> {
     const response = await this.groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages.map((m) => ({ role: m.role, content: m.content })),
@@ -21,7 +21,7 @@ export class GroqAiAdapter implements IAiService {
 
   async analyze(text: string, prompt: string): Promise<string> {
     const response = await this.groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: prompt },
         { role: 'user', content: text },
