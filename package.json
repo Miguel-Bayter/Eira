@@ -17,7 +17,7 @@
     "prepare": "husky"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.23.4",
     "pnpm": ">=9.0.0"
   },
   "devDependencies": {
