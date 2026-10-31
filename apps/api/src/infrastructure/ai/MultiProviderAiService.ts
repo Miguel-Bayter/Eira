@@ -10,10 +10,12 @@ export class MultiProviderAiService implements IAiService {
   async chat(messages: AiMessage[], systemPrompt: string): Promise<string> {
     try {
       return await this.primary.chat(messages, systemPrompt);
-    } catch {
+    } catch (primaryErr) {
+      console.error('[AI] Primary (Groq) chat failed:', primaryErr);
       try {
         return await this.fallback.chat(messages, systemPrompt);
-      } catch {
+      } catch (fallbackErr) {
+        console.error('[AI] Fallback (Gemini) chat failed:', fallbackErr);
         throw new AiServiceUnavailableError();
       }
     }
@@ -22,10 +24,12 @@ export class MultiProviderAiService implements IAiService {
   async analyze(text: string, prompt: string): Promise<string> {
     try {
       return await this.primary.analyze(text, prompt);
-    } catch {
+    } catch (primaryErr) {
+      console.error('[AI] Primary (Groq) analyze failed:', primaryErr);
       try {
         return await this.fallback.analyze(text, prompt);
-      } catch {
+      } catch (fallbackErr) {
+        console.error('[AI] Fallback (Gemini) analyze failed:', fallbackErr);
         throw new AiServiceUnavailableError();
       }
     }
@@ -34,8 +38,10 @@ export class MultiProviderAiService implements IAiService {
   async moderate(text: string): Promise<{ isApproved: boolean; reason?: string }> {
     try {
       return await this.primary.moderate(text);
-    } catch {
+    } catch (primaryErr) {
+      console.error('[AI] Primary (Groq) moderate failed:', primaryErr);
       return this.fallback.moderate(text);
     }
   }
 }
+
